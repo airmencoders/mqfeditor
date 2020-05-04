@@ -10,6 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
+
+const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   title: {
     flexGrow: 1,
@@ -41,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Navigation = ({ state }) => {
+const Navigation = ({ state, onMenuClick }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
@@ -77,7 +83,11 @@ const Navigation = ({ state }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Account Settings</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to={`/u/${state.user.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
+          Account Settings
+        </NavLink>
+      </MenuItem>
     </Menu>
   )
 
@@ -93,17 +103,9 @@ const Navigation = ({ state }) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <Typography variant="subtitle2">
-          {(state.user) ? state.user.display : ""}
-        </Typography>
+        <NavLink to={`/u/${state.user.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
+          Account Settings
+        </NavLink>
       </MenuItem>
     </Menu>
   )
@@ -112,6 +114,15 @@ const Navigation = ({ state }) => {
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="open-drawer"
+            onClick={onMenuClick}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             MQF Dashboard
           </Typography>
