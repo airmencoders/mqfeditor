@@ -1,14 +1,17 @@
+/**
+ * 
+ */
 import React from 'react'
+
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+
+import Box from '@material-ui/core/Box'
+import CssBaseline from '@material-ui/core/CssBaseline'
+
+import './App.css'
 import Dashboard from './Dashboard'
 import Login from './Login'
-import './App.css'
-import Navigation from './Navigation'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import Test from './Test'
-import Box from '@material-ui/core/Box'
-import { v4 } from 'uuid'
-
+import MQFTest from './MQFTest'
 import MQFOverview from './MQFOverview'
 
 const Account = () => {
@@ -41,22 +44,45 @@ const MQFStudy = () => {
   )
 }
 
-const MQFTest = () => {
-  return (
-    <Box my={14}>
-      <h1>[MQF TEST HERE]</h1>
-    </Box>
-  )
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      hasScrolled: false,
       isAuthenticated: false,
       user: null,
       tests: null,
     }
+  }
+
+  toggleVisibility() {
+    if (window.pageYOffset > 200) {
+      this.setState({
+        hasScrolled: true
+      })
+    } else {
+      this.setState({
+        hasScrolled: false
+      })
+    }
+  }
+
+  componentDidMount() {
+    const scrollComponent = this
+    document.addEventListener('scroll', (e) => {
+      scrollComponent.toggleVisibility()
+    })
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('scroll')
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
   }
 
   handleLoginClick = () => {
@@ -73,7 +99,7 @@ class App extends React.Component {
         majcom: "ACC",
         squadron: "74FS",
         office: "CCV",
-        role: "Admin",
+        role: "admin",
       },
       tests: [
         {
@@ -85,7 +111,36 @@ class App extends React.Component {
           date: "5 May 2020, 16:58 Zulu",
           questions: [
             {
-              number: 1,
+              question: 'How many engines does the A-10C have?',
+              options: ['One', 'Two', 'Three', 'Four'],
+              answer: 1,
+              reference: 'T.O. A-10C-1'
+            },
+            {
+              question: 'How many engines does the A-10C have?',
+              options: ['One', 'Two', 'Three', 'Four'],
+              answer: 1,
+              reference: 'T.O. A-10C-1'
+            },
+            {
+              question: 'How many engines does the A-10C have?',
+              options: ['One', 'Two', 'Three', 'Four'],
+              answer: 1,
+              reference: 'T.O. A-10C-1'
+            },
+            {
+              question: 'How many engines does the A-10C have?',
+              options: ['One', 'Two', 'Three', 'Four'],
+              answer: 1,
+              reference: 'T.O. A-10C-1'
+            },
+            {
+              question: 'How many engines does the A-10C have?',
+              options: ['One', 'Two', 'Three', 'Four'],
+              answer: 1,
+              reference: 'T.O. A-10C-1'
+            },
+            {
               question: 'How many engines does the A-10C have?',
               options: ['One', 'Two', 'Three', 'Four'],
               answer: 1,
@@ -102,14 +157,13 @@ class App extends React.Component {
           date: "5 May 2020, 16:58 Zulu",
           questions: [
             {
-              number: 1,
               question: 'How many runways does Moody AFB have?',
               options: ['One', 'Two', 'Three', 'Four'],
               answer: 1,
               reference: 'The Earth'
             }
           ]
-        }
+        },
       ],
     })
   }
@@ -129,8 +183,8 @@ class App extends React.Component {
             <Route exact path="/m"><MQFNew /></Route>
             <Route path="/m/:mqfId/e"><MQFEdit /></Route>
             <Route path="/m/:mqfId/s"><MQFStudy /></Route>
-            <Route path="/m/:mqfId/t"><MQFTest /></Route>
-            <Route path="/m/:mqfId"><MQFOverview state={this.state} /></Route>
+            <Route path="/m/:mqfId/t"><MQFTest state={this.state} scroll={this.scrollToTop} /></Route>
+            <Route path="/m/:mqfId"><MQFOverview state={this.state} scroll={this.scrollToTop} /></Route>
             <Route path="/u/:userId"><Account /></Route>
           </Switch>
         </Router>

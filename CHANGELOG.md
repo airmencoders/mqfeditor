@@ -1,3 +1,10 @@
+## 0.5.0
+- Added `ScrollToTop` component to render a FAB to scroll to top of window
+- Added `hasScrolled` to App state
+- Added `scroll` event listeners to `document` in `componentDidMount` and removed listener in `componentWillUnmount`
+- Added `toggleVisibility` function in `App` class, passing to components using the `ScrollToTop` component
+- Began work on page template for `MQFTest` - Expect work in future for testing, grading, and saving trend data
+
 ## 0.4.0
 - Added `README.md`
 

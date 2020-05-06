@@ -1,13 +1,16 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { NavLink } from 'react-router-dom'
+
 import Divider from '@material-ui/core/Divider'
+import Drawer from '@material-ui/core/Drawer'
+import Fab from '@material-ui/core/Fab'
+import Hidden from '@material-ui/core/Hidden'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import Hidden from '@material-ui/core/Hidden'
-import Drawer from '@material-ui/core/Drawer'
+import { makeStyles } from '@material-ui/core/styles'
 
-import { NavLink } from 'react-router-dom'
+import PostAddIcon from '@material-ui/icons/PostAdd'
 
 const drawerWidth = 240
 
@@ -22,9 +25,15 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   toolbar: theme.mixins.toolbar,
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    left: drawerWidth + theme.spacing(2),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
 }))
-
-
 
 const SideMenu = (props) => {
   const classes = useStyles()
@@ -47,6 +56,18 @@ const SideMenu = (props) => {
           </ListItem>
         ))}
       </List>
+      {
+        (state.user.role === 'admin' || state.user.role === 'staneval') ?
+          (
+            <NavLink to={`/m`}>
+              <Fab color='primary' variant='extended' aria-label='create mqf' className={classes.fab}>
+                <PostAddIcon className={classes.extendedIcon} />
+                Add MQF
+              </Fab>
+            </NavLink>
+          ) :
+          (null)
+      }
     </div>
   )
 

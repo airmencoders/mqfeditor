@@ -1,45 +1,26 @@
 import React from 'react'
-import 'typeface-roboto'
-import { makeStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import ResponsiveNavigation from './ResponsiveNavigation'
-import Divider from '@material-ui/core/Divider'
-import Hidden from '@material-ui/core/Hidden'
-import PropTypes from 'prop-types'
-import Grid from '@material-ui/core/Grid'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardActions from '@material-ui/core/CardActions'
-import { useParams, Link, NavLink, Redirect } from 'react-router-dom'
-import Icon from '@material-ui/core/Icon'
-import EditIcon from '@material-ui/icons/Edit'
-import EditAttributesIcon from '@material-ui/icons/EditAttributes'
-import ListIcon from '@material-ui/icons/List'
-import DeleteIcon from '@material-ui/icons/Delete'
-import Button from '@material-ui/core/Button'
+import { useParams, NavLink, Redirect } from 'react-router-dom'
+
 import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
+import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
+import ListIcon from '@material-ui/icons/List'
+
+import ResponsiveNavigation from './ResponsiveNavigation'
+import ScrollToTop from './ScrollToTop'
 import SideMenu from './SideMenu'
-
-const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  drawerPaper: {
-    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
@@ -66,17 +47,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginTop: theme.spacing(3),
   },
-  center: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
 }))
 
-const MQFOverview = (props) => {
+const MQFOverview = ({ state, scroll }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
-  const { state } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
@@ -104,7 +80,8 @@ const MQFOverview = (props) => {
           <Grid item xs={12}>
             <Card className={classes.card}>
               <CardContent>
-                <Typography variant='h5'>{`[${currentMQF.mds}] ${currentMQF.name}`}</Typography>
+                <Typography variant='h5'>{currentMQF.name}</Typography>
+                <Typography variant='h6'>{`MDS: ${currentMQF.mds}`}</Typography>
                 <Typography variant='subtitle1'>{`Created by: ${mqfOwner.display}`}</Typography>
                 <Typography variant='body1'>{`Version: ${currentMQF.version}`}</Typography>
                 <Typography variant='body1'>{`Date Created: ${currentMQF.date}`}</Typography>
@@ -139,10 +116,10 @@ const MQFOverview = (props) => {
             </Card>
           </Grid>
           {
-            currentMQF.questions.map(object => (
-              <Card className={classes.childCard} key={object.number}>
+            currentMQF.questions.map((object, index) => (
+              <Card className={classes.childCard} key={index}>
                 <CardContent>
-                  <Typography variant='body1'>{`${object.number}. ${object.question}`}</Typography>
+                  <Typography variant='body1'>{`${index + 1}. ${object.question}`}</Typography>
                   {
                     object.options.map((option, index) => (
                       (index === object.answer) ?
@@ -156,6 +133,7 @@ const MQFOverview = (props) => {
             ))
           }
         </Grid>
+        <ScrollToTop state={state} scroll={scroll} />
       </main>
     </div>
   )

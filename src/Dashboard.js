@@ -1,21 +1,13 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import ResponsiveNavigation from './ResponsiveNavigation'
-import Divider from '@material-ui/core/Divider'
-import Hidden from '@material-ui/core/Hidden'
-import PropTypes from 'prop-types'
-import { Link, NavLink, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
+
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
-import Container from '@material-ui/core/Container'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
+import ResponsiveNavigation from './ResponsiveNavigation'
 import SideMenu from './SideMenu'
 
 const drawerWidth = 240
@@ -71,7 +63,7 @@ const Dashboard = (props) => {
             <Card variant='outlined' style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
               <CardContent>
                 <Typography variant='h4' align='center'>
-                  Select a test on the left to begin.
+                  Select a test to begin.
                 </Typography>
               </CardContent>
             </Card>
