@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -112,9 +114,13 @@ const Navigation = ({ state }) => {
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            MQF Dashboard
-          </Typography>
+          <div className={classes.title}>
+            <NavLink to='/' style={{ textDecoration: 'none' }}>
+                <Typography variant='h6' style={{ color: 'white' }}>
+                  MQF Dashboard
+                </Typography>
+            </NavLink>
+          </div>
           <div className={classes.grow} />
           {state.isAuthenticated && (
             <React.Fragment>

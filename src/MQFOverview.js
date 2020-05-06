@@ -1,4 +1,5 @@
 import React from 'react'
+import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -10,7 +11,20 @@ import ResponsiveNavigation from './ResponsiveNavigation'
 import Divider from '@material-ui/core/Divider'
 import Hidden from '@material-ui/core/Hidden'
 import PropTypes from 'prop-types'
-import { Link, NavLink } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardActions from '@material-ui/core/CardActions'
+import { useParams, Link, NavLink, Redirect } from 'react-router-dom'
+import Icon from '@material-ui/core/Icon'
+import EditIcon from '@material-ui/icons/Edit'
+import EditAttributesIcon from '@material-ui/icons/EditAttributes'
+import ListIcon from '@material-ui/icons/List'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+
+import SideMenu from './SideMenu'
 
 const drawerWidth = 240
 
@@ -27,20 +41,41 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerContainer: {
-    overflow: 'auto',
-  },
   content: {
     flexGrow: 1,
+    width: '100%',
     padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
+  blueButton: {
+    margin: theme.spacing(1),
+  },
+  redButton: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.error.main,
+    color: 'white',
+  },
+  card: {
+    width: '75%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  childCard: {
+    width: '75%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: theme.spacing(3),
+  },
+  center: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
 }))
 
 const MQFOverview = (props) => {
   const classes = useStyles()
+  let { mqfId } = useParams()
 
-  const { window } = props
   const { state } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
@@ -48,76 +83,79 @@ const MQFOverview = (props) => {
     setMobileOpen(!mobileOpen)
   }
 
-  const drawer = (
-    <div>
-      <div className={classes.toolbar} />
-      <Divider />
-      <List>
-        {state.tests.map((test) => (
-          <ListItem button key={test.id}>
-            <NavLink to={`/m/${test.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
-              <ListItemText primary={`[${test.mds}] ${test.name}`} />
-            </NavLink>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  )
+  if (state.isAuthenticated === false) {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
-  const container = window !== undefined ? () => window().document.body : undefined
+  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
+  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
+  const currentMQF = filterMQF(mqfId, state.tests)[0]
+  const mqfOwner = { ...state.user }
 
   return (
     <div className={classes.root}>
       <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <nav className={classes.drawer} aria-label="mqf tests">
-        <Hidden smUp implementation="js">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor="left"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{ paper: classes.drawerPaper, }}
-            modalProps={{ keepMounted: true, }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="js">
-          <Drawer
-            classes={{ paper: classes.drawerPaper, }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Grid container direction='row' justify='center'>
+          <Grid item xs={12}>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography variant='h5'>{`[${currentMQF.mds}] ${currentMQF.name}`}</Typography>
+                <Typography variant='subtitle1'>{`Created by: ${mqfOwner.display}`}</Typography>
+                <Typography variant='body1'>{`Version: ${currentMQF.version}`}</Typography>
+                <Typography variant='body1'>{`Date Created: ${currentMQF.date}`}</Typography>
+                <Typography variant='body1'>{`Number of questions: ${currentMQF.questions.length}`}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Show actions only if test owner / admin */}
+          <Grid item xs={12}>
+            <Card className={classes.childCard}>
+              <CardActions>
+                <Box display='flex' direction='row' flexWrap='wrap'>
+                  <NavLink to={`/m/${mqfId}/t`} style={{ textDecoration: 'none' }}>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListIcon />}>Take Practice Test</Button>
+                  </NavLink>
+
+                  {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
+                    (
+                      <React.Fragment >
+                        <NavLink to={`/m/${mqfId}/e`} style={{ textDecoration: 'none' }}>
+                          <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<EditIcon />}>Edit Test</Button>
+                        </NavLink>
+                        <Button variant='contained' className={classes.redButton} startIcon={<DeleteIcon />}>Delete Test</Button>
+
+                      </React.Fragment>
+                    ) :
+                    (null)
+                  }
+                </Box>
+              </CardActions>
+            </Card>
+          </Grid>
+          {
+            currentMQF.questions.map(object => (
+              <Card className={classes.childCard} key={object.number}>
+                <CardContent>
+                  <Typography variant='body1'>{`${object.number}. ${object.question}`}</Typography>
+                  {
+                    object.options.map((option, index) => (
+                      (index === object.answer) ?
+                        <Typography variant='subtitle1' key={index}><strong>{`${String.fromCharCode(65 + index)}. ${option}`}</strong></Typography> :
+                        <Typography variant='subtitle1' key={index}>{`${String.fromCharCode(65 + index)}. ${option}`}</Typography>
+                    ))
+                  }
+                  <Typography variant='subtitle1'><i>{`Reference: ${object.reference}`}</i></Typography>
+                </CardContent>
+              </Card>
+            ))
+          }
+        </Grid>
       </main>
     </div>
   )

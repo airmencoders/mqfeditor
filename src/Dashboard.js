@@ -10,11 +10,13 @@ import ResponsiveNavigation from './ResponsiveNavigation'
 import Divider from '@material-ui/core/Divider'
 import Hidden from '@material-ui/core/Hidden'
 import PropTypes from 'prop-types'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, Redirect } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
+
+import SideMenu from './SideMenu'
 
 const drawerWidth = 240
 
@@ -31,16 +33,12 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerContainer: {
-    overflow: 'auto',
-  },
   content: {
+    flexGrow: 1,
+    width: '100%',
     padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
-  title: {
-    fontSize: 14,
-  },
   card: {
     minWidth: 275,
   },
@@ -49,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = (props) => {
   const classes = useStyles()
 
-  const { window } = props
   const { state } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
@@ -57,67 +54,31 @@ const Dashboard = (props) => {
     setMobileOpen(!mobileOpen)
   }
 
-  const drawer = (
-    <div>
-      <div className={classes.toolbar} />
-      <Divider />
-      <List>
-        {state.tests.map((test) => (
-          <ListItem button key={test.id}>
-            <NavLink to={`/m/${test.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
-              <ListItemText primary={`[${test.mds}] ${test.name}`} />
-            </NavLink>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  )
-
-  const container = window !== undefined ? () => window().document.body : undefined
+  if(state.isAuthenticated === false) {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
   return (
     <div className={classes.root}>
       <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <nav className={classes.drawer} aria-label="mqf tests">
-        <Hidden smUp implementation="js">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor="left"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{ paper: classes.drawerPaper, }}
-            modalProps={{ keepMounted: true, }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="js">
-          <Drawer
-            classes={{ paper: classes.drawerPaper, }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-          <Container maxWidth="sm">
-            <Card variant="outlined" className={classes.card}>
+        <Grid container direction='row' justify='center'>
+          <Grid item xs={12}>
+            <Card variant='outlined' style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
               <CardContent>
-                <Typography variant="body2" component="p">
-                  Select a MQF Test on the left to begin.
-                </Typography>
-                <Typography variant="body2" component="p">
-                  TODO: Center the card
+                <Typography variant='h4' align='center'>
+                  Select a test on the left to begin.
                 </Typography>
               </CardContent>
             </Card>
-          </Container>
+          </Grid>
+        </Grid>
       </main>
-    </div>
+    </div >
   )
 }
 

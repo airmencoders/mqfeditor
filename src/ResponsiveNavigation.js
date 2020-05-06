@@ -123,9 +123,13 @@ const Navigation = ({ state, onMenuClick }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            MQF Dashboard
-          </Typography>
+          <div className={classes.title}>
+            <NavLink to='/' style={{ textDecoration: 'none' }}>
+              <Typography variant='h6' style={{ color: 'white' }}>
+                MQF Dashboard
+              </Typography>
+            </NavLink>
+          </div>
           <div className={classes.grow} />
           {state.isAuthenticated && (
             <React.Fragment>
