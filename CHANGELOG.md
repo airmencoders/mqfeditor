@@ -1,3 +1,6 @@
+## 0.4.0
+- Added `README.md`
+
 ## 0.3.0
 - Continued work on `/src/MQFOverview`
 - Moved sidebar navigation to own Component
