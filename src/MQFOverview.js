@@ -1,3 +1,38 @@
+/**
+ * Renders an overview of MQF Test
+ * 
+ * Includes an overview of the test meta-data, actions to study, take a test, view trend data,
+ * and Admin / Owner actions
+ * 
+ * @link    https://airmencoders.cce.us.af.mil/mqf
+ * @link    https://github.com/airmencoders/mqfeditor
+ * @file    MQFOverview.js
+ * @author  chris-m92
+ * @since   0.1.0
+ * @version 0.6.0
+ * 
+ * MIT License
+ * 
+ * Copyright (c) 2020 Airmen Coders
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import React from 'react'
 import { useParams, NavLink, Redirect } from 'react-router-dom'
 
@@ -12,7 +47,8 @@ import Typography from '@material-ui/core/Typography'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
-import ListIcon from '@material-ui/icons/List'
+import ListAltIcon from '@material-ui/icons/ListAlt'
+import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
 import ResponsiveNavigation from './ResponsiveNavigation'
 import ScrollToTop from './ScrollToTop'
@@ -34,22 +70,17 @@ const useStyles = makeStyles((theme) => ({
   redButton: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.error.main,
-    color: 'white',
+    color: theme.palette.getContrastText(theme.palette.error.main)
   },
   card: {
-    width: '75%',
+    // width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  childCard: {
-    width: '75%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
   },
 }))
 
-const MQFOverview = ({ state, scroll }) => {
+const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
@@ -72,17 +103,25 @@ const MQFOverview = ({ state, scroll }) => {
 
   return (
     <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
+      <ResponsiveNavigation
+        onLogoutClick={onLogoutClick}
+        onMenuClick={handleDrawerToggle}
+        state={state}
+      />
+      <SideMenu
+        mobileOpen={mobileOpen}
+        onMenuClick={handleDrawerToggle}
+        state={state}
+      />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
-          <Grid item xs={12}>
+          <Grid item xs={10}>
             <Card className={classes.card}>
               <CardContent>
                 <Typography variant='h5'>{currentMQF.name}</Typography>
                 <Typography variant='h6'>{`MDS: ${currentMQF.mds}`}</Typography>
-                <Typography variant='subtitle1'>{`Created by: ${mqfOwner.display}`}</Typography>
+                <Typography variant='subtitle1'>{`Created by: ${mqfOwner.rank} ${mqfOwner.first} ${mqfOwner.last}, ${mqfOwner.squadron}/${mqfOwner.office}`}</Typography>
                 <Typography variant='body1'>{`Version: ${currentMQF.version}`}</Typography>
                 <Typography variant='body1'>{`Date Created: ${currentMQF.date}`}</Typography>
                 <Typography variant='body1'>{`Number of questions: ${currentMQF.questions.length}`}</Typography>
@@ -91,12 +130,15 @@ const MQFOverview = ({ state, scroll }) => {
           </Grid>
 
           {/* Show actions only if test owner / admin */}
-          <Grid item xs={12}>
-            <Card className={classes.childCard}>
+          <Grid item xs={10}>
+            <Card className={classes.card}>
               <CardActions>
                 <Box display='flex' direction='row' flexWrap='wrap'>
+                  <NavLink to={`/m/${mqfId}/s`} style={{ textDecoration: 'none' }}>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study MQF</Button>
+                  </NavLink>
                   <NavLink to={`/m/${mqfId}/t`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListIcon />}>Take Practice Test</Button>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListAltIcon />}>Take Practice Test</Button>
                   </NavLink>
 
                   {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
@@ -117,23 +159,29 @@ const MQFOverview = ({ state, scroll }) => {
           </Grid>
           {
             currentMQF.questions.map((object, index) => (
-              <Card className={classes.childCard} key={index}>
-                <CardContent>
-                  <Typography variant='body1'>{`${index + 1}. ${object.question}`}</Typography>
-                  {
-                    object.options.map((option, index) => (
-                      (index === object.answer) ?
-                        <Typography variant='subtitle1' key={index}><strong>{`${String.fromCharCode(65 + index)}. ${option}`}</strong></Typography> :
-                        <Typography variant='subtitle1' key={index}>{`${String.fromCharCode(65 + index)}. ${option}`}</Typography>
-                    ))
-                  }
-                  <Typography variant='subtitle1'><i>{`Reference: ${object.reference}`}</i></Typography>
-                </CardContent>
-              </Card>
+              <Grid item xs={10}>
+                <Card className={classes.card} key={index}>
+                  <CardContent>
+                    <Typography variant='body1'>{`${index + 1}. ${object.question}`}</Typography>
+                    {
+                      object.options.map((option, index) => (
+                        (index === object.answer) ?
+                          <Typography variant='subtitle1' key={index}><strong>{`${String.fromCharCode(65 + index)}. ${option}`}</strong></Typography> :
+                          <Typography variant='subtitle1' key={index}>{`${String.fromCharCode(65 + index)}. ${option}`}</Typography>
+                      ))
+                    }
+                    <Typography variant='subtitle1'><i>{`Reference: ${object.reference}`}</i></Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))
           }
         </Grid>
-        <ScrollToTop state={state} scroll={scroll} />
+        <ScrollToTop
+          onScrollToTop={onScrollToTop}
+          order={1}
+          state={state}
+        />
       </main>
     </div>
   )

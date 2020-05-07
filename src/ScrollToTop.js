@@ -12,12 +12,12 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 const useStyles = makeStyles((theme) => ({
   fab: {
     position: 'fixed',
-    bottom: theme.spacing(2),
+    bottom: theme.spacing(11),
     right: theme.spacing(2),
   },
 }))
 
-const ScrollToTop = ({ state, scroll }) => {
+const ScrollToTop = ({ state, onScrollToTop, order }) => {
   const classes = useStyles()
   const theme = useTheme()
 
@@ -34,8 +34,12 @@ const ScrollToTop = ({ state, scroll }) => {
     >
       <Fab
         aria-label='scroll to top'
-        className={classes.fab}
-        onClick={scroll}
+        onClick={onScrollToTop}
+        style={{
+          position: 'fixed',
+          bottom: theme.spacing(((order - 1) * 9) + 2),
+          right: theme.spacing(2)
+        }}
       >
         <UpIcon />
       </Fab>

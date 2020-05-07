@@ -1,3 +1,12 @@
+## 0.6.0
+- Added border to `Login` CAC Image
+- Began adding file headers to files
+- Updated `ScrollToTop` bottom style to be calculated depending on the order
+- Moved the `Add MQF` FAB from the `SideMenu` to the `Dashboard` - This means that you can only add an MQF from the dashboard, but better aligns with Material Style Guidelines
+- Updated property names
+- Added template pages for `MQFNew`, `MQFStudy`, `MQFTest`, & `UserAccount`
+- Began work on `MQFEdit` page
+
 ## 0.5.0
 - Added `ScrollToTop` component to render a FAB to scroll to top of window
 - Added `hasScrolled` to App state

@@ -1,5 +1,34 @@
 /**
+ * Routes React SPA through website
  * 
+ * @link    https://airmencoders.cce.us.af.mil/mqf
+ * @link    https://github.com/airmencoders/mqfeditor
+ * @file    App.js
+ * @author  chris-m92
+ * @since   0.1.0
+ * @version 0.6.0
+ * 
+ * MIT License
+ * 
+ * Copyright (c) 2020 Airmen Coders
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 import React from 'react'
 
@@ -11,38 +40,12 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import './App.css'
 import Dashboard from './Dashboard'
 import Login from './Login'
+import MQFEdit from './MQFEdit'
+import MQFNew from './MQFNew'
+import MQFStudy from './MQFStudy'
 import MQFTest from './MQFTest'
 import MQFOverview from './MQFOverview'
-
-const Account = () => {
-  return (
-    <h1>[ACCOUNT SETTINGS HERE</h1>
-  )
-}
-
-const MQFNew = () => {
-  return (
-    <Box my={14}>
-      <h1>[NEW TEST FORM HERE]</h1>
-    </Box>
-  )
-}
-
-const MQFEdit = () => {
-  return (
-    <Box my={14}>
-      <h1>[MQF EDIT HERE]</h1>
-    </Box>
-  )
-}
-
-const MQFStudy = () => {
-  return (
-    <Box my={14}>
-      <h1>[MQF STUDY HERE]</h1>
-    </Box>
-  )
-}
+import UserAccount from './UserAccount'
 
 class App extends React.Component {
   constructor(props) {
@@ -55,7 +58,7 @@ class App extends React.Component {
     }
   }
 
-  toggleVisibility() {
+  toggleScrollButtonVisibility() {
     if (window.pageYOffset > 200) {
       this.setState({
         hasScrolled: true
@@ -70,18 +73,29 @@ class App extends React.Component {
   componentDidMount() {
     const scrollComponent = this
     document.addEventListener('scroll', (e) => {
-      scrollComponent.toggleVisibility()
+      scrollComponent.toggleScrollButtonVisibility()
     })
   }
 
   componentWillUnmount() {
-    document.removeEventListener('scroll')
+    const scrollComponent = null
+    document.removeEventListener('scroll', (e) => {
+      scrollComponent.toggleScrollButtonVisibility()
+    })
   }
 
-  scrollToTop() {
+  handleScrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
+    })
+  }
+
+  handleLogoutClick = () => {
+    this.setState({
+      isAuthenticated: false,
+      user: null,
+      tests: null,
     })
   }
 
@@ -176,16 +190,58 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/">
               {(this.state.isAuthenticated) ?
-                <Dashboard state={this.state} /> :
-                <Login state={this.state} onClick={() => { this.handleLoginClick() }} />
+                <Dashboard
+                  onLogoutClick={this.handleLogoutClick}
+                  state={this.state}
+                /> :
+                <Login
+                  onLoginClick={this.handleLoginClick}
+                  state={this.state}
+                />
               }
             </Route>
-            <Route exact path="/m"><MQFNew /></Route>
-            <Route path="/m/:mqfId/e"><MQFEdit /></Route>
-            <Route path="/m/:mqfId/s"><MQFStudy /></Route>
-            <Route path="/m/:mqfId/t"><MQFTest state={this.state} scroll={this.scrollToTop} /></Route>
-            <Route path="/m/:mqfId"><MQFOverview state={this.state} scroll={this.scrollToTop} /></Route>
-            <Route path="/u/:userId"><Account /></Route>
+            <Route exact path="/m">
+              <MQFNew 
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop}
+                state={this.state}
+              />
+            </Route>
+            <Route path="/m/:mqfId/e">
+              <MQFEdit
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop}
+                state={this.state}
+              />
+            </Route>
+            <Route path="/m/:mqfId/s">
+              <MQFStudy
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop}
+                state={this.state}
+              />
+            </Route>
+            <Route path="/m/:mqfId/t">
+              <MQFTest 
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop}
+                state={this.state}
+              />
+            </Route>
+            <Route path="/m/:mqfId">
+              <MQFOverview 
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop} 
+                state={this.state}
+              />
+            </Route>
+            <Route path="/u/:userId">
+              <UserAccount 
+                onLogoutClick={this.handleLogoutClick}
+                onScrollToTop={this.handleScrollToTop}
+                state={this.state}
+              />
+            </Route>
           </Switch>
         </Router>
       </div>
