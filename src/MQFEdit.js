@@ -7,7 +7,7 @@
  * @link    https://github.com/airmencoders/mqfeditor
  * @file    MQFOverview.js
  * @author  chris-m92
- * @since   0.1.0
+ * @since   0.5.0
  * 
  * MIT License
  * 
@@ -32,31 +32,25 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { useParams, NavLink, Redirect } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Divider from '@material-ui/core/Divider'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
 import Snackbar from '@material-ui/core/Snackbar'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
-import DeleteIcon from '@material-ui/icons/Delete'
-import EditIcon from '@material-ui/icons/Edit'
-import ListIcon from '@material-ui/icons/List'
 import SaveIcon from '@material-ui/icons/Save'
 
 import ResponsiveNavigation from './ResponsiveNavigation'
 import ScrollToTop from './ScrollToTop'
 import SideMenu from './SideMenu'
+import QuestionEdit from './QuestionEdit'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,14 +62,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
-  blueButton: {
-    margin: theme.spacing(1),
-  },
-  redButton: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.error.main,
-    color: 'white',
-  },
   card: {
     //width: '100%',
     marginLeft: 'auto',
@@ -85,18 +71,6 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(3),
   },
-  wideTextField: {
-    margin: theme.spacing(3),
-    maxWidth: '700px',
-    flexGrow: 1,
-  },
-  fullWidthTextField: {
-    marginBottom: theme.spacing(3),
-  },
-  redButton: {
-    backgroundColor: theme.palette.error.main,
-    color: theme.palette.getContrastText(theme.palette.error.main),
-  },
   fab: {
     position: 'fixed',
     bottom: theme.spacing(2),
@@ -104,14 +78,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MQFEdit = ({ state, onScrollToTop, onLogoutClick }) => {
+const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
   const classes = useStyles()
-  let { mqfId } = useParams()
-
+  const { mqfId } = useParams()
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [snackbarOpen, setSnackbarOpen] = React.useState(false)
 
-  const handleSnackbarClick = () => {
+  // Ensure that user is logged in
+  if (state.isAuthenticated === false) {
+    return (
+      <Redirect to='/' />
+    )
+  }
+
+  // Declare references
+  let _mds, _name
+
+  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
+  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
+  const currentMQF = filterMQF(mqfId, state.tests)[0]
+
+  const handleSaveClick = () => {
+    let newMQF = {
+      ...currentMQF,
+      mds: _mds.value,
+      name: _name.value,
+      version: currentMQF.version + 1,
+      date: new Date().toString(),
+    }
+    onSave(mqfId, newMQF)
     setSnackbarOpen(true)
   }
 
@@ -119,24 +114,12 @@ const MQFEdit = ({ state, onScrollToTop, onLogoutClick }) => {
     if (reason === 'clickaway') {
       return
     }
-
     setSnackbarOpen(false)
   }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  }
-
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
-  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
-  const currentMQF = filterMQF(mqfId, state.tests)[0]
-  const mqfOwner = { ...state.user }
+  } 
 
   return (
     <div className={classes.root}>
@@ -165,73 +148,25 @@ const MQFEdit = ({ state, onScrollToTop, onLogoutClick }) => {
                     className={classes.textField}
                     defaultValue={currentMQF.mds}
                     id='mqf-mds'
+                    inputRef={value => _mds = value}
                     label='MDS'
                   />
                   <TextField
                     className={classes.textField}
                     defaultValue={currentMQF.name}
                     id='mqf-name'
+                    inputRef={value => _name = value}
                     label='MQF Name'
-                  />
-                  <TextField
-                    className={classes.wideTextField}
-                    defaultValue={mqfOwner.display}
-                    disabled
-                    id='mqf-owner'
-                    label='Owner'
-                    multiline
-                  />
-                  <TextField
-                    className={classes.textField}
-                    defaultValue={currentMQF.version + 1}
-                    disabled
-                    id='mqf-version'
-                    label='Version'
                   />
                 </Box>
               </Card>
               {
-                currentMQF.questions.map((object, index) => (
-                  <Card className={classes.card} key={index}>
-                    <CardContent>
-                      <TextField
-                        id={`question-${index + 1}`}
-                        className={classes.fullWidthTextField}
-                        defaultValue={object.question}
-                        fullWidth
-                        label={`Question ${index + 1}`}
-                        multiline
-                      />
-                      {
-                        object.options.map((option, index) => (
-                          <TextField
-                            className={classes.fullWidthTextField}
-                            defaultValue={option}
-                            fullWidth
-                            key={index}
-                            label={`Option ${String.fromCharCode(65 + index)}`}
-                            multiline
-                          />
-                        ))
-                      }
-
-                    </CardContent>
-                    <Divider />
-                    <CardActions>
-                      <Button
-                        color='primary'
-                        variant='contained'
-                      >
-                        Add Option
-                      </Button>
-                      <Button
-                        className={classes.redButton}
-                        variant='contained'
-                      >
-                        Delete question
-                      </Button>
-                    </CardActions>
-                  </Card>
+                currentMQF.questions.map((question, questionIndex) => (
+                  <QuestionEdit
+                    key={`question-${questionIndex}`}
+                    question={question}
+                    questionIndex={questionIndex}
+                  />
                 ))
               }
               <Button
@@ -247,7 +182,7 @@ const MQFEdit = ({ state, onScrollToTop, onLogoutClick }) => {
           aria-label='save changes'
           className={classes.fab}
           color='primary'
-          onClick={handleSnackbarClick}
+          onClick={handleSaveClick}
         >
           <SaveIcon />
         </Fab>

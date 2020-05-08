@@ -9,7 +9,6 @@
  * @file    MQFOverview.js
  * @author  chris-m92
  * @since   0.1.0
- * @version 0.6.0
  * 
  * MIT License
  * 
@@ -159,8 +158,8 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
           </Grid>
           {
             currentMQF.questions.map((object, index) => (
-              <Grid item xs={10}>
-                <Card className={classes.card} key={index}>
+              <Grid item xs={10} key={index}>
+                <Card className={classes.card}>
                   <CardContent>
                     <Typography variant='body1'>{`${index + 1}. ${object.question}`}</Typography>
                     {

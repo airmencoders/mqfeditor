@@ -1,3 +1,6 @@
+## 0.7.0
+- Added function to update state of tests when clicking `save` FAB in `MQFEdit`
+
 ## 0.6.0
 - Added border to `Login` CAC Image
 - Began adding file headers to files

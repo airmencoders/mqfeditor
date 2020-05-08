@@ -9,7 +9,6 @@
  * @file    Dashboard.js
  * @author  chris-m92
  * @since   0.1.0
- * @version 0.6.0
  * 
  * MIT License
  * 
