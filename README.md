@@ -27,12 +27,18 @@ npm install @material-ui/icons --save
 npm install react-router-dom --save
 npm install typeface-roboto --save
 npm install prop-types --save
+npm install pdf-parse --save
+npm install react-card-flip --save
 ```
 
 ## Authentication
 **DEVELOPMENT ONLY** 
 Currently only meant for mock-up using sample data.
 Expected to gain authentication from other means
+
+## State
+**DEVELOPMENT ONLY**
+Currently using mock-api to generate sample `state`. Because of this, any direct navigation through the URL bar will reset the state bringing you back to the login screen.
 
 ## Roles
 1. Administrator - Allowed all rights in website

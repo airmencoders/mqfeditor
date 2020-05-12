@@ -44,8 +44,8 @@ import Typography from '@material-ui/core/Typography'
 
 import PostAddIcon from '@material-ui/icons/PostAdd'
 
-import ResponsiveNavigation from './ResponsiveNavigation'
-import SideMenu from './SideMenu'
+import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import SideMenu from '../components/SideMenu'
 
 const drawerWidth = 240
 
@@ -86,17 +86,26 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = ({ state, onLogoutClick }) => {
   const classes = useStyles()
+
+  //----------------------------------------------------------------//
+  // Internal state passed to Drawer component
+
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
 
+  //----------------------------------------------------------------//
+  // Ensure user is authenticated
+
   if(state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
     )
   }
+  
+  //----------------------------------------------------------------//
 
   return (
     <div className={classes.root}>

@@ -32,6 +32,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+import Badge from '@material-ui/core/Badge'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
@@ -66,7 +67,9 @@ const SideMenu = ({ window, state, onMenuClick, mobileOpen }) => {
         {state.tests.map((test) => (
           <ListItem button key={test.id} onClick={onMenuClick} >
             <NavLink to={`/m/${test.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
-              <ListItemText primary={`[${test.mds}] ${test.name}`} />
+              <Badge variant='dot' color='secondary' invisible={test.seen}>
+                <ListItemText primary={`[${test.mds}] ${test.name}`} />
+              </Badge>
             </NavLink>
           </ListItem>
         ))}

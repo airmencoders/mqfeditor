@@ -38,7 +38,7 @@ import Fab from '@material-ui/core/Fab'
 import { useTheme } from '@material-ui/core/styles'
 import Zoom from '@material-ui/core/Zoom'
 
-import UpIcon from '@material-ui/icons/KeyboardArrowUp'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
 const ScrollToTop = ({ state, onScrollToTop, order }) => {
   const theme = useTheme()
@@ -63,7 +63,7 @@ const ScrollToTop = ({ state, onScrollToTop, order }) => {
           right: theme.spacing(2)
         }}
       >
-        <UpIcon />
+        <KeyboardArrowUpIcon />
       </Fab>
     </Zoom>
   )

@@ -1,3 +1,21 @@
+## 0.9.0
+- Remove questions from MQF Overview - make room for trend data
+- Installed `react-flip-card` from `npm`, allows for CSS transformations to look like flip card
+- Implemented `MQFStudy`, currently only studies 'flashcard' style in order.
+- TODO: Vertically center answer on flashcard
+- TODO: Implement an option for random order studying (using `react-router` url query?) - require extra 'state'
+- TODO: Implement `MQFTest` (will always be in random order)
+- TODO: Implement User Account page
+- TODO: Implement `MQFCreate` page (PDF Import, parse, JSON Generation add to state / database through API Endpoints) as well as manual
+- FEATURE: Potential for 'private' vs. 'public' tests?
+
+## 0.8.0
+- Finished MQF Save functionality
+- Need to add modification of questions (add / remove options)
+- Need to add / remove questions
+- Changed `array.filter` to finding index for current array for readability
+- Fixed bug where saving a test would change order in `SideMenu`
+
 ## 0.7.0
 - Added function to update state of tests when clicking `save` FAB in `MQFEdit`
 

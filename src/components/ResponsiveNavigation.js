@@ -45,6 +45,8 @@ import Typography from '@material-ui/core/Typography'
 
 import MenuIcon from '@material-ui/icons/Menu'
 
+import version from '../version'
+
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -127,7 +129,7 @@ const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
                     Log Out
                 </MenuItem>
                 <Divider />
-                v0.6.0
+                {version}
               </Menu>
             </div>
           )}

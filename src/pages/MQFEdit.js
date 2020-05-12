@@ -47,10 +47,10 @@ import TextField from '@material-ui/core/TextField'
 import CloseIcon from '@material-ui/icons/Close'
 import SaveIcon from '@material-ui/icons/Save'
 
-import ResponsiveNavigation from './ResponsiveNavigation'
-import ScrollToTop from './ScrollToTop'
-import SideMenu from './SideMenu'
-import QuestionEdit from './QuestionEdit'
+import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import ScrollToTop from '../components/ScrollToTop'
+import SideMenu from '../components/SideMenu'
+import QuestionEdit from '../components/QuestionEdit'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,34 +81,20 @@ const useStyles = makeStyles((theme) => ({
 const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
+
+  //----------------------------------------------------------------//
+  // Internal state passed to Drawer component
+
   const [mobileOpen, setMobileOpen] = React.useState(false)
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  } 
+
+  //----------------------------------------------------------------//
+  // Internal state passed to Snackbar component
+
   const [snackbarOpen, setSnackbarOpen] = React.useState(false)
-
-  // Ensure that user is logged in
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
-  // Declare references
-  let _mds, _name
-
-  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
-  const currentMQF = filterMQF(mqfId, state.tests)[0]
-
-  const handleSaveClick = () => {
-    let newMQF = {
-      ...currentMQF,
-      mds: _mds.value,
-      name: _name.value,
-      version: currentMQF.version + 1,
-      date: new Date().toString(),
-    }
-    onSave(mqfId, newMQF)
-    setSnackbarOpen(true)
-  }
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -117,9 +103,86 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
     setSnackbarOpen(false)
   }
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
+  //----------------------------------------------------------------//
+
+
+  // Declare references
+  let _mds, _name
+  // array of questions in order
+  const questionRefs = React.useRef([])
+
+  // 2D array of options in order
+  // [['one', 'two', 'three', 'four']]
+  const optionRefs = React.useRef([])
+
+  // array of answers in order
+  const answerRefs = React.useRef([])
+
+  // Array of publication references in order
+  const referenceRefs = React.useRef([])
+
+  // Ensure that user is logged in
+  if (state.isAuthenticated === false) {
+    return (
+      <Redirect to='/' />
+    )
   } 
+
+  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
+  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
+  const currentMQF = filterMQF(mqfId, state.tests)[0]
+
+  const testSaveQuestions = () => {
+    questionRefs.current.forEach((qRef, qIndex) => {
+      console.log(`Question ${qIndex}:`, qRef.value)
+
+      optionRefs.current[qIndex].forEach((oRef, oIndex) => (
+        console.log(`Option ${oIndex}:`, oRef.value)
+      ))
+
+      console.log(`Answer ${qIndex}:`, answerRefs.current[qIndex].charCodeAt(0) - 65)
+      console.log(`Reference:`, referenceRefs.current[qIndex].value)
+      console.log('-------------------------')
+    })
+
+    // Make
+  }
+
+  const handleSaveClick = () => {
+
+    let questions = []
+    questionRefs.current.forEach((qRef, qIndex) => {
+      let options = []
+
+      optionRefs.current[qIndex].forEach((oRef, oIndex) => options[oIndex] = oRef.value)
+
+      const question = {
+        question: qRef.value,
+        options,
+        answer: (answerRefs.current[qIndex].charCodeAt(0) - 65),
+        reference: referenceRefs.current[qIndex].value
+      }
+
+      questions[qIndex] = question
+    })
+
+
+    let newMQF = {
+      ...currentMQF,
+      mds: _mds.value,
+      name: _name.value,
+      version: currentMQF.version + 1,
+      date: new Date().toString(),
+      seen: false,
+      questions
+    }
+    onSave(mqfId, newMQF)
+    setSnackbarOpen(true)
+  }
+
+  
+
+  
 
   return (
     <div className={classes.root}>
@@ -163,9 +226,13 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
               {
                 currentMQF.questions.map((question, questionIndex) => (
                   <QuestionEdit
+                    answerRefs={answerRefs}
                     key={`question-${questionIndex}`}
+                    optionRefs={optionRefs}
+                    referenceRefs={referenceRefs}
                     question={question}
                     questionIndex={questionIndex}
+                    questionRefs={questionRefs}
                   />
                 ))
               }

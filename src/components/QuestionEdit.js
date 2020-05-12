@@ -67,13 +67,16 @@ const useStyles = makeStyles((theme) => ({
   },*/
 }))
 
-const Question = ({question, questionIndex}) => {
+const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
   const [selectedValue, setSelectedValue] = React.useState(String.fromCharCode(65 + question.answer))
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value)
   }
+
+  // Initialize the current reference as a 2D array
+  optionRefs.current[questionIndex] = []
 
   return (
     <Card className={classes.card} key={questionIndex}>
@@ -83,6 +86,7 @@ const Question = ({question, questionIndex}) => {
           className={classes.fullWidthTextField}
           defaultValue={question.question}
           fullWidth
+          inputRef={value => questionRefs.current[questionIndex] = value }
           label={`Question ${questionIndex + 1}`}
           multiline
         />
@@ -104,16 +108,26 @@ const Question = ({question, questionIndex}) => {
                       value={String.fromCharCode(65 + optionIndex)}
                       name={`question-${questionIndex}-option-${optionIndex}`}
                       inputProps={{ 'aria-label': String.fromCharCode(65 + optionIndex) }}
+                      inputRef={() => answerRefs.current[questionIndex] = selectedValue}
                     />
                   </InputAdornment>
                 )
-              }}
+              }}              
+              inputRef={ value => optionRefs.current[questionIndex][optionIndex] = value }
               label={`Option ${String.fromCharCode(65 + optionIndex)}`}
               multiline
             />
           ))
         }
-
+        <TextField
+          id={`question-${questionIndex + 1}-reference`}
+          className={classes.fullWidthTextField}
+          defaultValue={question.reference}
+          fullWidth
+          inputRef={value => referenceRefs.current[questionIndex] = value}
+          label='Reference'
+          multiline
+        />
       </CardContent>
       <Divider />
       <CardActions>

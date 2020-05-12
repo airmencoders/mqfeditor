@@ -30,11 +30,12 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import update from 'immutability-helper'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 
-import { authData } from './mockApi/authData'
+import { authData } from '../mockApi/authData'
 import Dashboard from './Dashboard'
 import Login from './Login'
 import MQFEdit from './MQFEdit'
@@ -81,15 +82,36 @@ class App extends React.Component {
     })
   }
 
-  handleSaveMQFChanges = (oldId, newVersion) => {
-    const filterTests = (needle, haystack) => haystack.filter(mqf => mqf.id !== needle)
+  handleMQFSeen = (id, seenVersion) => {
+    /*const filterTests = (needle, haystack) => haystack.filter(mqf => mqf.id !== needle)
     const newTests = [
-      newVersion,
-      ...filterTests(oldId, this.state.tests)
-    ]
+      seenVersion,
+      ...filterTests(id, this.state.tests)
+    ]*/
+
+    const index = this.state.tests.findIndex((needle) => needle.id === id )
+
+    const testArray = this.state.tests.slice()
+    testArray[index] = seenVersion
 
     this.setState({
-      tests: newTests,
+      tests: testArray,
+    })
+    
+    /*this.setState({
+      tests: update(this.state.tests, {index: {seen: {$set: true}}})
+    })*/
+  }
+
+  handleSaveMQFChanges = (id, newVersion) => {
+
+    const index = this.state.tests.findIndex((needle) => needle.id === id)
+
+    const testArray = this.state.tests.slice()
+    testArray[index] = newVersion
+
+    this.setState({
+      tests: testArray,
     })
   }
 
@@ -101,7 +123,7 @@ class App extends React.Component {
   }
 
   toggleScrollButtonVisibility() {
-    if (window.pageYOffset > 200) {
+    if (window.pageYOffset > 100) {
       this.setState({
         hasScrolled: true
       })
@@ -145,10 +167,12 @@ class App extends React.Component {
                 state={this.state}
               />
             </Route>
-            <Route path="/m/:mqfId/s">
+            <Redirect exact from='/m/:mqfId/s' to='/m/:mqfId/s/sequential' />
+            <Route path="/m/:mqfId/s/:order">
               <MQFStudy
                 onLogoutClick={this.handleLogoutClick}
                 onScrollToTop={this.handleScrollToTop}
+                onSeen={this.handleMQFSeen}
                 state={this.state}
               />
             </Route>

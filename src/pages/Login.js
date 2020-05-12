@@ -40,9 +40,9 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-import cac from './images/cac.png'
+import cac from '../images/cac.png'
 
-import Navigation from './Navigation'
+import Navigation from '../components/Navigation'
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -37,9 +37,9 @@ import { useParams, Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-import ResponsiveNavigation from './ResponsiveNavigation'
-import ScrollToTop from './ScrollToTop'
-import SideMenu from './SideMenu'
+import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import ScrollToTop from '../components/ScrollToTop'
+import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,7 +81,7 @@ const Test = ({ state, scroll }) => {
         <ScrollToTop state={state} scroll={scroll} />
       </main>
     </div>
-  )
+	)
 }
 
 export default Test

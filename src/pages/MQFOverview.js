@@ -47,11 +47,12 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import ListAltIcon from '@material-ui/icons/ListAlt'
+import ShuffleIcon from '@material-ui/icons/Shuffle'
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
-import ResponsiveNavigation from './ResponsiveNavigation'
-import ScrollToTop from './ScrollToTop'
-import SideMenu from './SideMenu'
+import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import ScrollToTop from '../components/ScrollToTop'
+import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     // width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    //marginLeft: 'auto',
+    //marginRight: 'auto',
     marginBottom: theme.spacing(3),
   },
 }))
@@ -83,21 +84,37 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
+  //----------------------------------------------------------------//
+  // Internal state passed to Drawer component
+
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
-
+  
+  //----------------------------------------------------------------//
+  // Ensure user is authenticated
+  
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
     )
   }
 
+  //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
-  const currentMQF = filterMQF(mqfId, state.tests)[0]
+
+  const index = state.tests.findIndex((needle) => needle.id === mqfId)
+
+  // index === -1 when MQF ID was not found
+  if (index === -1) {
+    return (
+      <Redirect to='/dashboard' />
+    )
+  }
+
+  const currentMQF = state.tests.slice()[index]
   const mqfOwner = { ...state.user }
 
   return (
@@ -133,8 +150,11 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
             <Card className={classes.card}>
               <CardActions>
                 <Box display='flex' direction='row' flexWrap='wrap'>
-                  <NavLink to={`/m/${mqfId}/s`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study MQF</Button>
+                  <NavLink to={`/m/${mqfId}/s/sequential`} style={{ textDecoration: 'none' }}>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study MQF (Sequential)</Button>
+                  </NavLink>
+                  <NavLink to={`/m/${mqfId}/s/random`} style={{ textDecoration: 'none' }}>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ShuffleIcon />}>Study MQF (Random)</Button>
                   </NavLink>
                   <NavLink to={`/m/${mqfId}/t`} style={{ textDecoration: 'none' }}>
                     <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListAltIcon />}>Take Practice Test</Button>
@@ -157,7 +177,9 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
             </Card>
           </Grid>
           {
-            currentMQF.questions.map((object, index) => (
+            // THIS IS BEING MOVED TO THE 'STUDY' PAGE
+            // INSTEAD, THIS WILL SHOW TREND ITEMS, MISSED QUESTIONS, COMPARE TO ALL USERS WHEN IT COMES TO SCORES, ETC...
+            /*currentMQF.questions.map((object, index) => (
               <Grid item xs={10} key={index}>
                 <Card className={classes.card}>
                   <CardContent>
@@ -173,7 +195,7 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
                   </CardContent>
                 </Card>
               </Grid>
-            ))
+            ))*/
           }
         </Grid>
         <ScrollToTop
