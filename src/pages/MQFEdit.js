@@ -104,8 +104,6 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
   }
 
   //----------------------------------------------------------------//
-
-
   // Declare references
   let _mds, _name
   // array of questions in order
@@ -132,7 +130,7 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
   const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
   const currentMQF = filterMQF(mqfId, state.tests)[0]
 
-  const testSaveQuestions = () => {
+  /*const testSaveQuestions = () => {
     questionRefs.current.forEach((qRef, qIndex) => {
       console.log(`Question ${qIndex}:`, qRef.value)
 
@@ -146,7 +144,7 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
     })
 
     // Make
-  }
+  }*/
 
   const handleSaveClick = () => {
 
@@ -179,10 +177,6 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
     onSave(mqfId, newMQF)
     setSnackbarOpen(true)
   }
-
-  
-
-  
 
   return (
     <div className={classes.root}>

@@ -31,7 +31,6 @@
  */
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import update from 'immutability-helper'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 
@@ -39,7 +38,7 @@ import { authData } from '../mockApi/authData'
 import Dashboard from './Dashboard'
 import Login from './Login'
 import MQFEdit from './MQFEdit'
-import MQFNew from './MQFNew'
+import MQFCreate from './MQFCreate'
 import MQFStudy from './MQFStudy'
 import MQFTest from './MQFTest'
 import MQFOverview from './MQFOverview'
@@ -153,7 +152,7 @@ class App extends React.Component {
               }
             </Route>
             <Route exact path="/m">
-              <MQFNew
+              <MQFCreate
                 onLogoutClick={this.handleLogoutClick}
                 onScrollToTop={this.handleScrollToTop}
                 state={this.state}

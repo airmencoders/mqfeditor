@@ -33,7 +33,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import ReactCardFlip from 'react-card-flip'
 
-import Box from '@material-ui/core/Box'
+// import Box from '@material-ui/core/Box'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -84,7 +84,6 @@ const Test = ({ onSeen, state, scroll }) => {
   // Internal state passed to Drawer component
 
   const [mobileOpen, setMobileOpen] = React.useState(false)
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
@@ -92,12 +91,62 @@ const Test = ({ onSeen, state, scroll }) => {
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
 
-  let index, currentMQF, mqfOwner
+  let index, currentMQF
+  let tempArray = []
 
   if (state.tests !== null) {
     index = state.tests.findIndex((needle) => needle.id === mqfId)
     currentMQF = state.tests.slice()[index]
-    mqfOwner = { ...state.user }
+    for (let i = 0; i < currentMQF.questions.length; i++) {
+      tempArray[i] = i
+    }
+  }
+  let [questionArray, setQuestionArray] = React.useState(tempArray)
+
+  //----------------------------------------------------------------//
+  // Hook to mimic componentDidMount() in Class Components
+  // Here we update the 'seen' flag for the state
+
+  React.useEffect(() => {
+    // Update the 'seen' state (POTENTIAL TO CHANGE TO THE OVERVIEW PAGE)
+    if (state.tests !== null) {
+      const seenMQF = {
+        ...currentMQF,
+        seen: true,
+      }
+      onSeen(mqfId, seenMQF)
+    }
+  }, [])
+
+  //---- DEBUG ----//
+  // Here we test to see if a 'state' for the question order is preserved across renders
+  React.useEffect(() => {
+    if (state.tests !== null) {
+      let tempArray = []
+      for (var tempIndex = 0; tempIndex < currentMQF.questions.length; tempIndex++) {
+        if (order === 'random') {
+          let potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
+
+          // Do not allow repeat questions
+          while (tempArray.find(value => value === potentialQuestion) !== undefined) {
+            potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
+          }
+
+          tempArray[tempIndex] = potentialQuestion
+        } else {
+          tempArray[tempIndex] = tempIndex
+        }
+      }
+      setQuestionArray(tempArray)
+    }
+  }, [])
+
+  //----------------------------------------------------------------//
+  // Ensure user is authenticated
+  if (state.isAuthenticated === false) {
+    return (
+      <Redirect to='/' />
+    )
   }
 
   //----------------------------------------------------------------//
@@ -132,31 +181,6 @@ const Test = ({ onSeen, state, scroll }) => {
     setIsFlipped(!isFlipped)
   }
 
-  //----------------------------------------------------------------//
-  // Hook to mimic componentDidMount() in Class Components
-
-  React.useEffect(() => {
-    if (state.tests !== null) {
-      const seenMQF = {
-        ...currentMQF,
-        seen: true,
-      }
-      onSeen(mqfId, seenMQF)
-    }
-
-  }, [])
-
-  //----------------------------------------------------------------//
-  // Ensure user is authenticated
-
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
-  //----------------------------------------------------------------//
-
   return (
     <div className={classes.root}>
       <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
@@ -165,9 +189,6 @@ const Test = ({ onSeen, state, scroll }) => {
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
           <Grid item xs={10} md={5}>
-            {
-              (order === 'random') ? <Typography variant='h5'>Random order not currently supported</Typography> : null
-            }
             <ReactCardFlip
               flipDirection='vertical'
               infinite={true}
@@ -179,15 +200,16 @@ const Test = ({ onSeen, state, scroll }) => {
                 onClick={toggleCardFlip}
               >
                 <CardContent>
+                  <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
                   <Typography variant='body1'>
-                    {`${currentQuestion + 1}. ${currentMQF.questions[currentQuestion].question}`}
+                    {`${questionArray[currentQuestion]}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
                   </Typography>
                 </CardContent>
                 <Divider />
                 <CardActions>
                   <Grid container direction='column'>
                     {
-                      currentMQF.questions[currentQuestion].options.map((option, index) => (
+                      currentMQF.questions[questionArray[currentQuestion]].options.map((option, index) => (
                         <Grid
                           item
                           key={index}
@@ -210,7 +232,7 @@ const Test = ({ onSeen, state, scroll }) => {
                   <Typography variant='body1' align='center'>
                     <strong>
                       {
-                        `${String.fromCharCode(65 + currentMQF.questions[currentQuestion].answer)}. ${currentMQF.questions[currentQuestion].options[currentMQF.questions[currentQuestion].answer]}`
+                        `${String.fromCharCode(65 + currentMQF.questions[questionArray[currentQuestion]].answer)}. ${currentMQF.questions[questionArray[currentQuestion]].options[currentMQF.questions[questionArray[currentQuestion]].answer]}`
                       }
                     </strong>
                   </Typography>

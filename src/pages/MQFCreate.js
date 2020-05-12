@@ -32,8 +32,11 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
@@ -45,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
+  card: {
+    marginBottom: theme.spacing(3),
+  },
   content: {
     flexGrow: 1,
     width: '100%',
@@ -53,9 +59,8 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }))
 
-const Test = ({ state, scroll }) => {
+const MQFCreate = ({ state, scroll }) => {
   const classes = useStyles()
-  let { mqfId } = useParams()
 
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
@@ -75,13 +80,21 @@ const Test = ({ state, scroll }) => {
       <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography variant='h6'>
-          {mqfId}
-        </Typography>
+        <Grid container direction='row' justify='center'>
+          <Grid item xs={10}>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography variant='h6'>
+                  Create a MQF
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
         <ScrollToTop state={state} scroll={scroll} />
       </main>
     </div>
   )
 }
 
-export default Test
+export default MQFCreate

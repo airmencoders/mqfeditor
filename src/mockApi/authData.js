@@ -21,7 +21,7 @@ export const authData = {
       owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 1,
       date: '11 May 2020',
-      seen: true,
+      seen: false,
       questions: [
         {
           question: 'GLOVE is to HAND as SHOE is to',
@@ -182,7 +182,7 @@ export const authData = {
       owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 1,
       date: '11 May 2020',
-      seen: true,
+      seen: false,
       questions: [
         {
           question: 'A theater contains x rows, with y seats in each row. How many total seats are there in the theater?',
@@ -199,7 +199,7 @@ export const authData = {
       owner: "68b80a87-a122-4f73-8dc5-1b06ddbeeb96",
       version: 3,
       date: "5 May 2020, 16:58 Zulu",
-      seen: true,
+      seen: false,
       questions: [
         {
           question: 'How many engines does the A-10C have?',
@@ -246,7 +246,7 @@ export const authData = {
       owner: "68b80a87-a122-4f73-8dc5-1b06ddbeeb96",
       version: 1,
       date: "5 May 2020, 16:58 Zulu",
-      seen: true,
+      seen: false,
       questions: [
         {
           question: 'How many runways does Moody AFB have?',

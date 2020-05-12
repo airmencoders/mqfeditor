@@ -1,3 +1,6 @@
+## 0.10.0
+- Implemented random question studying (Need peer review to see if there's a better way to do it)
+
 ## 0.9.0
 - Remove questions from MQF Overview - make room for trend data
 - Installed `react-flip-card` from `npm`, allows for CSS transformations to look like flip card

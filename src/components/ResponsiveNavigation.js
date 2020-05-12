@@ -107,9 +107,9 @@ const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
                 aria-controls='account-menu'
                 aria-haspopup='true'
                 onClick={handleMenu}
-                color='inherit'  
+                color='inherit'
               >
-                <Avatar>{`${state.user.first.substring(0,1)}${state.user.last.substring(0,1)}`}</Avatar>
+                <Avatar>{`${state.user.first.substring(0, 1)}${state.user.last.substring(0, 1)}`}</Avatar>
               </Button>
               <Menu
                 id='account-menu'
@@ -126,10 +126,12 @@ const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
                   </NavLink>
                 </MenuItem>
                 <MenuItem onClick={onLogoutClick} >
-                    Log Out
+                  Log Out
                 </MenuItem>
                 <Divider />
-                {version}
+                <MenuItem>
+                  {`Version ${version}`}
+                </MenuItem>
               </Menu>
             </div>
           )}

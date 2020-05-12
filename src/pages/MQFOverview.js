@@ -92,10 +92,10 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
-  
+
   //----------------------------------------------------------------//
   // Ensure user is authenticated
-  
+
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
@@ -151,7 +151,7 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
               <CardActions>
                 <Box display='flex' direction='row' flexWrap='wrap'>
                   <NavLink to={`/m/${mqfId}/s/sequential`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study MQF (Sequential)</Button>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study (Sequential)</Button>
                   </NavLink>
                   <NavLink to={`/m/${mqfId}/s/random`} style={{ textDecoration: 'none' }}>
                     <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ShuffleIcon />}>Study MQF (Random)</Button>
