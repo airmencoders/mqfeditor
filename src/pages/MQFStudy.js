@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     // marginLeft: 'auto',
     //marginRight: 'auto',
-    minHeight: 200,
+    minHeight: 300,
   },
   content: {
     flexGrow: 1,

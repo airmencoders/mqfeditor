@@ -1,3 +1,7 @@
+## 0.10.1
+- Fixed bug affecting render latency when flipping study card
+- Seems to occur when card height is different between cards (Potential issue with package)
+
 ## 0.10.0
 - Implemented random question studying (Need peer review to see if there's a better way to do it)
 
