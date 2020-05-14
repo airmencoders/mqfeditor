@@ -32,17 +32,14 @@
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
-import Button from '@material-ui/core/Button'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Zoom from '@material-ui/core/Zoom'
+import { makeStyles } from '@material-ui/core/styles'
 
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import ScrollToTop from '../components/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionTest from '../components/QuestionTest'
 
@@ -51,8 +48,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   card: {
-    // marginLeft: 'auto',
-    //marginRight: 'auto',
     minHeight: 300,
   },
   content: {
@@ -64,69 +59,23 @@ const useStyles = makeStyles((theme) => ({
   questionFab: {
     marginTop: theme.spacing(2),
   },
+  submit: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
 }))
 
 //----------------------------------------------------------------//
 // COMPONENT CODE
 //----------------------------------------------------------------//
-const Test = ({ onSeen, state }) => {
+const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
   const classes = useStyles()
-  const theme = useTheme()
   let { mqfId } = useParams()
 
   //----------------------------------------------------------------//
   // Define answer references
   const answerRefs = React.useRef([])
-
-  //----------------------------------------------------------------//
-  // Internal state for handling the visibility of FABs
-  let [hasPrevious, setHasPrevious] = React.useState(false)
-  let [hasNext, setHasNext] = React.useState(true)
-  let [showSubmit, setShowSubmit] = React.useState(false)
-
-  const transitionDuration = {
-    enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen,
-  }
-
-  //----------------------------------------------------------------//
-  // Internal State for handling question changes
-
-  let [currentQuestion, setCurrentQuestion] = React.useState(0)
-  const handlePreviousQuestion = () => {
-    if (currentQuestion === 1) {
-      setHasPrevious(false)
-    }
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1)
-      if (!hasNext) {
-        setShowSubmit(false)
-
-        // Timeout is necessary to make the Next/Submit FAB not interfere with eachother
-        setTimeout(() => {
-          setHasNext(true)
-        }, transitionDuration.exit)
-      }
-    }
-  }
-
-  const handleNextQuestion = () => {
-    if (currentQuestion === currentMQF.questions.length - 2) {
-      setHasNext(false)
-
-      // Timeout is necessary to make the Next/Submit FAB not interfere with eachother
-      setTimeout(() => {
-        setShowSubmit(true)
-      }, transitionDuration.exit)
-    }
-
-    if (currentQuestion < currentMQF.questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      if (!hasPrevious) {
-        setHasPrevious(true)
-      }
-    }
-  }
 
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
@@ -182,67 +131,60 @@ const Test = ({ onSeen, state }) => {
     )
   }
 
+  //----------------------------------------------------------------//
+  // DEBUG - LOG ANSWERS TO CONSOLE
+  // TODO  - ALERT IF NOT ALL ANSWERED, VALIDATION
   const checkAnswers = () => {
     answerRefs.current.map((answer, index) => {
       console.log(`answer ${index}:`, answer)
     })
   }
+
   return (
     <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
+      <ResponsiveNavigation
+        onMenuClick={handleDrawerToggle}
+        onLogoutClick={onLogoutClick}
+        state={state}
+      />
+      <SideMenu
+        mobileOpen={mobileOpen}
+        onMenuClick={handleDrawerToggle}
+        state={state}
+      />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
           <Grid item xs={10} md={5}>
-            <Button variant='contained' onClick={checkAnswers}>Check Answers</Button>
-            <QuestionTest
-              answerRefs={answerRefs}
-              currentMQF={currentMQF}    
-              currentQuestion={currentQuestion}
-              questionArray={questionArray}
-            />
-            <Grid container direction='row' justify='space-between'>
-              <Grid item>
-                <Zoom
-                  className={classes.questionFab}
-                  in={hasPrevious}
-                  timeout={transitionDuration}
-                  unmountOnExit
-                >
-                  <Fab onClick={handlePreviousQuestion}>
-                    <KeyboardArrowLeftIcon />
-                  </Fab>
-                </Zoom>
-              </Grid>
-              <Grid item>
-                <Zoom
-                  className={classes.questionFab}
-                  in={hasNext}
-                  timeout={transitionDuration}
-                  unmountOnExit
-                >
-                  <Fab onClick={handleNextQuestion}>
-                    <KeyboardArrowRightIcon />
-                  </Fab>
-                </Zoom>
-                <Zoom
-                  className={classes.questionFab}
-                  in={showSubmit}
-                  timeout={transitionDuration}
-                  unmountOnExit
-                >
-                  <Fab color='primary'>
-                    <AssignmentTurnedInIcon />
-                  </Fab>
-                </Zoom>
-              </Grid>
-            </Grid>
+            {
+              currentMQF.questions.map((q, index) => (
+                <QuestionTest
+                  answerRefs={answerRefs}
+                  currentQuestion={index}
+                  key={index}
+                  options={currentMQF.questions[questionArray[index]].options}
+                  question={currentMQF.questions[questionArray[index]].question}
+                />
+              ))
+            }
           </Grid>
         </Grid>
+        <ScrollToTop
+          state={state}
+          onScrollToTop={onScrollToTop}
+          order={2}
+        />
+        <Fab
+          aria-label='submit test'
+          className={classes.submit}
+          color='primary'
+          onClick={checkAnswers}
+        >
+          <AssignmentTurnedInIcon />
+        </Fab>
       </main>
     </div>
   )
 }
 
-export default Test
+export default MQFTest

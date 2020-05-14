@@ -35,10 +35,8 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Divider from '@material-ui/core/Divider'
-import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grid from '@material-ui/core/Grid'
 import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
@@ -65,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const QuestionTest = ({ answerRefs, currentMQF, currentQuestion, questionArray }) => {
+const QuestionTest = ({ answerRefs, currentQuestion, options, question }) => {
 
   const classes = useStyles()
   const [selectedValue, setSelectedValue] = React.useState('')
@@ -74,47 +72,29 @@ const QuestionTest = ({ answerRefs, currentMQF, currentQuestion, questionArray }
     setSelectedValue(event.target.value)
   }
 
-  console.log('currentQuestion:', currentQuestion)
-  console.log(`answer for question ${currentQuestion}:`, selectedValue)
-
   return (
     <Card className={classes.card}>
       <CardContent>
-        {
-          // TESTING
-          // Color changing depending if the user has an answer for the given question
-          currentMQF.questions.map((value, index) => (
-            <Typography className={(answerRefs[index]) ? classes.answeredQuestion : classes.pendingQuestion} key={index}>{`${index + 1} `}</Typography>
-          ))
-        }
-      </CardContent>
-      <Divider />
-      <CardContent>
-        {currentMQF.questions[questionArray[currentQuestion]].question}
+        <Typography variant='h6'>{question}</Typography>
       </CardContent>
       <Divider />
       <CardActions>
-        <FormControl component='fieldset'>
-          <RadioGroup
-            name={`question-${currentQuestion}-options`}
-            onChange={handleChange}
-            value={selectedValue}
-          >
-            {
-              currentMQF.questions[questionArray[currentQuestion]].options.map((value, index) =>
-                (
-                  <FormControlLabel
-                    control={<Radio />}
-                    inputRef={() => answerRefs.current[currentQuestion] = selectedValue}
-                    key={index}
-                    label={value}
-                    name={`question-${currentQuestion}-option-${index}`}
-                    value={`${index}`}
-                  />
-                ))
-            }
-          </RadioGroup>
-        </FormControl>
+        <Grid container direction='column'>
+          {
+            options.map((option, index) => (
+              <Grid item xs={12} key={index}>
+                <Radio
+                  onChange={handleChange}
+                  value={`${index}`}
+                  name={`question-${currentQuestion}-option-${index}`}
+                  inputProps={{ 'aria-label': option }}
+                  inputRef={() => answerRefs.current[currentQuestion] = selectedValue}
+                />
+                {option}
+              </Grid>
+            ))
+          }
+        </Grid>
       </CardActions>
     </Card>
   )

@@ -1,8 +1,11 @@
+## 0.11.1
+- Changed `/src/MQFTest` to display all questions on the same page, this remedies the issue where the radio buttons were being reused by React
+
 ## 0.11.0
 - Fixed bug where question number indexes reference '0' array index instead of standard counting
 - Added delay to `/App/handleMQFSeen()` so that badge animation still shows on rendering a new page
 - Created `/src/MQFTest`
-- TODO: `/src/MQFTest` does not properly render options. rather, it keeps the previous question selected when rendering the new question
+- ~~TODO: `/src/MQFTest` does not properly render options. rather, it keeps the previous question selected when rendering the new question~~
 
 ## 0.10.1
 - Fixed bug affecting render latency when flipping study card
@@ -16,7 +19,7 @@
 - Installed `react-flip-card` from `npm`, allows for CSS transformations to look like flip card
 - Implemented `MQFStudy`, currently only studies 'flashcard' style in order.
 - TODO: Vertically center answer on flashcard
-- TODO: Implement an option for random order studying (using `react-router` url query?) - require extra 'state'
+- ~~TODO: Implement an option for random order studying (using `react-router` url query?) - require extra 'state'~~
 - TODO: Implement `MQFTest` (will always be in random order)
 - TODO: Implement User Account page
 - TODO: Implement `MQFCreate` page (PDF Import, parse, JSON Generation add to state / database through API Endpoints) as well as manual
@@ -54,7 +57,7 @@
 ## 0.3.0
 - Continued work on `/src/MQFOverview`
 - Moved sidebar navigation to own Component
-- @todo: Add Meta viewport to `/public/index.html` to avoid inital scale on mobile
+- ~~@todo: Add Meta viewport to `/public/index.html` to avoid inital scale on mobile~~
 - Commit `/public/`
 - Update `package.json` and `package-lock.json`
 
