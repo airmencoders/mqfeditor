@@ -6,7 +6,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/components/ScrollToTop.js
  * @author  chris-m92
  * @since   0.5.0
  * 

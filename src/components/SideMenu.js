@@ -3,7 +3,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/components/SideMenu.js
  * @author  chris-m92
  * @since   0.1.0
  * 

@@ -154,7 +154,7 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
                     <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study (Sequential)</Button>
                   </NavLink>
                   <NavLink to={`/m/${mqfId}/s/random`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ShuffleIcon />}>Study MQF (Random)</Button>
+                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ShuffleIcon />}>Study (Random)</Button>
                   </NavLink>
                   <NavLink to={`/m/${mqfId}/t`} style={{ textDecoration: 'none' }}>
                     <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListAltIcon />}>Take Practice Test</Button>

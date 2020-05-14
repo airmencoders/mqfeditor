@@ -3,7 +3,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/pages/MQFStudy.js
  * @author  chris-m92
  * @since   0.9.0
  * 
@@ -47,7 +47,6 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
@@ -73,12 +72,47 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   }
 }))
-
+//----------------------------------------------------------------//
+// COMPONENT CODE
+//----------------------------------------------------------------//
 const Test = ({ onSeen, state, scroll }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
-  let [currentQuestion, setCurrentQuestion] = React.useState(0)
+
+  //----------------------------------------------------------------//
+  // Internal state used to handle the flipping of flashcards
+
   let [isFlipped, setIsFlipped] = React.useState(false)
+  const toggleCardFlip = () => {
+    setIsFlipped(!isFlipped)
+  }
+
+  //----------------------------------------------------------------//
+  // Internal state used to handle the changes in questions
+  let [currentQuestion, setCurrentQuestion] = React.useState(0)
+  const handlePreviousQuestion = () => {
+    let timeout = (isFlipped) ? 200 : 0
+    setIsFlipped(false)
+    setTimeout(() => {
+      if (currentQuestion === 0) {
+        setCurrentQuestion(currentMQF.questions.length - 1)
+      } else {
+        setCurrentQuestion(currentQuestion - 1)
+      }
+    }, timeout)
+  }
+
+  const handleNextQuestion = () => {
+    let timeout = (isFlipped) ? 200 : 0
+    setIsFlipped(false)
+    setTimeout(() => {
+      if (currentQuestion === currentMQF.questions.length - 1) {
+        setCurrentQuestion(0)
+      } else {
+        setCurrentQuestion(currentQuestion + 1)
+      }
+    }, timeout)
+  }  
 
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
@@ -106,10 +140,11 @@ const Test = ({ onSeen, state, scroll }) => {
   //----------------------------------------------------------------//
   // Hook to mimic componentDidMount() in Class Components
   // Here we update the 'seen' flag for the state
+  // Because of how useEffect works, we need to accomplish this prior to any returns
 
   React.useEffect(() => {
     // Update the 'seen' state (POTENTIAL TO CHANGE TO THE OVERVIEW PAGE)
-    if (state.tests !== null) {
+    if (state.isAuthenticated === true && state.tests !== null) {
       const seenMQF = {
         ...currentMQF,
         seen: true,
@@ -118,7 +153,7 @@ const Test = ({ onSeen, state, scroll }) => {
     }
   }, [])
 
-  //---- DEBUG ----//
+  //----------------------------------------------------------------//
   // Here we test to see if a 'state' for the question order is preserved across renders
   React.useEffect(() => {
     if (state.tests !== null) {
@@ -149,38 +184,6 @@ const Test = ({ onSeen, state, scroll }) => {
     )
   }
 
-  //----------------------------------------------------------------//
-  // Handle the change of questions
-  const handlePreviousQuestion = () => {
-    let timeout = (isFlipped) ? 200 : 0
-    setIsFlipped(false)
-    setTimeout(() => {
-      if (currentQuestion === 0) {
-        setCurrentQuestion(currentMQF.questions.length - 1)
-      } else {
-        setCurrentQuestion(currentQuestion - 1)
-      }
-    }, timeout)
-  }
-
-  const handleNextQuestion = () => {
-    let timeout = (isFlipped) ? 200 : 0
-    setIsFlipped(false)
-    setTimeout(() => {
-      if (currentQuestion === currentMQF.questions.length - 1) {
-        setCurrentQuestion(0)
-      } else {
-        setCurrentQuestion(currentQuestion + 1)
-      }
-    }, timeout)
-  }
-
-  //----------------------------------------------------------------//
-  // Handle the flipping of cards
-  const toggleCardFlip = () => {
-    setIsFlipped(!isFlipped)
-  }
-
   return (
     <div className={classes.root}>
       <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
@@ -202,7 +205,7 @@ const Test = ({ onSeen, state, scroll }) => {
                 <CardContent>
                   <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
                   <Typography variant='body1'>
-                    {`${questionArray[currentQuestion]}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
+                    {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
                   </Typography>
                 </CardContent>
                 <Divider />
@@ -247,8 +250,6 @@ const Test = ({ onSeen, state, scroll }) => {
             </Fab>
           </Grid>
         </Grid>
-
-        <ScrollToTop state={state} scroll={scroll} />
       </main>
     </div>
   )

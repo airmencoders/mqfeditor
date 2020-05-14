@@ -3,7 +3,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    App.js
+ * @file    /src/pages/App.js
  * @author  chris-m92
  * @since   0.1.0
  * 
@@ -88,15 +88,19 @@ class App extends React.Component {
       ...filterTests(id, this.state.tests)
     ]*/
 
-    const index = this.state.tests.findIndex((needle) => needle.id === id )
+    const index = this.state.tests.findIndex((needle) => needle.id === id)
 
     const testArray = this.state.tests.slice()
     testArray[index] = seenVersion
 
-    this.setState({
-      tests: testArray,
-    })
-    
+    // Set delay so that renders still show nice animation
+    setTimeout(() => {
+      this.setState({
+        tests: testArray,
+      })
+    }, 100)
+
+
     /*this.setState({
       tests: update(this.state.tests, {index: {seen: {$set: true}}})
     })*/
@@ -161,7 +165,7 @@ class App extends React.Component {
             <Route path="/m/:mqfId/e">
               <MQFEdit
                 onLogoutClick={this.handleLogoutClick}
-                onSave={(mqfId, newValue) => {this.handleSaveMQFChanges(mqfId, newValue)}}
+                onSave={(mqfId, newValue) => { this.handleSaveMQFChanges(mqfId, newValue) }}
                 onScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
@@ -179,6 +183,7 @@ class App extends React.Component {
               <MQFTest
                 onLogoutClick={this.handleLogoutClick}
                 onScrollToTop={this.handleScrollToTop}
+                onSeen={this.handleMQFSeen}
                 state={this.state}
               />
             </Route>

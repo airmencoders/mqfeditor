@@ -1,3 +1,9 @@
+## 0.11.0
+- Fixed bug where question number indexes reference '0' array index instead of standard counting
+- Added delay to `/App/handleMQFSeen()` so that badge animation still shows on rendering a new page
+- Created `/src/MQFTest`
+- TODO: `/src/MQFTest` does not properly render options. rather, it keeps the previous question selected when rendering the new question
+
 ## 0.10.1
 - Fixed bug affecting render latency when flipping study card
 - Seems to occur when card height is different between cards (Potential issue with package)
