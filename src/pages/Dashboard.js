@@ -6,7 +6,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    Dashboard.js
+ * @file    /src/pages/Dashboard.js
  * @author  chris-m92
  * @since   0.1.0
  * 
@@ -47,20 +47,9 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import SideMenu from '../components/SideMenu'
 
-const drawerWidth = 240
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  drawerPaper: {
-    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
@@ -76,11 +65,7 @@ const useStyles = makeStyles((theme) => ({
   fab: {
     position: 'fixed',
     bottom: theme.spacing(2),
-    // left: drawerWidth + theme.spacing(2),
     right: theme.spacing(2),
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
   },
 }))
 
@@ -91,7 +76,6 @@ const Dashboard = ({ state, onLogoutClick }) => {
   // Internal state passed to Drawer component
 
   const [mobileOpen, setMobileOpen] = React.useState(false)
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }

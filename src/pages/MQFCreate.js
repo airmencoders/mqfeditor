@@ -5,7 +5,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/pages/MQFCreate.js
  * @author  chris-m92
  * @since   x.y.z
  * 
@@ -36,9 +36,15 @@ import { Redirect } from 'react-router-dom'
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
+import Snackbar from '@material-ui/core/Snackbar'
 import Typography from '@material-ui/core/Typography'
+
+import CloseIcon from '@material-ui/icons/Close'
+import SaveIcon from '@material-ui/icons/Save'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/ScrollToTop'
@@ -56,18 +62,48 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: theme.spacing(3),
   },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
   toolbar: theme.mixins.toolbar,
 }))
 
-const MQFCreate = ({ state, scroll }) => {
+//----------------------------------------------------------------//
+// COMPONENT CODE
+//----------------------------------------------------------------//
+const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   const classes = useStyles()
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  //----------------------------------------------------------------//
+  // Internal state passed to Drawer component
 
+  const [mobileOpen, setMobileOpen] = React.useState(false)
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
 
+  //----------------------------------------------------------------//
+  // Internal state passed to Snackbar component
+
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false)
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle save button
+  const handleSaveClick = () => {
+
+  }
+
+  //----------------------------------------------------------------//
+  // Ensure user is authenticated
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
@@ -76,8 +112,16 @@ const MQFCreate = ({ state, scroll }) => {
 
   return (
     <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
+      <ResponsiveNavigation
+        onMenuClick={handleDrawerToggle}
+        onLogoutClick={onLogoutClick}
+        state={state}
+      />
+      <SideMenu
+        mobileOpen={mobileOpen}
+        onMenuClick={handleDrawerToggle}
+        state={state}
+      />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
@@ -87,12 +131,61 @@ const MQFCreate = ({ state, scroll }) => {
                 <Typography variant='h6'>
                   Create a MQF
                 </Typography>
+                <Typography variant='h6'>
+                  TODO: TEXT FIELD FOR NAME
+                </Typography>
+                <Typography variant='h6'>
+                  TODO: TEXT FIELD FOR MDS
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography variant='h6'>
+                  TODO: PLACEHOLDER FOR IMPORT FIELD.
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography variant='h6'>
+                  TODO: BOTTOM CARD - ADD QUESTION
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <ScrollToTop state={state} scroll={scroll} />
+        <Fab
+          aria-label='save changes'
+          className={classes.fab}
+          color='primary'
+          onClick={handleSaveClick}
+        >
+          <SaveIcon />
+        </Fab>
+        <ScrollToTop
+          onScrollToTop={onScrollToTop}
+          order={2}
+          state={state}
+        />
       </main>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        autoHideDuration={5000}
+        open={snackbarOpen}
+        onClose={handleSnackbarClose}
+        message='Changes Saved'
+        action={
+          <IconButton
+            aria-label='close'
+            color='inherit'
+            onClick={handleSnackbarClose}
+            size='small'
+          >
+            <CloseIcon fontSize='small' />
+          </IconButton>
+        }
+      />
     </div>
   )
 }
