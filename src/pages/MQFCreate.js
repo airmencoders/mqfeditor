@@ -1,13 +1,11 @@
 /**
- * [SUMMARY]
- * 
- * [DESCRIPTION]
+ * Renders form to create a new MQF test
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
  * @file    /src/pages/MQFCreate.js
  * @author  chris-m92
- * @since   x.y.z
+ * @since   0.14.0
  * 
  * MIT License
  * 
@@ -36,9 +34,6 @@ import { Redirect } from 'react-router-dom'
 
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Fab from '@material-ui/core/Fab'
-import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -51,21 +46,19 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
-import SaveIcon from '@material-ui/icons/Save'
+import NoteAddIcon from '@material-ui/icons/NoteAdd'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTop from '../components/fabs/ScrollToTop'
+import Save from '../components/fabs/Save'
 import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
   actionsContainer: {
     marginBottom: theme.spacing(2),
   },
-  resetContainer: {
-    padding: theme.spacing(3),
-  },
-  root: {
-    display: 'flex',
+  buttonIcon: {
+    marginRight: theme.spacing(1),
   },
   card: {
     marginBottom: theme.spacing(3),
@@ -80,6 +73,18 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
+  fileInput: {
+    display: 'none',
+  },
+  fileUploadButton: {
+    marginBottom: theme.spacing(3),
+  },
+  resetContainer: {
+    padding: theme.spacing(3),
+  },
+  root: {
+    display: 'flex',
+  },
   textField: {
     margin: theme.spacing(3),
   },
@@ -87,30 +92,77 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 //----------------------------------------------------------------//
-// Set up steps
-
-const getSteps = () => {
-  return ['Input MQF Information', 'Import PDF', 'Edit Questions']
-}
-
-const getStepContent = step => {
-  switch (step) {
-    case 0:
-      return `Input MDS and name for the MQF.`
-    case 1:
-      return `Import a PDF version of a current MQF.`
-    case 2:
-      return `Edit questions or add more questions.`
-  }
-}
-
-//----------------------------------------------------------------//
 // COMPONENT CODE
 //----------------------------------------------------------------//
-const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
+const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
   const classes = useStyles()
 
+  //----------------------------------------------------------------//
+  // Internal state and references for input
   let _mds, _name
+  const [mds, setMds] = React.useState('')
+  const [name, setName] = React.useState('')
+  const [filename, setFilename] = React.useState('')
+
+  const handleFileChange = () => {
+    setFilename(document.getElementById('pdf-upload').files[0].name)
+  }
+
+  //----------------------------------------------------------------//
+  // Set up steps
+
+  const getSteps = () => {
+    return ['Input MQF Information', 'Import MQF PDF', 'Edit Questions']
+  }
+
+  const getStepContent = step => {
+    switch (step) {
+      case 0:
+        return (
+          <React.Fragment>
+            <TextField
+              className={classes.textField}
+              defaultValue={mds}
+              inputRef={input => _mds = input}
+              label='MDS'
+            />
+            <TextField
+              className={classes.textField}
+              defaultValue={name}
+              inputRef={input => _name = input}
+              label='Name'
+            />
+          </React.Fragment>
+        )
+      case 1:
+        return (
+          <React.Fragment>
+            <input
+              accept='application/pdf'
+              className={classes.fileInput}
+              id='pdf-upload'
+              multiple
+              onChange={handleFileChange}
+              type='file'
+            />
+            <label htmlFor='pdf-upload'>
+              <Button
+                className={classes.fileUploadButton}
+                color='primary'
+                component='span'
+                variant='contained'
+              >
+                <NoteAddIcon className={classes.buttonIcon} />{(filename) ? filename : 'Upload MQF'}
+              </Button>
+            </label>
+          </React.Fragment>
+        )
+      case 2:
+        return `Edit questions or add more questions.`
+      default:
+        return
+    }
+  }
 
   //----------------------------------------------------------------//
   // Internal state for handling steps
@@ -118,6 +170,10 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   const steps = getSteps()
 
   const handleNext = () => {
+    if (activeStep === 0) {
+      setMds(_mds.value)
+      setName(_name.value)
+    }
     setActiveStep(prevActiveStep => prevActiveStep + 1)
   }
 
@@ -132,10 +188,10 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  /*const [mobileOpen, setMobileOpen] = React.useState(false)
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  }
+  }*/
 
   //----------------------------------------------------------------//
   // Internal state passed to Snackbar component
@@ -152,8 +208,9 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   //----------------------------------------------------------------//
   // Handle save button
   const handleSaveClick = () => {
-    /*console.log('MDS:', _mds.value)
-    console.log('Name:', _name.value)*/
+    console.log('MDS:', mds)
+    console.log('Name:', name)
+    console.log('Filename:', filename)
   }
 
   //----------------------------------------------------------------//
@@ -167,13 +224,12 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
-        onMenuClick={handleDrawerToggle}
-        onLogoutClick={onLogoutClick}
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
         state={state}
       />
       <SideMenu
-        mobileOpen={mobileOpen}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         state={state}
       />
       <main className={classes.content}>
@@ -191,24 +247,8 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
                 <Step key={index}>
                   <StepLabel>{label}</StepLabel>
                   <StepContent>
-                    <Typography>{getStepContent(index)}</Typography>
+                    {getStepContent(index)}
                     <div className={classes.actionsContainer}>
-                      {
-                        activeStep === 0 ? (
-                          <React.Fragment>
-                            <TextField
-                              className={classes.textField}
-                              inputRef={value => _mds = value}
-                              label='MDS'
-                            />
-                            <TextField
-                              className={classes.textField}
-                              inputRef={value => _name = value}
-                              label='Test Name'
-                            />
-                          </React.Fragment>
-                        ) : (null)
-                      }
                       <div>
                         <Button
                           className={classes.button}
@@ -243,17 +283,9 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
             )}
           </form>
         </Card>
-
-        <Fab
-          aria-label='save changes'
-          className={classes.fab}
-          color='primary'
-          onClick={handleSaveClick}
-        >
-          <SaveIcon />
-        </Fab>
+        <Save handleClick={handleSaveClick} />
         <ScrollToTop
-          onScrollToTop={onScrollToTop}
+          handleScrollToTop={handleScrollToTop}
           order={2}
           state={state}
         />

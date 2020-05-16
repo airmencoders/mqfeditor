@@ -48,7 +48,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import SaveIcon from '@material-ui/icons/Save'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionEdit from '../components/QuestionEdit'
 
@@ -75,18 +75,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
+const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScrollToTop, state }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
 
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  /*const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  } 
+  } */
 
   //----------------------------------------------------------------//
   // Internal state passed to Snackbar component
@@ -155,20 +155,19 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
       seen: false,
       questions
     }
-    onSave(mqfId, newMQF)
+    handleSave(mqfId, newMQF)
     setSnackbarOpen(true)
   }
 
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
-        onLogoutClick={onLogoutClick}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
         state={state}
       />
       <SideMenu
-        mobileOpen={mobileOpen}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         state={state}
       />
       <main className={classes.content}>
@@ -232,7 +231,7 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
           <SaveIcon />
         </Fab>
         <ScrollToTop
-          onScrollToTop={onScrollToTop}
+          handleScrollToTop={handleScrollToTop}
           order={2}
           state={state}
         />

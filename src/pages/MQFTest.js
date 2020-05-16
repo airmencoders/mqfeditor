@@ -39,7 +39,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionTest from '../components/QuestionTest'
 
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // COMPONENT CODE
 //----------------------------------------------------------------//
-const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
+const MQFTest = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
@@ -80,10 +80,10 @@ const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  /*const [mobileOpen, setMobileOpen] = React.useState(false)
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  }
+  }*/
 
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
@@ -119,7 +119,7 @@ const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
         ...currentMQF,
         seen: true,
       }
-      onSeen(mqfId, seenMQF)
+      handleMQFSeen(mqfId, seenMQF)
     }
   }, [])
 
@@ -143,13 +143,12 @@ const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
-        onMenuClick={handleDrawerToggle}
-        onLogoutClick={onLogoutClick}
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
         state={state}
       />
       <SideMenu
-        mobileOpen={mobileOpen}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         state={state}
       />
       <main className={classes.content}>
@@ -171,7 +170,7 @@ const MQFTest = ({ onLogoutClick, onScrollToTop, onSeen, state }) => {
         </Grid>
         <ScrollToTop
           state={state}
-          onScrollToTop={onScrollToTop}
+          handleScrollToTop={handleScrollToTop}
           order={2}
         />
         <Fab

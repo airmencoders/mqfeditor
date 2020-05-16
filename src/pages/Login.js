@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Login = ({ state, onLoginClick }) => {
+const Login = ({ handleLoginClick, state }) => {
   const classes = useStyles()
 
   return (
@@ -86,7 +86,7 @@ const Login = ({ state, onLoginClick }) => {
                 <Grid item>
                   <Button
                     variant="contained"
-                    onClick={onLoginClick}
+                    onClick={handleLoginClick}
                     color="primary"
                   >Log In with CAC</Button>
                 </Grid>

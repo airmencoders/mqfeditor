@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }))
 
-const SideMenu = ({ window, state, onMenuClick, mobileOpen }) => {
+const SideMenu = ({ window, state, handleDrawerToggle }) => {
   const classes = useStyles()
 
   const drawer = (
@@ -65,9 +65,20 @@ const SideMenu = ({ window, state, onMenuClick, mobileOpen }) => {
       <Divider />
       <List>
         {state.tests.map((test) => (
-          <ListItem button key={test.id} onClick={onMenuClick} >
-            <NavLink to={`/m/${test.id}`} style={{ textDecoration: 'none', color: 'initial' }}>
-              <Badge variant='dot' color='secondary' invisible={test.seen}>
+          <ListItem 
+            button
+            key={test.id}
+            onClick={handleDrawerToggle}
+          >
+            <NavLink
+              style={{ textDecoration: 'none', color: 'initial' }}
+              to={`/m/${test.id}`}
+            >
+              <Badge
+                color='secondary'
+                invisible={test.seen}
+                variant='dot'
+              >
                 <ListItemText primary={`[${test.mds}] ${test.name}`} />
               </Badge>
             </NavLink>
@@ -86,10 +97,10 @@ const SideMenu = ({ window, state, onMenuClick, mobileOpen }) => {
           container={container}
           variant='temporary'
           anchor='left'
-          open={mobileOpen}
-          onClose={onMenuClick}
+          open={state.mobileOpen}
+          onClose={handleDrawerToggle}
           classes={{ paper: classes.drawerPaper, }}
-          modalProps={{ keepMounted: true, }}
+          ModalProps={{ keepMounted: true, }}
         >
           {drawer}
         </Drawer>

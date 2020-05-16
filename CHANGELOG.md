@@ -1,3 +1,8 @@
+## 0.14.0
+- Continued work on `/src/pages/MQFCreate`
+- TODO: Find a Javascript PDF Parser
+- Began work on abstracting out state / components
+
 ## 0.13.0
 - Standardized all cards to be `variant='outlined'`
 - Code cleanup

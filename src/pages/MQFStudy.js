@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // COMPONENT CODE
 //----------------------------------------------------------------//
-const Test = ({ onSeen, state, scroll }) => {
+const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
 
@@ -117,10 +117,10 @@ const Test = ({ onSeen, state, scroll }) => {
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  /*const [mobileOpen, setMobileOpen] = React.useState(false)
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  }
+  }*/
 
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
@@ -149,7 +149,7 @@ const Test = ({ onSeen, state, scroll }) => {
         ...currentMQF,
         seen: true,
       }
-      onSeen(mqfId, seenMQF)
+      handleMQFSeen(mqfId, seenMQF)
     }
   }, [])
 
@@ -186,8 +186,15 @@ const Test = ({ onSeen, state, scroll }) => {
 
   return (
     <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
+      <ResponsiveNavigation
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
+        state={state}
+      />
+      <SideMenu
+        handleDrawerToggle={handleDrawerToggle}
+        state={state}
+      />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
@@ -257,4 +264,4 @@ const Test = ({ onSeen, state, scroll }) => {
   )
 }
 
-export default Test
+export default MQFStudy

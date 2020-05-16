@@ -51,7 +51,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle'
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
@@ -80,18 +80,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
+const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  /*const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
-  }
+  }*/
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
@@ -120,13 +120,12 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
-        onLogoutClick={onLogoutClick}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
         state={state}
       />
       <SideMenu
-        mobileOpen={mobileOpen}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         state={state}
       />
       <main className={classes.content}>
@@ -205,7 +204,7 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
           }
         </Grid>
         <ScrollToTop
-          onScrollToTop={onScrollToTop}
+          handleScrollToTop={handleScrollToTop}
           order={1}
           state={state}
         />

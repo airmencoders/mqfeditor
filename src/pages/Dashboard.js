@@ -33,105 +33,66 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { NavLink, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 
-import PostAddIcon from '@material-ui/icons/PostAdd'
-
+import DashboardStats from '../components/DashboardStats'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import SideMenu from '../components/SideMenu'
+import CreateMqf from '../components/fabs/CreateMqf'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
   content: {
     flexGrow: 1,
     width: '100%',
     padding: theme.spacing(3),
   },
+  root: {
+    display: 'flex',
+  },
   toolbar: theme.mixins.toolbar,
-  card: {
-    width: 300,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
 }))
 
-const Dashboard = ({ state, onLogoutClick }) => {
+const Dashboard = ({ handleDrawerToggle, handleLogoutClick, state }) => {
   const classes = useStyles()
-
-  //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
 
-  if(state.isAuthenticated === false) {
+  if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
     )
   }
-  
+
   //----------------------------------------------------------------//
 
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
-        onMenuClick={handleDrawerToggle}
-        onLogoutClick={onLogoutClick}
+        handleDrawerToggle={handleDrawerToggle}
+        handleLogoutClick={handleLogoutClick}
         state={state}
       />
       <SideMenu
-        mobileOpen={mobileOpen}
-        onMenuClick={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         state={state}
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container direction='row' justify='center'>
-          <Grid item xs={12}>
-            <Card variant='outlined' className={classes.card}>
-              <CardContent>
-                <Typography variant='h6'>
-                  {`Tests in Progress: 0`}
-                </Typography>
-                <Typography variant='h6'>
-                  {`Tests studied: 0`}
-                </Typography>
-              </CardContent>
-            </Card>
+        <Grid
+          container
+          direction='row'
+          justify='center'
+        >
+          <Grid item xs={8}>
+            <DashboardStats />
           </Grid>
         </Grid>
       </main>
-      {
-        (state.user.role === 'admin' || state.user.role === 'staneval') ?
-          (
-            <NavLink to={`/m`}>
-              <Fab color='primary' /*variant='extended'*/ aria-label='create mqf' className={classes.fab}>
-                <PostAddIcon />
-                {/*Add MQF*/}
-              </Fab>
-            </NavLink>
-          ) :
-          (null)
-      }
+      {(state.user.role === 'admin') ? <CreateMqf /> : null}
     </div >
   )
 }

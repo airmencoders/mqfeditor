@@ -1,14 +1,14 @@
 /**
- * Renders a FAB to scroll to top of page when clicked.
+ * Renders MQF Statistics
  * 
- * Expects a property 'order' to dynamically change height if more than one FAB
- * is expected to be rendered.
+ * Dashboard includes a side menu of site MQFs along. Future updates may include
+ * information about testing trend data, news posts, etc.
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    /src/components/ScrollToTop.js
+ * @file    /src/components/DashboardStats.js
  * @author  chris-m92
- * @since   0.5.0
+ * @since   0.14.0
  * 
  * MIT License
  * 
@@ -34,39 +34,28 @@
  */
 import React from 'react'
 
-import Fab from '@material-ui/core/Fab'
-import { useTheme } from '@material-ui/core/styles'
-import Zoom from '@material-ui/core/Zoom'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+const useStyles = makeStyles(theme => ({
 
-const ScrollToTop = ({ state, onScrollToTop, order }) => {
-  const theme = useTheme()
+}))
 
-  const transitionDuration = {
-    enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen,
-  }
+const DashboardStats = () => {
+  const classes = useStyles()
 
   return (
-    <Zoom
-      in={state.hasScrolled}
-      timeout={transitionDuration}
-      unmountOnExit
+    <Card
+      variant='outlined'
     >
-      <Fab
-        aria-label='scroll to top'
-        onClick={onScrollToTop}
-        style={{
-          position: 'fixed',
-          bottom: theme.spacing(((order - 1) * 9) + 2),
-          right: theme.spacing(2)
-        }}
-      >
-        <KeyboardArrowUpIcon />
-      </Fab>
-    </Zoom>
+      <CardContent>
+        <Typography variant='h6'>Tests in Progress: 0</Typography>
+        <Typography variant='h6'>Tests Studied: 0</Typography>
+      </CardContent>
+    </Card>
   )
 }
 
-export default ScrollToTop
+export default DashboardStats

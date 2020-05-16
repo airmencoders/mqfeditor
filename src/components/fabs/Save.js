@@ -1,13 +1,11 @@
 /**
- * [SUMMARY]
- * 
- * [DESCRIPTION]
+ * Renders a FAB to save component.
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/components/fabs/Save.js
  * @author  chris-m92
- * @since   x.y.z
+ * @since   0.14.0
  * 
  * MIT License
  * 
@@ -32,56 +30,32 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
 
+import Fab from '@material-ui/core/Fab'
 import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/fabs/ScrollToTop'
-import SideMenu from '../components/SideMenu'
+import SaveIcon from '@material-ui/icons/Save'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+const useStyles = makeStyles(theme => ({
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
   },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  toolbar: theme.mixins.toolbar,
 }))
-
-const Test = ({ state, scroll }) => {
+const Save = ({ handleClick }) => {
   const classes = useStyles()
-  let { userId } = useParams()
-
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
-
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
 
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography variant='h6'>
-          {userId}
-        </Typography>
-        <ScrollToTop state={state} scroll={scroll} />
-      </main>
-    </div>
-	)
+    <Fab
+      aria-label='save changes'
+      className={classes.fab}
+      color='primary'
+      onClick={handleClick}
+    >
+      <SaveIcon />
+    </Fab>
+  )
 }
 
-export default Test
+export default Save

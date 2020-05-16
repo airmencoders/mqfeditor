@@ -50,8 +50,9 @@ class App extends React.Component {
     this.state = {
       hasScrolled: false,
       isAuthenticated: false,
-      user: null,
+      mobileOpen: false,
       tests: null,
+      user: null,
     }
   }
 
@@ -69,6 +70,12 @@ class App extends React.Component {
     })
   }
 
+  handleDrawerToggle = () => {
+    this.setState({
+      mobileOpen: !this.state.mobileOpen,
+    })
+  }
+
   handleLoginClick = () => {
     this.setState(authData)
   }
@@ -82,12 +89,6 @@ class App extends React.Component {
   }
 
   handleMQFSeen = (id, seenVersion) => {
-    /*const filterTests = (needle, haystack) => haystack.filter(mqf => mqf.id !== needle)
-    const newTests = [
-      seenVersion,
-      ...filterTests(id, this.state.tests)
-    ]*/
-
     const index = this.state.tests.findIndex((needle) => needle.id === id)
 
     const testArray = this.state.tests.slice()
@@ -99,15 +100,9 @@ class App extends React.Component {
         tests: testArray,
       })
     }, 100)
-
-
-    /*this.setState({
-      tests: update(this.state.tests, {index: {seen: {$set: true}}})
-    })*/
   }
 
   handleSaveMQFChanges = (id, newVersion) => {
-
     const index = this.state.tests.findIndex((needle) => needle.id === id)
 
     const testArray = this.state.tests.slice()
@@ -146,51 +141,57 @@ class App extends React.Component {
             <Route exact path="/">
               {(this.state.isAuthenticated) ?
                 <Dashboard
-                  onLogoutClick={this.handleLogoutClick}
+                  handleDrawerToggle={this.handleDrawerToggle}
+                  handleLogoutClick={this.handleLogoutClick}
                   state={this.state}
                 /> :
                 <Login
-                  onLoginClick={this.handleLoginClick}
+                  handleLoginClick={this.handleLoginClick}
                   state={this.state}
                 />
               }
             </Route>
             <Route exact path="/m">
               <MQFCreate
-                onLogoutClick={this.handleLogoutClick}
-                onScrollToTop={this.handleScrollToTop}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>
             <Route path="/m/:mqfId/e">
               <MQFEdit
-                onLogoutClick={this.handleLogoutClick}
-                onSave={(mqfId, newValue) => { this.handleSaveMQFChanges(mqfId, newValue) }}
-                onScrollToTop={this.handleScrollToTop}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleSave={(mqfId, newValue) => { this.handleSaveMQFChanges(mqfId, newValue) }}
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>
             <Redirect exact from='/m/:mqfId/s' to='/m/:mqfId/s/sequential' />
             <Route path="/m/:mqfId/s/:order">
               <MQFStudy
-                onLogoutClick={this.handleLogoutClick}
-                onScrollToTop={this.handleScrollToTop}
-                onSeen={this.handleMQFSeen}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleMQFSeen={this.handleMQFSeen}
+                handleScrollToTop={this.handleScrollToTop}                
                 state={this.state}
               />
             </Route>
             <Route path="/m/:mqfId/t">
               <MQFTest
-                onLogoutClick={this.handleLogoutClick}
-                onScrollToTop={this.handleScrollToTop}
-                onSeen={this.handleMQFSeen}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleMQFSeen={this.handleMQFSeen}
+                handleScrollToTop={this.handleScrollToTop}                
                 state={this.state}
               />
             </Route>
             <Route path="/m/:mqfId">
               <MQFOverview
-                onLogoutClick={this.handleLogoutClick}
-                onScrollToTop={this.handleScrollToTop}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>

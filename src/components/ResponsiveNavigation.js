@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
+const Navigation = ({ handleDrawerToggle, handleLogoutClick, state }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -88,7 +88,7 @@ const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
             className={classes.menuButton}
             color="inherit"
             aria-label="open-drawer"
-            onClick={onMenuClick}
+            onClick={handleDrawerToggle}
           >
             <MenuIcon />
           </IconButton>
@@ -125,7 +125,7 @@ const Navigation = ({ state, onMenuClick, onLogoutClick }) => {
                     Account Settings
                   </NavLink>
                 </MenuItem>
-                <MenuItem onClick={onLogoutClick} >
+                <MenuItem onClick={handleLogoutClick} >
                   Log Out
                 </MenuItem>
                 <Divider />
