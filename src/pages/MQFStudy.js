@@ -201,6 +201,7 @@ const Test = ({ onSeen, state, scroll }) => {
                 className={classes.card}
                 key='front'
                 onClick={toggleCardFlip}
+                variant='outlined'
               >
                 <CardContent>
                   <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
@@ -230,6 +231,7 @@ const Test = ({ onSeen, state, scroll }) => {
                 className={classes.card}
                 key='back'
                 onClick={toggleCardFlip}
+                variant='outlined'
               >
                 <CardContent>
                   <Typography variant='body1' align='center'>

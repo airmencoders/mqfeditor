@@ -63,9 +63,6 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: theme.mixins.toolbar,
   card: {
-    //width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
     marginBottom: theme.spacing(3),
   },
   textField: {
@@ -130,22 +127,6 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
   const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
   const currentMQF = filterMQF(mqfId, state.tests)[0]
 
-  /*const testSaveQuestions = () => {
-    questionRefs.current.forEach((qRef, qIndex) => {
-      console.log(`Question ${qIndex}:`, qRef.value)
-
-      optionRefs.current[qIndex].forEach((oRef, oIndex) => (
-        console.log(`Option ${oIndex}:`, oRef.value)
-      ))
-
-      console.log(`Answer ${qIndex}:`, answerRefs.current[qIndex].charCodeAt(0) - 65)
-      console.log(`Reference:`, referenceRefs.current[qIndex].value)
-      console.log('-------------------------')
-    })
-
-    // Make
-  }*/
-
   const handleSaveClick = () => {
 
     let questions = []
@@ -195,7 +176,10 @@ const MQFEdit = ({ onLogoutClick, onSave, onScrollToTop, state }) => {
         <form noValidate autoComplete='off'>
           <Grid container direction='row' justify='center'>
             <Grid item xs={10}>
-              <Card className={classes.card}>
+              <Card 
+                className={classes.card}
+                variant='outlined'
+              >
                 <Box
                   direction='row'
                   display='flex'

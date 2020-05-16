@@ -133,7 +133,10 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
         <div className={classes.toolbar} />
         <Grid container direction='row' justify='center'>
           <Grid item xs={10}>
-            <Card className={classes.card}>
+            <Card
+              className={classes.card}
+              variant='outlined'
+            >
               <CardContent>
                 <Typography variant='h5'>{currentMQF.name}</Typography>
                 <Typography variant='h6'>{`MDS: ${currentMQF.mds}`}</Typography>
@@ -147,7 +150,10 @@ const MQFOverview = ({ state, onScrollToTop, onLogoutClick }) => {
 
           {/* Show actions only if test owner / admin */}
           <Grid item xs={10}>
-            <Card className={classes.card}>
+            <Card
+              className={classes.card}
+              variant='outlined'
+            >
               <CardActions>
                 <Box display='flex' direction='row' flexWrap='wrap'>
                   <NavLink to={`/m/${mqfId}/s/sequential`} style={{ textDecoration: 'none' }}>

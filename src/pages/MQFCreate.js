@@ -34,13 +34,20 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Snackbar from '@material-ui/core/Snackbar'
+import Step from '@material-ui/core/Step'
+import StepContent from '@material-ui/core/StepContent'
+import StepLabel from '@material-ui/core/StepLabel'
+import Stepper from '@material-ui/core/Stepper'
+import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
@@ -51,6 +58,12 @@ import ScrollToTop from '../components/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
+  actionsContainer: {
+    marginBottom: theme.spacing(2),
+  },
+  resetContainer: {
+    padding: theme.spacing(3),
+  },
   root: {
     display: 'flex',
   },
@@ -67,14 +80,54 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
+  textField: {
+    margin: theme.spacing(3),
+  },
   toolbar: theme.mixins.toolbar,
 }))
+
+//----------------------------------------------------------------//
+// Set up steps
+
+const getSteps = () => {
+  return ['Input MQF Information', 'Import PDF', 'Edit Questions']
+}
+
+const getStepContent = step => {
+  switch (step) {
+    case 0:
+      return `Input MDS and name for the MQF.`
+    case 1:
+      return `Import a PDF version of a current MQF.`
+    case 2:
+      return `Edit questions or add more questions.`
+  }
+}
 
 //----------------------------------------------------------------//
 // COMPONENT CODE
 //----------------------------------------------------------------//
 const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   const classes = useStyles()
+
+  let _mds, _name
+
+  //----------------------------------------------------------------//
+  // Internal state for handling steps
+  const [activeStep, setActiveStep] = React.useState(0)
+  const steps = getSteps()
+
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1)
+  }
+
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1)
+  }
+
+  const handleReset = () => {
+    setActiveStep(0)
+  }
 
   //----------------------------------------------------------------//
   // Internal state passed to Drawer component
@@ -99,7 +152,8 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
   //----------------------------------------------------------------//
   // Handle save button
   const handleSaveClick = () => {
-
+    /*console.log('MDS:', _mds.value)
+    console.log('Name:', _name.value)*/
   }
 
   //----------------------------------------------------------------//
@@ -124,37 +178,72 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container direction='row' justify='center'>
-          <Grid item xs={10}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography variant='h6'>
-                  Create a MQF
-                </Typography>
-                <Typography variant='h6'>
-                  TODO: TEXT FIELD FOR NAME
-                </Typography>
-                <Typography variant='h6'>
-                  TODO: TEXT FIELD FOR MDS
-                </Typography>
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography variant='h6'>
-                  TODO: PLACEHOLDER FOR IMPORT FIELD.
-                </Typography>
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography variant='h6'>
-                  TODO: BOTTOM CARD - ADD QUESTION
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <form noValidate autoComplete='off'>
+            <Stepper
+              activeStep={activeStep}
+              orientation='vertical'
+            >
+              {steps.map((label, index) => (
+                <Step key={index}>
+                  <StepLabel>{label}</StepLabel>
+                  <StepContent>
+                    <Typography>{getStepContent(index)}</Typography>
+                    <div className={classes.actionsContainer}>
+                      {
+                        activeStep === 0 ? (
+                          <React.Fragment>
+                            <TextField
+                              className={classes.textField}
+                              inputRef={value => _mds = value}
+                              label='MDS'
+                            />
+                            <TextField
+                              className={classes.textField}
+                              inputRef={value => _name = value}
+                              label='Test Name'
+                            />
+                          </React.Fragment>
+                        ) : (null)
+                      }
+                      <div>
+                        <Button
+                          className={classes.button}
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                        >
+                          Back
+                        </Button>
+                        <Button
+                          className={classes.button}
+                          color='primary'
+                          onClick={handleNext}
+                          variant='contained'
+                        >
+                          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                        </Button>
+                      </div>
+                    </div>
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+            {activeStep === steps.length && (
+              <Paper
+                className={classes.resetContainer}
+                elevation={0}
+                square
+              >
+                <Typography>All steps completed - you&apos;re finished</Typography>
+                <Button className={classes.button} onClick={handleReset}>Reset</Button>
+              </Paper>
+            )}
+          </form>
+        </Card>
+
         <Fab
           aria-label='save changes'
           className={classes.fab}
@@ -186,7 +275,7 @@ const MQFCreate = ({ onLogoutClick, onScrollToTop, state }) => {
           </IconButton>
         }
       />
-    </div>
+    </div >
   )
 }
 

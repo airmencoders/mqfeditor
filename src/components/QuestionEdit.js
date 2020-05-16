@@ -79,7 +79,11 @@ const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRef
   optionRefs.current[questionIndex] = []
 
   return (
-    <Card className={classes.card} key={questionIndex}>
+    <Card
+      className={classes.card}
+      key={questionIndex}
+      variant='outlined'
+    >
       <CardContent name='question'>
         <TextField
           id={`question-${questionIndex + 1}`}

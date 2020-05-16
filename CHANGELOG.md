@@ -1,3 +1,9 @@
+## 0.13.0
+- Standardized all cards to be `variant='outlined'`
+- Code cleanup
+- Implemented Stepper for `/src/pages/MQFCreate` 
+- TODO: Stepper unmounts TextFields which clears the reference - need permanent reference, maybe using state.
+
 ## 0.12.0
 - Began scaffolding `/src/pages/MQFCreate`
 
@@ -23,7 +29,7 @@
 - Implemented `MQFStudy`, currently only studies 'flashcard' style in order.
 - TODO: Vertically center answer on flashcard
 - ~~TODO: Implement an option for random order studying (using `react-router` url query?) - require extra 'state'~~
-- TODO: Implement `MQFTest` (will always be in random order)
+- ~~TODO: Implement `MQFTest` (will always be in random order)~~
 - TODO: Implement User Account page
 - TODO: Implement `MQFCreate` page (PDF Import, parse, JSON Generation add to state / database through API Endpoints) as well as manual
 - FEATURE: Potential for 'private' vs. 'public' tests?
@@ -67,7 +73,7 @@
 ## 0.2.0
 - Updated mock state for handling authentication
 - Created dummy pages for handling the creation, editing, managing, studying, and testing of MQFs
-- @todo: Styling and futher development
+- ~~@todo: Styling and futher development~~
 
 ## 0.1.0
 - Initial Commit

@@ -73,7 +73,10 @@ const QuestionTest = ({ answerRefs, currentQuestion, options, question }) => {
   }
 
   return (
-    <Card className={classes.card}>
+    <Card
+      className={classes.card}
+      variant='outlined'
+    >
       <CardContent>
         <Typography variant='h6'>{question}</Typography>
       </CardContent>
