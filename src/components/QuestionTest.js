@@ -29,8 +29,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -40,11 +46,11 @@ import Radio from '@material-ui/core/Radio'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   card: {
-    //width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
     marginBottom: theme.spacing(3),
   },
   answeredQuestion: {
@@ -61,17 +67,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
-
-const QuestionTest = ({ answerRefs, currentQuestion, options, question }) => {
-
+//----------------------------------------------------------------//
+// Question Test Component
+//----------------------------------------------------------------//
+export default ({ answerRefs, currentQuestion, options, question }) => {
   const classes = useStyles()
+
+  //----------------------------------------------------------------//
+  // Radio Button State
+  //----------------------------------------------------------------//
   const [selectedValue, setSelectedValue] = React.useState('')
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value)
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <Card
       className={classes.card}
@@ -102,5 +115,3 @@ const QuestionTest = ({ answerRefs, currentQuestion, options, question }) => {
     </Card>
   )
 }
-
-export default QuestionTest

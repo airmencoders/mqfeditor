@@ -29,13 +29,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Fab from '@material-ui/core/Fab'
 import { makeStyles } from '@material-ui/core/styles'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import SaveIcon from '@material-ui/icons/Save'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles(theme => ({
   fab: {
     position: 'fixed',
@@ -43,9 +55,16 @@ const useStyles = makeStyles(theme => ({
     right: theme.spacing(2),
   },
 }))
-const Save = ({ handleClick }) => {
+
+//----------------------------------------------------------------//
+// Save FAB Component
+//----------------------------------------------------------------//
+export default ({ handleClick }) => {
   const classes = useStyles()
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <Fab
       aria-label='save changes'
@@ -57,5 +76,3 @@ const Save = ({ handleClick }) => {
     </Fab>
   )
 }
-
-export default Save

@@ -32,9 +32,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { useParams, NavLink, Redirect } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
@@ -44,16 +50,25 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import ListAltIcon from '@material-ui/icons/ListAlt'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -73,29 +88,20 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText(theme.palette.error.main)
   },
   card: {
-    // width: '100%',
-    //marginLeft: 'auto',
-    //marginRight: 'auto',
     marginBottom: theme.spacing(3),
   },
 }))
 
-const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
+//----------------------------------------------------------------//
+// MQF Overview Component
+//----------------------------------------------------------------//
+export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
   //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  /*const [mobileOpen, setMobileOpen] = React.useState(false)
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }*/
-
-  //----------------------------------------------------------------//
   // Ensure user is authenticated
-
+  //----------------------------------------------------------------//
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
@@ -104,7 +110,7 @@ const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop,
 
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-
+  //----------------------------------------------------------------//
   const index = state.tests.findIndex((needle) => needle.id === mqfId)
 
   // index === -1 when MQF ID was not found
@@ -117,6 +123,9 @@ const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop,
   const currentMQF = state.tests.slice()[index]
   const mqfOwner = { ...state.user }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
@@ -181,27 +190,6 @@ const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop,
               </CardActions>
             </Card>
           </Grid>
-          {
-            // THIS IS BEING MOVED TO THE 'STUDY' PAGE
-            // INSTEAD, THIS WILL SHOW TREND ITEMS, MISSED QUESTIONS, COMPARE TO ALL USERS WHEN IT COMES TO SCORES, ETC...
-            /*currentMQF.questions.map((object, index) => (
-              <Grid item xs={10} key={index}>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography variant='body1'>{`${index + 1}. ${object.question}`}</Typography>
-                    {
-                      object.options.map((option, index) => (
-                        (index === object.answer) ?
-                          <Typography variant='subtitle1' key={index}><strong>{`${String.fromCharCode(65 + index)}. ${option}`}</strong></Typography> :
-                          <Typography variant='subtitle1' key={index}>{`${String.fromCharCode(65 + index)}. ${option}`}</Typography>
-                      ))
-                    }
-                    <Typography variant='subtitle1'><i>{`Reference: ${object.reference}`}</i></Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))*/
-          }
         </Grid>
         <ScrollToTop
           handleScrollToTop={handleScrollToTop}
@@ -212,5 +200,3 @@ const MQFOverview = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop,
     </div>
   )
 }
-
-export default MQFOverview

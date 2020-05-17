@@ -31,27 +31,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
-import Snackbar from '@material-ui/core/Snackbar'
 import TextField from '@material-ui/core/TextField'
 
-import CloseIcon from '@material-ui/icons/Close'
+//----------------------------------------------------------------//
+// Material UI Lab Components
+//----------------------------------------------------------------//
+// NOT YET IMPLEMENTED
+// import Skeleton from '@material-ui/lab/Skeleton'
+
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import SaveIcon from '@material-ui/icons/Save'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
+import CustomSnackbar from '../components/CustomSnackbar'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionEdit from '../components/QuestionEdit'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -75,33 +94,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScrollToTop, state }) => {
+//----------------------------------------------------------------//
+// Edit MQF Component
+//----------------------------------------------------------------//
+export default ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScrollToTop, handleSnackbarClose, handleSnackbarOpen, state }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
 
   //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  /*const [mobileOpen, setMobileOpen] = React.useState(false)
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  } */
-
-  //----------------------------------------------------------------//
-  // Internal state passed to Snackbar component
-
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false)
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setSnackbarOpen(false)
-  }
-
-  //----------------------------------------------------------------//
   // Declare references
+  //----------------------------------------------------------------//
   let _mds, _name
   // array of questions in order
   const questionRefs = React.useRef([])
@@ -121,12 +123,17 @@ const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScro
     return (
       <Redirect to='/' />
     )
-  } 
+  }
 
+  //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
+  //----------------------------------------------------------------//
   const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
   const currentMQF = filterMQF(mqfId, state.tests)[0]
 
+  //----------------------------------------------------------------//
+  // Handle Save Button
+  //----------------------------------------------------------------//
   const handleSaveClick = () => {
 
     let questions = []
@@ -156,9 +163,12 @@ const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScro
       questions
     }
     handleSave(mqfId, newMQF)
-    setSnackbarOpen(true)
+    handleSnackbarOpen()
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
@@ -175,7 +185,7 @@ const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScro
         <form noValidate autoComplete='off'>
           <Grid container direction='row' justify='center'>
             <Grid item xs={10}>
-              <Card 
+              <Card
                 className={classes.card}
                 variant='outlined'
               >
@@ -236,25 +246,11 @@ const MQFEdit = ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScro
           state={state}
         />
       </main>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        autoHideDuration={5000}
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
+      <CustomSnackbar
+        handleSnackbarClose={handleSnackbarClose}
         message='Changes Saved'
-        action={
-          <IconButton
-            aria-label='close'
-            color='inherit'
-            onClick={handleSnackbarClose}
-            size='small'
-          >
-            <CloseIcon fontSize='small' />
-          </IconButton>
-        }
+        open={state.snackbarOpen}
       />
-    </div >
+    </div>
   )
 }
-
-export default MQFEdit

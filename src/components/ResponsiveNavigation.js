@@ -12,7 +12,7 @@
  * Copyright (c) 2020 Airmen Coders
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and associated documentation files (the 'Software'), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -21,7 +21,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -29,9 +29,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -43,12 +49,21 @@ import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import MenuIcon from '@material-ui/icons/Menu'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import version from '../version'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
-  grow: {
+  root: {
     flexGrow: 1,
   },
   menuButton: {
@@ -65,10 +80,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Navigation = ({ handleDrawerToggle, handleLogoutClick, state }) => {
+//----------------------------------------------------------------//
+// ResponsiveNavigation Component
+//----------------------------------------------------------------//
+export default ({ handleDrawerToggle, handleLogoutClick, state }) => {
   const classes = useStyles()
-  const [anchorEl, setAnchorEl] = React.useState(null)
 
+  //----------------------------------------------------------------//
+  // Menu Anchor and Menu State
+  //----------------------------------------------------------------//
+  const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
   const handleMenu = (event) => {
@@ -79,15 +100,21 @@ const Navigation = ({ handleDrawerToggle, handleLogoutClick, state }) => {
     setAnchorEl(null)
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
-    <div className={classes.grow}>
-      <AppBar position="fixed" className={classes.appBar}>
+    <div className={classes.root}>
+      <AppBar
+        className={classes.appBar}
+        position='fixed'
+      >
         <Toolbar>
           <IconButton
-            edge="start"
+            edge='start'
             className={classes.menuButton}
-            color="inherit"
-            aria-label="open-drawer"
+            color='inherit'
+            aria-label='open-drawer'
             onClick={handleDrawerToggle}
           >
             <MenuIcon />
@@ -140,5 +167,3 @@ const Navigation = ({ handleDrawerToggle, handleLogoutClick, state }) => {
     </div>
   )
 }
-
-export default Navigation

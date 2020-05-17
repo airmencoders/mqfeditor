@@ -29,30 +29,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import IconButton from '@material-ui/core/IconButton'
-import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import Snackbar from '@material-ui/core/Snackbar'
 import Step from '@material-ui/core/Step'
 import StepContent from '@material-ui/core/StepContent'
 import StepLabel from '@material-ui/core/StepLabel'
 import Stepper from '@material-ui/core/Stepper'
+import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
-import CloseIcon from '@material-ui/icons/Close'
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import NoteAddIcon from '@material-ui/icons/NoteAdd'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import Save from '../components/fabs/Save'
 import SideMenu from '../components/SideMenu'
+import CustomSnackbar from '../components/CustomSnackbar'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   actionsContainer: {
     marginBottom: theme.spacing(2),
@@ -67,11 +80,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: '100%',
     padding: theme.spacing(3),
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
   },
   fileInput: {
     display: 'none',
@@ -92,13 +100,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 //----------------------------------------------------------------//
-// COMPONENT CODE
+// Create MQF Component
 //----------------------------------------------------------------//
-const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, handleSnackbarClose, handleSnackbarOpen, state }) => {
   const classes = useStyles()
 
   //----------------------------------------------------------------//
   // Internal state and references for input
+  //----------------------------------------------------------------//
   let _mds, _name
   const [mds, setMds] = React.useState('')
   const [name, setName] = React.useState('')
@@ -110,7 +119,7 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
 
   //----------------------------------------------------------------//
   // Set up steps
-
+  //----------------------------------------------------------------//
   const getSteps = () => {
     return ['Input MQF Information', 'Import MQF PDF', 'Edit Questions']
   }
@@ -125,12 +134,14 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
               defaultValue={mds}
               inputRef={input => _mds = input}
               label='MDS'
+              required={true}
             />
             <TextField
               className={classes.textField}
               defaultValue={name}
               inputRef={input => _name = input}
               label='Name'
+              required={true}
             />
           </React.Fragment>
         )
@@ -158,7 +169,7 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
           </React.Fragment>
         )
       case 2:
-        return `Edit questions or add more questions.`
+        return `Edit or add more questions.`
       default:
         return
     }
@@ -166,6 +177,7 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
 
   //----------------------------------------------------------------//
   // Internal state for handling steps
+  //----------------------------------------------------------------//
   const [activeStep, setActiveStep] = React.useState(0)
   const steps = getSteps()
 
@@ -186,27 +198,8 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
   }
 
   //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  /*const [mobileOpen, setMobileOpen] = React.useState(false)
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }*/
-
-  //----------------------------------------------------------------//
-  // Internal state passed to Snackbar component
-
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false)
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setSnackbarOpen(false)
-  }
-
-  //----------------------------------------------------------------//
   // Handle save button
+  //----------------------------------------------------------------//
   const handleSaveClick = () => {
     console.log('MDS:', mds)
     console.log('Name:', name)
@@ -215,12 +208,16 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
+  //----------------------------------------------------------------//
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
     )
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
@@ -290,25 +287,11 @@ const MQFCreate = ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, s
           state={state}
         />
       </main>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        autoHideDuration={5000}
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
+      <CustomSnackbar
+        handleSnackbarClose={handleSnackbarClose}
         message='Changes Saved'
-        action={
-          <IconButton
-            aria-label='close'
-            color='inherit'
-            onClick={handleSnackbarClose}
-            size='small'
-          >
-            <CloseIcon fontSize='small' />
-          </IconButton>
-        }
+        open={state.snackbarOpen}
       />
     </div >
   )
 }
-
-export default MQFCreate

@@ -29,20 +29,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionTest from '../components/QuestionTest'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -67,27 +82,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 //----------------------------------------------------------------//
-// COMPONENT CODE
+// MQF Test Component
 //----------------------------------------------------------------//
-const MQFTest = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
   //----------------------------------------------------------------//
   // Define answer references
+  //----------------------------------------------------------------//
   const answerRefs = React.useRef([])
 
   //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  /*const [mobileOpen, setMobileOpen] = React.useState(false)
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }*/
-
-  //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-
+  //----------------------------------------------------------------//
   let index, currentMQF
   let tempArray = []
 
@@ -125,6 +133,7 @@ const MQFTest = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleS
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
+  //----------------------------------------------------------------//
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
@@ -140,6 +149,9 @@ const MQFTest = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleS
     })
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
@@ -185,5 +197,3 @@ const MQFTest = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleS
     </div>
   )
 }
-
-export default MQFTest

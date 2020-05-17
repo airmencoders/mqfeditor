@@ -1,14 +1,11 @@
 /**
- * Renders an overview of MQF Test.
- * 
- * Includes an overview of the test meta-data, actions to study, take a test, view trend data,
- * and Admin / Owner actions.
+ * Renders a Card with options to edit a MQF Question
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    MQFOverview.js
+ * @file    /src/components/QuestionEdit.js
  * @author  chris-m92
- * @since   0.5.0
+ * @since   0.11.0
  * 
  * MIT License
  * 
@@ -32,8 +29,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -44,11 +47,11 @@ import Radio from '@material-ui/core/Radio'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   card: {
-    //width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
     marginBottom: theme.spacing(3),
   },
   divider: {
@@ -58,17 +61,17 @@ const useStyles = makeStyles((theme) => ({
   fullWidthTextField: {
     marginBottom: theme.spacing(3),
   },
-  /*radio: {
-    color: green[400],
-    '&$checked': {
-      color: green[600],
-    },
-    checked: {},
-  },*/
 }))
 
-const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRefs, referenceRefs }) => {
+//----------------------------------------------------------------//
+// Question Edit Component
+//----------------------------------------------------------------//
+export default ({ answerRefs, optionRefs, question, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
+
+  //----------------------------------------------------------------//
+  // Radio Button State
+  //----------------------------------------------------------------//
   const [selectedValue, setSelectedValue] = React.useState(String.fromCharCode(65 + question.answer))
 
   const handleChange = (event) => {
@@ -78,6 +81,9 @@ const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRef
   // Initialize the current reference as a 2D array
   optionRefs.current[questionIndex] = []
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <Card
       className={classes.card}
@@ -90,7 +96,7 @@ const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRef
           className={classes.fullWidthTextField}
           defaultValue={question.question}
           fullWidth
-          inputRef={value => questionRefs.current[questionIndex] = value }
+          inputRef={value => questionRefs.current[questionIndex] = value}
           label={`Question ${questionIndex + 1}`}
           multiline
         />
@@ -116,8 +122,8 @@ const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRef
                     />
                   </InputAdornment>
                 )
-              }}              
-              inputRef={ value => optionRefs.current[questionIndex][optionIndex] = value }
+              }}
+              inputRef={value => optionRefs.current[questionIndex][optionIndex] = value}
               label={`Option ${String.fromCharCode(65 + optionIndex)}`}
               multiline
             />
@@ -141,5 +147,3 @@ const Question = ({ answerRefs, optionRefs, question, questionIndex, questionRef
     </Card>
   )
 }
-
-export default Question

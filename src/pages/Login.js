@@ -3,7 +3,7 @@
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    Login.js
+ * @file    /src/pages/Login.js
  * @author  chris-m92
  * @since   0.1.0
  * 
@@ -29,8 +29,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -40,10 +46,19 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+//----------------------------------------------------------------//
+// Images
+//----------------------------------------------------------------//
 import cac from '../images/cac.png'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import Navigation from '../components/Navigation'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -63,9 +78,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Login = ({ handleLoginClick, state }) => {
+//----------------------------------------------------------------//
+// Login Component
+//----------------------------------------------------------------//
+export default ({ handleLoginClick, state }) => {
   const classes = useStyles()
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <Navigation state={state} />
@@ -98,5 +119,3 @@ const Login = ({ handleLoginClick, state }) => {
     </div>
   )
 }
-
-export default Login

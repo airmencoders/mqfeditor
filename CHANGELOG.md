@@ -1,3 +1,10 @@
+## 0.15.0
+- Install `@material-ui/lab` from NPM
+- Code Cleanup
+- TODO: Implement `@material-ui/lab/Skeleton` once backend and API are functioning
+- TODO: Implement a way to not allow skipping of `MDS` and `Name` in `/src/pages/MQFCreate`
+- TODO: Implement a way to parse PDF - might require server side
+
 ## 0.14.0
 - Continued work on `/src/pages/MQFCreate`
 - TODO: Find a Javascript PDF Parser
@@ -7,7 +14,7 @@
 - Standardized all cards to be `variant='outlined'`
 - Code cleanup
 - Implemented Stepper for `/src/pages/MQFCreate` 
-- TODO: Stepper unmounts TextFields which clears the reference - need permanent reference, maybe using state.
+- ~~TODO: Stepper unmounts TextFields which clears the reference - need permanent reference, maybe using state.~~
 
 ## 0.12.0
 - Began scaffolding `/src/pages/MQFCreate`

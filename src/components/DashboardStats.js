@@ -32,24 +32,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-const useStyles = makeStyles(theme => ({
+//----------------------------------------------------------------//
+// DashboardStats Component
+//----------------------------------------------------------------//
+export default () => {
 
-}))
-
-const DashboardStats = () => {
-  const classes = useStyles()
-
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
-    <Card
-      variant='outlined'
-    >
+    <Card variant='outlined'>
       <CardContent>
         <Typography variant='h6'>Tests in Progress: 0</Typography>
         <Typography variant='h6'>Tests Studied: 0</Typography>
@@ -57,5 +61,3 @@ const DashboardStats = () => {
     </Card>
   )
 }
-
-export default DashboardStats

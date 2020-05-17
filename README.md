@@ -27,8 +27,15 @@ npm install @material-ui/icons --save
 npm install react-router-dom --save
 npm install typeface-roboto --save
 npm install prop-types --save
-npm install pdf-parse --save
+npm install pdfjs-dist --save
 npm install react-card-flip --save
+```
+
+## Potential Unstable Dependencies
+Material-UI includes Lab components that may have shortcomings but are not in the core due to various reasons.
+[About The Lab | Material UI](https://material-ui.com/components/about-the-lab/)
+```bash
+npm install @material-ui/lab --save
 ```
 
 ## Authentication

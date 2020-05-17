@@ -29,21 +29,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import CssBaseline from '@material-ui/core/CssBaseline'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import { authData } from '../mockApi/authData'
 import Dashboard from './Dashboard'
 import Login from './Login'
-import MQFEdit from './MQFEdit'
 import MQFCreate from './MQFCreate'
+import MQFEdit from './MQFEdit'
+import MQFOverview from './MQFOverview'
 import MQFStudy from './MQFStudy'
 import MQFTest from './MQFTest'
-import MQFOverview from './MQFOverview'
 import UserAccount from './UserAccount'
 
+//----------------------------------------------------------------//
+// App Component
+//----------------------------------------------------------------//
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -51,11 +63,15 @@ class App extends React.Component {
       hasScrolled: false,
       isAuthenticated: false,
       mobileOpen: false,
+      snackbarOpen: false,
       tests: null,
       user: null,
     }
   }
 
+  //----------------------------------------------------------------//
+  // Class Lifecycle
+  //----------------------------------------------------------------//
   componentDidMount() {
     const scrollComponent = this
     document.addEventListener('scroll', (e) => {
@@ -70,12 +86,18 @@ class App extends React.Component {
     })
   }
 
+  //----------------------------------------------------------------//
+  // Drawer Methods
+  //----------------------------------------------------------------//
   handleDrawerToggle = () => {
     this.setState({
       mobileOpen: !this.state.mobileOpen,
     })
   }
 
+  //----------------------------------------------------------------//
+  // Authentication Methods 
+  //----------------------------------------------------------------//
   handleLoginClick = () => {
     this.setState(authData)
   }
@@ -88,6 +110,9 @@ class App extends React.Component {
     })
   }
 
+  //----------------------------------------------------------------//
+  // MQF Lifecycle Methods 
+  //----------------------------------------------------------------//
   handleMQFSeen = (id, seenVersion) => {
     const index = this.state.tests.findIndex((needle) => needle.id === id)
 
@@ -113,10 +138,25 @@ class App extends React.Component {
     })
   }
 
+  //----------------------------------------------------------------//
+  // UI Methods 
+  //----------------------------------------------------------------//
   handleScrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
+    })
+  }
+
+  handleSnackbarOpen = () => {
+    this.setState({
+      snackbarOpen: true
+    })
+  }
+
+  handleSnackbarClose = () => {
+    this.setState({
+      snackbarOpen: false
     })
   }
 
@@ -131,7 +171,10 @@ class App extends React.Component {
       })
     }
   }
-
+  
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   render() {
     return (
       <div className="App">
@@ -156,6 +199,8 @@ class App extends React.Component {
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
                 handleScrollToTop={this.handleScrollToTop}
+                handleSnackbarClose={this.handleSnackbarClose}
+                handleSnackbarOpen={this.handleSnackbarOpen}
                 state={this.state}
               />
             </Route>
@@ -165,16 +210,17 @@ class App extends React.Component {
                 handleLogoutClick={this.handleLogoutClick}
                 handleSave={(mqfId, newValue) => { this.handleSaveMQFChanges(mqfId, newValue) }}
                 handleScrollToTop={this.handleScrollToTop}
+                handleSnackbarClose={this.handleSnackbarClose}
+                handleSnackbarOpen={this.handleSnackbarOpen}
                 state={this.state}
               />
             </Route>
-            <Redirect exact from='/m/:mqfId/s' to='/m/:mqfId/s/sequential' />
             <Route path="/m/:mqfId/s/:order">
               <MQFStudy
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
                 handleMQFSeen={this.handleMQFSeen}
-                handleScrollToTop={this.handleScrollToTop}                
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>
@@ -183,7 +229,7 @@ class App extends React.Component {
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
                 handleMQFSeen={this.handleMQFSeen}
-                handleScrollToTop={this.handleScrollToTop}                
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>
@@ -197,8 +243,9 @@ class App extends React.Component {
             </Route>
             <Route path="/u/:userId">
               <UserAccount
-                onLogoutClick={this.handleLogoutClick}
-                onScrollToTop={this.handleScrollToTop}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleLogoutClick={this.handleLogoutClick}
+                handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />
             </Route>

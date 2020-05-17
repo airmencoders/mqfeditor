@@ -1,5 +1,5 @@
 /**
- * Renders a drawer containing MQF Test links.
+ * Renders a Material-UI Drawer containing MQF Test links.
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
@@ -29,9 +29,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Badge from '@material-ui/core/Badge'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
@@ -41,8 +47,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const drawerWidth = 240
-
 const useStyles = makeStyles((theme) => ({
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -56,16 +64,22 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }))
 
-const SideMenu = ({ window, state, handleDrawerToggle }) => {
+//----------------------------------------------------------------//
+// SideMenu Component
+//----------------------------------------------------------------//
+export default ({ window, state, handleDrawerToggle }) => {
   const classes = useStyles()
 
+  //----------------------------------------------------------------//
+  // Drawer Content - Define Only Once
+  //----------------------------------------------------------------//
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
         {state.tests.map((test) => (
-          <ListItem 
+          <ListItem
             button
             key={test.id}
             onClick={handleDrawerToggle}
@@ -90,6 +104,9 @@ const SideMenu = ({ window, state, handleDrawerToggle }) => {
 
   const container = window !== undefined ? () => window().document.body : undefined
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <nav className={classes.drawer} aria-label='mqf tests'>
       <Hidden smUp implementation='js'>
@@ -117,5 +134,3 @@ const SideMenu = ({ window, state, handleDrawerToggle }) => {
     </nav>
   )
 }
-
-export default SideMenu

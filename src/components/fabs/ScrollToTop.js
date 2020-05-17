@@ -32,22 +32,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 
+//----------------------------------------------------------------//
+// Material UI Components
+//----------------------------------------------------------------//
 import Fab from '@material-ui/core/Fab'
 import { useTheme } from '@material-ui/core/styles'
 import Zoom from '@material-ui/core/Zoom'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
-const ScrollToTop = ({ state, handleScrollToTop, order }) => {
+//----------------------------------------------------------------//
+// Scroll To Top FAB Component
+//----------------------------------------------------------------//
+export default ({ state, handleScrollToTop, order }) => {
   const theme = useTheme()
 
+  //----------------------------------------------------------------//
+  // Define Transition Duration
+  //----------------------------------------------------------------//
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen,
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <Zoom
       in={state.hasScrolled}
@@ -68,5 +86,3 @@ const ScrollToTop = ({ state, handleScrollToTop, order }) => {
     </Zoom>
   )
 }
-
-export default ScrollToTop

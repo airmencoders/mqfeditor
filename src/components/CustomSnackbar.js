@@ -1,14 +1,13 @@
 /**
- * Renders User Dashboard
+ * Renders a Material-UI Snackbar
  * 
- * Dashboard includes a side menu of site MQFs along. Future updates may include
- * information about testing trend data, news posts, etc.
+ * Purpose is to abstract away some of the code from the pages
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    /src/pages/Dashboard.js
+ * @file    /src/components/Snackbar.js
  * @author  chris-m92
- * @since   0.1.0
+ * @since   0.15.0
  * 
  * MIT License
  * 
@@ -36,79 +35,53 @@
 // Top Level Modules
 //----------------------------------------------------------------//
 import React from 'react'
-import { Redirect } from 'react-router-dom'
 
 //----------------------------------------------------------------//
 // Material UI Core Components
 //----------------------------------------------------------------//
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import Snackbar from '@material-ui/core/Snackbar'
 
 //----------------------------------------------------------------//
-// Custom Components
+// Material UI Icons
 //----------------------------------------------------------------//
-import DashboardStats from '../components/DashboardStats'
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import SideMenu from '../components/SideMenu'
-import CreateMqf from '../components/fabs/CreateMqf'
+import CloseIcon from '@material-ui/icons/Close'
 
 //----------------------------------------------------------------//
-// Custom Class Styles
+// CustomSnackbar Component
 //----------------------------------------------------------------//
-const useStyles = makeStyles((theme) => ({
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  root: {
-    display: 'flex',
-  },
-  toolbar: theme.mixins.toolbar,
-}))
-
-//----------------------------------------------------------------//
-// Dashboard Component
-//----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, state }) => {
-  const classes = useStyles()
+export default ({ handleSnackbarClose, message, open }) => {
 
   //----------------------------------------------------------------//
-  // Ensure User Is Authenticated
+  // Handle Snackbar Close
   //----------------------------------------------------------------//
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
+  const snackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    handleSnackbarClose()
   }
 
   //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid
-          container
-          direction='row'
-          justify='center'
+    <Snackbar
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      autoHideDuration={5000}
+      open={open}
+      onClose={snackbarClose}
+      message={message}
+      action={
+        <IconButton
+          aria-label='close'
+          color='inherit'
+          onClick={snackbarClose}
+          size='small'
         >
-          <Grid item xs={8}>
-            <DashboardStats />
-          </Grid>
-        </Grid>
-      </main>
-      {(state.user.role === 'admin') ? <CreateMqf /> : null}
-    </div >
+          <CloseIcon fontSize='small' />
+        </IconButton>
+      }
+    />
   )
 }

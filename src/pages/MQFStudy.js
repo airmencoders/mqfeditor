@@ -29,11 +29,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import ReactCardFlip from 'react-card-flip'
 
-// import Box from '@material-ui/core/Box'
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -43,12 +48,21 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 
+//----------------------------------------------------------------//
+// Custom Components
+//----------------------------------------------------------------//
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import SideMenu from '../components/SideMenu'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -72,16 +86,17 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   }
 }))
+
 //----------------------------------------------------------------//
-// COMPONENT CODE
+// Study MQF Component
 //----------------------------------------------------------------//
-const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
 
   //----------------------------------------------------------------//
   // Internal state used to handle the flipping of flashcards
-
+  //----------------------------------------------------------------//
   let [isFlipped, setIsFlipped] = React.useState(false)
   const toggleCardFlip = () => {
     setIsFlipped(!isFlipped)
@@ -89,6 +104,7 @@ const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handle
 
   //----------------------------------------------------------------//
   // Internal state used to handle the changes in questions
+  //----------------------------------------------------------------//
   let [currentQuestion, setCurrentQuestion] = React.useState(0)
   const handlePreviousQuestion = () => {
     let timeout = (isFlipped) ? 200 : 0
@@ -115,16 +131,8 @@ const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handle
   }  
 
   //----------------------------------------------------------------//
-  // Internal state passed to Drawer component
-
-  /*const [mobileOpen, setMobileOpen] = React.useState(false)
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }*/
-
-  //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-
+  //----------------------------------------------------------------//
   let index, currentMQF
   let tempArray = []
 
@@ -178,12 +186,16 @@ const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handle
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
+  //----------------------------------------------------------------//
   if (state.isAuthenticated === false) {
     return (
       <Redirect to='/' />
     )
   }
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <div className={classes.root}>
       <ResponsiveNavigation
@@ -263,5 +275,3 @@ const MQFStudy = ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handle
     </div>
   )
 }
-
-export default MQFStudy

@@ -29,14 +29,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//----------------------------------------------------------------//
+// Top Level Modules
+//----------------------------------------------------------------//
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+//----------------------------------------------------------------//
+// Material UI Core Components
+//----------------------------------------------------------------//
 import Fab from '@material-ui/core/Fab'
 import { makeStyles } from '@material-ui/core/styles'
 
+//----------------------------------------------------------------//
+// Material UI Icons
+//----------------------------------------------------------------//
 import PostAddIcon from '@material-ui/icons/PostAdd'
 
+//----------------------------------------------------------------//
+// Custom Class Styles
+//----------------------------------------------------------------//
 const useStyles = makeStyles(theme => ({
   fab: {
     position: 'fixed',
@@ -45,9 +57,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const CreateMqf = () => {
+//----------------------------------------------------------------//
+// Create MQF FAB Component
+//----------------------------------------------------------------//
+export default () => {
   const classes = useStyles()
 
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
     <NavLink to={`/m`}>
       <Fab
@@ -60,5 +78,3 @@ const CreateMqf = () => {
     </NavLink>
   )
 }
-
-export default CreateMqf
