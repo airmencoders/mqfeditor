@@ -47,7 +47,7 @@ import Typography from '@material-ui/core/Typography'
 //----------------------------------------------------------------//
 // DashboardStats Component
 //----------------------------------------------------------------//
-export default () => {
+export default ({ state }) => {
 
   //----------------------------------------------------------------//
   // Render The Component
@@ -55,8 +55,9 @@ export default () => {
   return (
     <Card variant='outlined'>
       <CardContent>
-        <Typography variant='h6'>Tests in Progress: 0</Typography>
-        <Typography variant='h6'>Tests Studied: 0</Typography>
+        <Typography variant='h6'>Tests Studied: {state.user.testsStudied.length}</Typography>
+        <Typography variant='h6'>Tests in Progress: {state.user.testsInProgress.length}</Typography>
+        <Typography variant='h6'>Tests Taken: {state.user.testsTaken.length}</Typography>
       </CardContent>
     </Card>
   )

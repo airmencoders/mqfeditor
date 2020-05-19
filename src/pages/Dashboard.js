@@ -104,7 +104,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, state }) => {
           justify='center'
         >
           <Grid item xs={8}>
-            <DashboardStats />
+            <DashboardStats state={state} />
           </Grid>
         </Grid>
       </main>

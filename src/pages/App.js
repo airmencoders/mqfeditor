@@ -113,8 +113,19 @@ class App extends React.Component {
   //----------------------------------------------------------------//
   // MQF Lifecycle Methods 
   //----------------------------------------------------------------//
-  handleMQFSeen = (id, seenVersion) => {
-    const index = this.state.tests.findIndex((needle) => needle.id === id)
+  handleMQFSave = (mqfId, newVersion) => {
+    const index = this.state.tests.findIndex(needle => needle.id === mqfId)
+
+    const testArray = this.state.tests.slice()
+    testArray[index] = newVersion
+
+    this.setState({
+      tests: testArray,
+    })
+  }
+  
+  handleMQFSeen = (mqfId, seenVersion) => {
+    const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
     const testArray = this.state.tests.slice()
     testArray[index] = seenVersion
@@ -127,11 +138,11 @@ class App extends React.Component {
     }, 100)
   }
 
-  handleSaveMQFChanges = (id, newVersion) => {
-    const index = this.state.tests.findIndex((needle) => needle.id === id)
+  handleQuestionStudied = (mqfId, questionIndex) => {
+    const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
     const testArray = this.state.tests.slice()
-    testArray[index] = newVersion
+    testArray[index].questions[questionIndex].timesStudied = this.state.tests[index].questions[questionIndex].timesStudied + 1
 
     this.setState({
       tests: testArray,
@@ -208,7 +219,7 @@ class App extends React.Component {
               <MQFEdit
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
-                handleSave={(mqfId, newValue) => { this.handleSaveMQFChanges(mqfId, newValue) }}
+                handleMQFSave={(mqfId, newValue) => { this.handleMQFSave(mqfId, newValue) }}
                 handleScrollToTop={this.handleScrollToTop}
                 handleSnackbarClose={this.handleSnackbarClose}
                 handleSnackbarOpen={this.handleSnackbarOpen}
@@ -221,6 +232,7 @@ class App extends React.Component {
                 handleLogoutClick={this.handleLogoutClick}
                 handleMQFSeen={this.handleMQFSeen}
                 handleScrollToTop={this.handleScrollToTop}
+                handleQuestionStudied={(mqfId, questionIndex) => {this.handleQuestionStudied(mqfId, questionIndex) }}
                 state={this.state}
               />
             </Route>

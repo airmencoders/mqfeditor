@@ -1,3 +1,7 @@
+## 0.16.0
+- Added MQF statistics and Question statistics to `/src/pages/Dashboard` and `/src/pages/MQFStudy`.
+- Statistics are held within the local state (eventually to get pushed to database on a `componentWillUnmount` lifecycle)
+
 ## 0.15.0
 - Install `@material-ui/lab` from NPM
 - Code Cleanup

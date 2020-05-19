@@ -189,6 +189,23 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, stat
                 </Box>
               </CardActions>
             </Card>
+            <Card
+              className={classes.card}
+              variant='outlined'
+            >
+              <CardContent>
+                {
+                  currentMQF.questions.map((question, index) => (
+                    <Typography
+                      key={index}
+                      variant='body1'
+                    >
+                      {`${index + 1}. Studied ${question.timesStudied} times.`}
+                    </Typography>
+                  ))
+                }
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
         <ScrollToTop

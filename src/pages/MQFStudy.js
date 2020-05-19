@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Study MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, handleQuestionStudied, state }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
 
@@ -128,7 +128,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
         setCurrentQuestion(currentQuestion + 1)
       }
     }, timeout)
-  }  
+  }
 
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
@@ -144,6 +144,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
     }
   }
   let [questionArray, setQuestionArray] = React.useState(tempArray)
+  let [questionsPicked, setQuestionsPicked] = React.useState(false)
 
   //----------------------------------------------------------------//
   // Hook to mimic componentDidMount() in Class Components
@@ -181,8 +182,19 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
         }
       }
       setQuestionArray(tempArray)
+      setQuestionsPicked(true)
     }
   }, [])
+
+  //----------------------------------------------------------------//
+  // On each render, depending on if `questionsPicked` or `currentQuestion` change, then we 
+  // Run this code, in this case, as long as the questions are picked (questionArray is set)
+  // Any time the current question changes, we say that we've studied the question
+  React.useEffect(() => {
+    if (questionsPicked) {
+      handleQuestionStudied(mqfId, questionArray[currentQuestion])
+    }
+  }, [questionsPicked, currentQuestion])
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated

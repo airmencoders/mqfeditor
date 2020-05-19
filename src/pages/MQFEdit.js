@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Edit MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScrollToTop, handleSnackbarClose, handleSnackbarOpen, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleScrollToTop, handleSnackbarClose, handleSnackbarOpen, state }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
 
@@ -162,7 +162,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleSave, handleScrol
       seen: false,
       questions
     }
-    handleSave(mqfId, newMQF)
+    handleMQFSave(mqfId, newMQF)
     handleSnackbarOpen()
   }
 
