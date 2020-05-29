@@ -1,3 +1,10 @@
+## 0.17.0
+- Removed `pdfjs-dist` package and prune `npm` dependencies
+- Removed `create-react-app` default test files
+- Bump version in `package.json`
+- Use `Save` FAB in `MQFEdit`
+- Remove stepper from `MQFCreate` and just use cards similar to `MQFEdit`
+
 ## 0.16.0
 - Added MQF statistics and Question statistics to `/src/pages/Dashboard` and `/src/pages/MQFStudy`.
 - Statistics are held within the local state (eventually to get pushed to database on a `componentWillUnmount` lifecycle)

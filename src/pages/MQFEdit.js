@@ -43,7 +43,6 @@ import { useParams, Redirect } from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
@@ -55,15 +54,11 @@ import TextField from '@material-ui/core/TextField'
 // import Skeleton from '@material-ui/lab/Skeleton'
 
 //----------------------------------------------------------------//
-// Material UI Icons
-//----------------------------------------------------------------//
-import SaveIcon from '@material-ui/icons/Save'
-
-//----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
 import CustomSnackbar from '../components/CustomSnackbar'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import Save from '../components/fabs/Save'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import QuestionEdit from '../components/QuestionEdit'
@@ -232,14 +227,9 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
             </Grid>
           </Grid>
         </form>
-        <Fab
-          aria-label='save changes'
-          className={classes.fab}
-          color='primary'
-          onClick={handleSaveClick}
-        >
-          <SaveIcon />
-        </Fab>
+        <Save
+          handleSaveClick={handleSaveClick}
+        />
         <ScrollToTop
           handleScrollToTop={handleScrollToTop}
           order={2}

@@ -40,11 +40,8 @@ import { Redirect } from 'react-router-dom'
 //----------------------------------------------------------------//
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
 import Paper from '@material-ui/core/Paper'
-import Step from '@material-ui/core/Step'
-import StepContent from '@material-ui/core/StepContent'
-import StepLabel from '@material-ui/core/StepLabel'
-import Stepper from '@material-ui/core/Stepper'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -109,102 +106,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
   // Internal state and references for input
   //----------------------------------------------------------------//
   let _mds, _name
-  const [mds, setMds] = React.useState('')
-  const [name, setName] = React.useState('')
-  const [filename, setFilename] = React.useState('')
-
-  const handleFileChange = () => {
-    setFilename(document.getElementById('pdf-upload').files[0].name)
-  }
-
-  //----------------------------------------------------------------//
-  // Set up steps
-  //----------------------------------------------------------------//
-  const getSteps = () => {
-    return ['Input MQF Information', 'Import MQF PDF', 'Edit Questions']
-  }
-
-  const getStepContent = step => {
-    switch (step) {
-      case 0:
-        return (
-          <React.Fragment>
-            <TextField
-              className={classes.textField}
-              defaultValue={mds}
-              inputRef={input => _mds = input}
-              label='MDS'
-              required={true}
-            />
-            <TextField
-              className={classes.textField}
-              defaultValue={name}
-              inputRef={input => _name = input}
-              label='Name'
-              required={true}
-            />
-          </React.Fragment>
-        )
-      case 1:
-        return (
-          <React.Fragment>
-            <input
-              accept='application/pdf'
-              className={classes.fileInput}
-              id='pdf-upload'
-              multiple
-              onChange={handleFileChange}
-              type='file'
-            />
-            <label htmlFor='pdf-upload'>
-              <Button
-                className={classes.fileUploadButton}
-                color='primary'
-                component='span'
-                variant='contained'
-              >
-                <NoteAddIcon className={classes.buttonIcon} />{(filename) ? filename : 'Upload MQF'}
-              </Button>
-            </label>
-          </React.Fragment>
-        )
-      case 2:
-        return `Edit or add more questions.`
-      default:
-        return
-    }
-  }
-
-  //----------------------------------------------------------------//
-  // Internal state for handling steps
-  //----------------------------------------------------------------//
-  const [activeStep, setActiveStep] = React.useState(0)
-  const steps = getSteps()
-
-  const handleNext = () => {
-    if (activeStep === 0) {
-      setMds(_mds.value)
-      setName(_name.value)
-    }
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-  }
-
-  const handleReset = () => {
-    setActiveStep(0)
-  }
-
-  //----------------------------------------------------------------//
-  // Handle save button
-  //----------------------------------------------------------------//
-  const handleSaveClick = () => {
-    console.log('MDS:', mds)
-    console.log('Name:', name)
-    console.log('Filename:', filename)
-  }
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
@@ -213,6 +114,10 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
     return (
       <Redirect to='/' />
     )
+  }
+
+  const handleSaveClick = () => {
+    console.log('saved!')
   }
 
   //----------------------------------------------------------------//
@@ -231,60 +136,38 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Card
-          className={classes.card}
-          variant='outlined'
-        >
-          <form noValidate autoComplete='off'>
-            <Stepper
-              activeStep={activeStep}
-              orientation='vertical'
-            >
-              {steps.map((label, index) => (
-                <Step key={index}>
-                  <StepLabel>{label}</StepLabel>
-                  <StepContent>
-                    {getStepContent(index)}
-                    <div className={classes.actionsContainer}>
-                      <div>
-                        <Button
-                          className={classes.button}
-                          disabled={activeStep === 0}
-                          onClick={handleBack}
-                        >
-                          Back
-                        </Button>
-                        <Button
-                          className={classes.button}
-                          color='primary'
-                          onClick={handleNext}
-                          variant='contained'
-                        >
-                          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
-                      </div>
-                    </div>
-                  </StepContent>
-                </Step>
-              ))}
-            </Stepper>
-            {activeStep === steps.length && (
-              <Paper
-                className={classes.resetContainer}
-                elevation={0}
-                square
-              >
-                <Typography>All steps completed - you&apos;re finished</Typography>
-                <Button className={classes.button} onClick={handleReset}>Reset</Button>
-              </Paper>
-            )}
-          </form>
-        </Card>
-        <Save handleClick={handleSaveClick} />
+
+        <form noValidate autoComplete='off'>
+          <Card
+            className={classes.card}
+            variant='outlined'
+          >
+            <CardContent>
+              <Typography variant='h6'>Test Details</Typography>
+              <TextField
+                className={classes.textField}
+                id='mds'
+                inputRef={value => _mds = value}
+                label='MDS'
+                variant='outlined'
+              />
+              <TextField
+                className={classes.textField}
+                id='name'
+                inputRef={value => _name = value}
+                label='Name'
+                variant='outlined'
+              />
+            </CardContent>
+          </Card>
+        </form>
         <ScrollToTop
           handleScrollToTop={handleScrollToTop}
           order={2}
           state={state}
+        />
+        <Save
+          handleSaveClick={handleSaveClick}
         />
       </main>
       <CustomSnackbar

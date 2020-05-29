@@ -25,9 +25,7 @@ All dependencies should be included in `package-lock.json`
 npm install @material-ui/core --save
 npm install @material-ui/icons --save
 npm install react-router-dom --save
-npm install typeface-roboto --save
 npm install prop-types --save
-npm install pdfjs-dist --save
 npm install react-card-flip --save
 ```
 

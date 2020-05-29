@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 //----------------------------------------------------------------//
 // Save FAB Component
 //----------------------------------------------------------------//
-export default ({ handleClick }) => {
+export default ({ handleSaveClick }) => {
   const classes = useStyles()
 
   //----------------------------------------------------------------//
@@ -70,7 +70,7 @@ export default ({ handleClick }) => {
       aria-label='save changes'
       className={classes.fab}
       color='primary'
-      onClick={handleClick}
+      onClick={handleSaveClick}
     >
       <SaveIcon />
     </Fab>
