@@ -1,3 +1,6 @@
+## 0.18.0
+- Added ability to delete MQF
+
 ## 0.17.0
 - Removed `pdfjs-dist` package and prune `npm` dependencies
 - Removed `create-react-app` default test files

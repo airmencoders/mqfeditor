@@ -113,6 +113,17 @@ class App extends React.Component {
   //----------------------------------------------------------------//
   // MQF Lifecycle Methods 
   //----------------------------------------------------------------//
+  handleMQFDelete = mqfId => {
+    const index = this.state.tests.findIndex(needle => needle.id === mqfId)
+
+    const testArray = [...this.state.tests]
+    testArray.splice(index, 1)
+
+    this.setState({
+      tests: testArray,
+    })
+  }
+
   handleMQFSave = (mqfId, newVersion) => {
     const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
@@ -249,6 +260,7 @@ class App extends React.Component {
               <MQFOverview
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
+                handleMQFDelete={this.handleMQFDelete}
                 handleScrollToTop={this.handleScrollToTop}
                 state={this.state}
               />

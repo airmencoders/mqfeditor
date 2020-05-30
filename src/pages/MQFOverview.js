@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // MQF Overview Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFDelete, handleScrollToTop, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
@@ -116,7 +116,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, stat
   // index === -1 when MQF ID was not found
   if (index === -1) {
     return (
-      <Redirect to='/dashboard' />
+      <Redirect to='/' />
     )
   }
 
@@ -163,25 +163,75 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, stat
               variant='outlined'
             >
               <CardActions>
-                <Box display='flex' direction='row' flexWrap='wrap'>
-                  <NavLink to={`/m/${mqfId}/s/sequential`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<SpeakerNotesIcon />}>Study (Sequential)</Button>
+                <Box
+                  direction='row'
+                  display='flex'
+                  flexWrap='wrap'
+                >
+                  <NavLink
+                    style={{ textDecoration: 'none' }}
+                    to={`/m/${mqfId}/s/sequential`}
+                  >
+                    <Button
+                      className={classes.blueButton}
+                      color='primary'
+                      startIcon={<SpeakerNotesIcon />}
+                      variant='contained'
+                    >
+                      Study (Sequential)
+                    </Button>
                   </NavLink>
-                  <NavLink to={`/m/${mqfId}/s/random`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ShuffleIcon />}>Study (Random)</Button>
+                  <NavLink
+                    style={{ textDecoration: 'none' }}
+                    to={`/m/${mqfId}/s/random`}
+                  >
+                    <Button
+                      className={classes.blueButton}
+                      color='primary'
+                      startIcon={<ShuffleIcon />}
+                      variant='contained'
+                    >
+                      Study (Random)
+                    </Button>
                   </NavLink>
-                  <NavLink to={`/m/${mqfId}/t`} style={{ textDecoration: 'none' }}>
-                    <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<ListAltIcon />}>Take Practice Test</Button>
+                  <NavLink
+                    style={{ textDecoration: 'none' }}
+                    to={`/m/${mqfId}/t`}
+                  >
+                    <Button
+                      className={classes.blueButton}
+                      color='primary'
+                      startIcon={<ListAltIcon />}
+                      variant='contained'
+                    >
+                      Take Practice Test
+                    </Button>
                   </NavLink>
 
                   {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
                     (
-                      <React.Fragment >
-                        <NavLink to={`/m/${mqfId}/e`} style={{ textDecoration: 'none' }}>
-                          <Button variant='contained' color='primary' className={classes.blueButton} startIcon={<EditIcon />}>Edit Test</Button>
+                      <React.Fragment>
+                        <NavLink
+                          style={{ textDecoration: 'none' }}
+                          to={`/m/${mqfId}/e`}
+                        >
+                          <Button
+                            className={classes.blueButton}
+                            color='primary'
+                            startIcon={<EditIcon />}
+                            variant='contained'
+                          >
+                            Edit Test
+                          </Button>
                         </NavLink>
-                        <Button variant='contained' className={classes.redButton} startIcon={<DeleteIcon />}>Delete Test</Button>
-
+                        <Button
+                          className={classes.redButton}
+                          onClick={() => handleMQFDelete(mqfId)}
+                          startIcon={<DeleteIcon />}
+                          variant='contained'
+                        >
+                          Delete Test
+                        </Button>
                       </React.Fragment>
                     ) :
                     (null)
@@ -214,6 +264,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, stat
           state={state}
         />
       </main>
-    </div>
+    </div >
   )
 }
