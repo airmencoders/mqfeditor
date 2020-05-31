@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     height: 20,
     margin: 10,
   },
-  fullWidthTextField: {
+  textField: {
     marginBottom: theme.spacing(3),
   },
 }))
@@ -93,7 +93,7 @@ export default ({ answerRefs, optionRefs, question, questionIndex, questionRefs,
       <CardContent name='question'>
         <TextField
           id={`question-${questionIndex + 1}`}
-          className={classes.fullWidthTextField}
+          className={classes.textField}
           defaultValue={question.question}
           fullWidth
           inputRef={value => questionRefs.current[questionIndex] = value}
@@ -103,7 +103,7 @@ export default ({ answerRefs, optionRefs, question, questionIndex, questionRefs,
         {
           question.options.map((option, optionIndex) => (
             <TextField
-              className={classes.fullWidthTextField}
+              className={classes.textField}
               defaultValue={option}
               fullWidth
               key={`question-${questionIndex}-option-${optionIndex}`}
@@ -131,7 +131,7 @@ export default ({ answerRefs, optionRefs, question, questionIndex, questionRefs,
         }
         <TextField
           id={`question-${questionIndex + 1}-reference`}
-          className={classes.fullWidthTextField}
+          className={classes.textField}
           defaultValue={question.reference}
           fullWidth
           inputRef={value => referenceRefs.current[questionIndex] = value}

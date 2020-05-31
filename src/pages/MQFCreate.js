@@ -41,6 +41,7 @@ import { Redirect } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
@@ -138,28 +139,39 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
         <div className={classes.toolbar} />
 
         <form noValidate autoComplete='off'>
-          <Card
-            className={classes.card}
-            variant='outlined'
+          <Grid
+            container
+            direction='row'
+            justify='center'
           >
-            <CardContent>
-              <Typography variant='h6'>Test Details</Typography>
-              <TextField
-                className={classes.textField}
-                id='mds'
-                inputRef={value => _mds = value}
-                label='MDS'
+            <Grid
+              item
+              xs={10}
+            >
+              <Card
+                className={classes.card}
                 variant='outlined'
-              />
-              <TextField
-                className={classes.textField}
-                id='name'
-                inputRef={value => _name = value}
-                label='Name'
-                variant='outlined'
-              />
-            </CardContent>
-          </Card>
+              >
+                <CardContent>
+                  <Typography variant='h6'>Test Details</Typography>
+                  <TextField
+                    className={classes.textField}
+                    id='mds'
+                    inputRef={value => _mds = value}
+                    label='MDS'
+                    variant='outlined'
+                  />
+                  <TextField
+                    className={classes.textField}
+                    id='name'
+                    inputRef={value => _name = value}
+                    label='Name'
+                    variant='outlined'
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </form>
         <ScrollToTop
           handleScrollToTop={handleScrollToTop}

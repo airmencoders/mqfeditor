@@ -61,6 +61,7 @@ import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import Save from '../components/fabs/Save'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
+import TestDetails from '../components/TestDetails'
 import QuestionEdit from '../components/QuestionEdit'
 
 //----------------------------------------------------------------//
@@ -178,33 +179,21 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <form noValidate autoComplete='off'>
-          <Grid container direction='row' justify='center'>
-            <Grid item xs={10}>
-              <Card
-                className={classes.card}
-                variant='outlined'
-              >
-                <Box
-                  direction='row'
-                  display='flex'
-                  flexWrap='wrap'
-                >
-                  <TextField
-                    className={classes.textField}
-                    defaultValue={currentMQF.mds}
-                    id='mqf-mds'
-                    inputRef={value => _mds = value}
-                    label='MDS'
-                  />
-                  <TextField
-                    className={classes.textField}
-                    defaultValue={currentMQF.name}
-                    id='mqf-name'
-                    inputRef={value => _name = value}
-                    label='MQF Name'
-                  />
-                </Box>
-              </Card>
+          <Grid
+            container
+            direction='row'
+            justify='center'
+          >
+            <Grid
+              item
+              xs={10}
+            >
+              <TestDetails
+                defaultMDS={currentMQF.mds}
+                defaultName={currentMQF.name}
+                _mdsRef={_mds}
+                _nameRef={_name}
+              />
               {
                 currentMQF.questions.map((question, questionIndex) => (
                   <QuestionEdit

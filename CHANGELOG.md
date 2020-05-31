@@ -1,3 +1,7 @@
+## 0.19.0
+- Moved Test Details from `/src/pages/MQFEdit` to own component for reusability
+- TODO: Fix references passed to children in `MQFEdit`
+
 ## 0.18.0
 - Added ability to delete MQF
 
@@ -16,8 +20,8 @@
 - Install `@material-ui/lab` from NPM
 - Code Cleanup
 - TODO: Implement `@material-ui/lab/Skeleton` once backend and API are functioning
-- TODO: Implement a way to not allow skipping of `MDS` and `Name` in `/src/pages/MQFCreate`
-- TODO: Implement a way to parse PDF - might require server side
+- ~~TODO: Implement a way to not allow skipping of `MDS` and `Name` in `/src/pages/MQFCreate`~~
+- ~~TODO: Implement a way to parse PDF - might require server side~~
 
 ## 0.14.0
 - Continued work on `/src/pages/MQFCreate`
