@@ -55,11 +55,13 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd'
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
+import CustomSnackbar from '../components/CustomSnackbar'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import ScrollToTop from '../components/fabs/ScrollToTop'
 import Save from '../components/fabs/Save'
 import SideMenu from '../components/SideMenu'
-import CustomSnackbar from '../components/CustomSnackbar'
+import TestDetails from '../components/TestDetails'
+import QuestionEdit from '../components/QuestionEdit'
 
 //----------------------------------------------------------------//
 // Custom Class Styles
@@ -106,7 +108,14 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
   //----------------------------------------------------------------//
   // Internal state and references for input
   //----------------------------------------------------------------//
-  let _mds, _name
+  const mdsRef = React.useRef()
+  const nameRef = React.useRef()
+  const answerRefs = React.useRef([])
+  const optionRefs = React.useRef([])
+  const referenceRefs = React.useRef([])
+  const questionRefs = React.useRef([])
+
+  let questionIndex = 0
 
   //----------------------------------------------------------------//
   // Ensure user is authenticated
@@ -119,6 +128,8 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
 
   const handleSaveClick = () => {
     console.log('saved!')
+    console.log('MDS:', mdsRef.current.value)
+    console.log('Name:', nameRef.current.value)
   }
 
   //----------------------------------------------------------------//
@@ -148,28 +159,17 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
               item
               xs={10}
             >
-              <Card
-                className={classes.card}
-                variant='outlined'
-              >
-                <CardContent>
-                  <Typography variant='h6'>Test Details</Typography>
-                  <TextField
-                    className={classes.textField}
-                    id='mds'
-                    inputRef={value => _mds = value}
-                    label='MDS'
-                    variant='outlined'
-                  />
-                  <TextField
-                    className={classes.textField}
-                    id='name'
-                    inputRef={value => _name = value}
-                    label='Name'
-                    variant='outlined'
-                  />
-                </CardContent>
-              </Card>
+              <TestDetails
+                mdsRef={mdsRef}
+                nameRef={nameRef}
+              />
+              <QuestionEdit
+                answerRefs={answerRefs}
+                optionRefs={optionRefs}
+                referenceRefs={referenceRefs}
+                questionIndex={questionIndex}
+                questionRefs={questionRefs}
+              />
             </Grid>
           </Grid>
         </form>

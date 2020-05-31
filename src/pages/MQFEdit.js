@@ -100,7 +100,8 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
   //----------------------------------------------------------------//
   // Declare references
   //----------------------------------------------------------------//
-  let _mds, _name
+  const mdsRef = React.useRef()
+  const nameRef = React.useRef()
   // array of questions in order
   const questionRefs = React.useRef([])
 
@@ -148,17 +149,19 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
       questions[qIndex] = question
     })
 
+    console.log('MDS', mdsRef.current.value)
+    console.log('Name', nameRef.current.value)
 
-    let newMQF = {
+    /*let newMQF = {
       ...currentMQF,
-      mds: _mds.value,
-      name: _name.value,
+      mds: nameRef.curent.value,
+      name: _name.current.value,
       version: currentMQF.version + 1,
       date: new Date().toString(),
       seen: false,
       questions
     }
-    handleMQFSave(mqfId, newMQF)
+    handleMQFSave(mqfId, newMQF)*/
     handleSnackbarOpen()
   }
 
@@ -191,8 +194,8 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
               <TestDetails
                 defaultMDS={currentMQF.mds}
                 defaultName={currentMQF.name}
-                _mdsRef={_mds}
-                _nameRef={_name}
+                mdsRef={mdsRef}
+                nameRef={nameRef}
               />
               {
                 currentMQF.questions.map((question, questionIndex) => (

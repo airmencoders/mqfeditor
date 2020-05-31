@@ -42,7 +42,6 @@ import React from 'react'
 import Card from '@material-ui/core/Card'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 
 //----------------------------------------------------------------//
 // Custom Class Styles
@@ -62,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Test Details Component
 //----------------------------------------------------------------//
-export default ({ defaultMDS = '', defaultName = '', _mdsRef, _nameRef }) => {
+export default ({ defaultMDS = '', defaultName = '', mdsRef, nameRef }) => {
   const classes = useStyles()
 
   return (
@@ -70,24 +69,18 @@ export default ({ defaultMDS = '', defaultName = '', _mdsRef, _nameRef }) => {
       className={classes.card}
       variant='outlined'
     >
-      <Typography
-        className={classes.title}
-        variant='h6'
-      >
-        {`[${defaultMDS}] ${defaultName}`}
-      </Typography>
       <TextField
         className={classes.textField}
         defaultValue={defaultMDS}
         fullWidth
-        inputRef={value => _mdsRef = value}
+        inputRef={value => mdsRef.current = value}
         label='Test MDS'
       />
       <TextField
         className={classes.textField}
         defaultValue={defaultName}
         fullWidth
-        inputRef={value => _nameRef = value}
+        inputRef={value => nameRef.current = value}
         label='Test Name'
       />
     </Card>

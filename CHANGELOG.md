@@ -1,6 +1,12 @@
+## 0.20.0
+- Used `React.useRef` for MDS and Name in `MQFEdit` and `MQFCreate`
+- Implemented the `TestDetails` component in `MQFEdit` and `MQFCreate`
+- Began work on reusing the `QuestionEdit` component in the `MQFCreate` page
+- TODO: Modify `QuestionEdit` so that it can be blank or take a question
+
 ## 0.19.0
 - Moved Test Details from `/src/pages/MQFEdit` to own component for reusability
-- TODO: Fix references passed to children in `MQFEdit`
+- ~~TODO: Fix references passed to children in `MQFEdit`~~
 
 ## 0.18.0
 - Added ability to delete MQF
