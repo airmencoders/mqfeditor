@@ -149,19 +149,16 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
       questions[qIndex] = question
     })
 
-    console.log('MDS', mdsRef.current.value)
-    console.log('Name', nameRef.current.value)
-
-    /*let newMQF = {
+    let newMQF = {
       ...currentMQF,
-      mds: nameRef.curent.value,
-      name: _name.current.value,
+      mds: mdsRef.current.value,
+      name: nameRef.current.value,
       version: currentMQF.version + 1,
       date: new Date().toString(),
       seen: false,
       questions
     }
-    handleMQFSave(mqfId, newMQF)*/
+    handleMQFSave(mqfId, newMQF)
     handleSnackbarOpen()
   }
 

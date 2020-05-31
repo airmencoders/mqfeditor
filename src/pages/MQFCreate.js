@@ -127,9 +127,18 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleScrollToTop, hand
   }
 
   const handleSaveClick = () => {
+
+    let options = []
+
+    optionRefs.current[0].forEach((oRef, oIndex) => options[oIndex] = oRef.value)
     console.log('saved!')
     console.log('MDS:', mdsRef.current.value)
     console.log('Name:', nameRef.current.value)
+    console.log('QuestionIndex:', questionIndex)
+    console.log('Question:', questionRefs.current[0].value)
+    console.log('Options:', options)
+    console.log('Answer:', answerRefs.current[0])
+    console.log('Reference:', referenceRefs.current[0].value)
   }
 
   //----------------------------------------------------------------//

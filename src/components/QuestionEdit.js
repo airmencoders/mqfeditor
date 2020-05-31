@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Edit Component
 //----------------------------------------------------------------//
-export default ({ answerRefs, optionRefs, question = {}, questionIndex, questionRefs, referenceRefs }) => {
+export default ({ answerRefs, optionRefs, question = {question:'', options:['','','',''], answer:'', reference:''}, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
 
   //----------------------------------------------------------------//
