@@ -75,6 +75,17 @@ const useStyles = makeStyles((theme) => ({
 export default ({ answerRefs, optionRefs, question = {question:'', options:['','','',''], answer:'', reference:''}, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
 
+  const [options, setOptions] = React.useState([...question.options])
+
+  const handleDeleteOption = optionIndex => {
+    const newOptions = options.filter((value, index) => index !== optionIndex)
+
+    console.log('Passed Index:', optionIndex)
+    console.log('New Options:', newOptions)
+
+    setOptions(newOptions)
+  }
+
   //----------------------------------------------------------------//
   // Radio Button State
   //----------------------------------------------------------------//
@@ -107,7 +118,7 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
           multiline
         />
         {
-          question.options.map((option, optionIndex) => (
+          options.map((option, optionIndex) => (
             <TextField
               className={classes.textField}
               defaultValue={option}
@@ -133,6 +144,7 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
                     <IconButton
                       aria-label='delete option'
                       edge='end'
+                      onClick={() => handleDeleteOption(optionIndex)}
                     >
                       <DeleteIcon />
                     </IconButton>

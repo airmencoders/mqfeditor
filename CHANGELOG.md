@@ -1,3 +1,7 @@
+## 0.22.1
+- Added filtering to delete options to `QuestionEdit`
+- BUG: When deleting option, the correct index is passed, but only the last option in the array is actually removed
+
 ## 0.22.0
 - Added `IconButton` adornments to options when editing
 - TODO: figure out how to delete the option
