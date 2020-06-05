@@ -113,6 +113,7 @@ class App extends React.Component {
   //----------------------------------------------------------------//
   // MQF Lifecycle Methods 
   //----------------------------------------------------------------//
+
   handleMQFDelete = mqfId => {
     const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
@@ -134,7 +135,7 @@ class App extends React.Component {
       tests: testArray,
     })
   }
-  
+
   handleMQFSeen = (mqfId, seenVersion) => {
     const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
@@ -193,7 +194,7 @@ class App extends React.Component {
       })
     }
   }
-  
+
   //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
@@ -243,7 +244,7 @@ class App extends React.Component {
                 handleLogoutClick={this.handleLogoutClick}
                 handleMQFSeen={this.handleMQFSeen}
                 handleScrollToTop={this.handleScrollToTop}
-                handleQuestionStudied={(mqfId, questionIndex) => {this.handleQuestionStudied(mqfId, questionIndex) }}
+                handleQuestionStudied={(mqfId, questionIndex) => { this.handleQuestionStudied(mqfId, questionIndex) }}
                 state={this.state}
               />
             </Route>

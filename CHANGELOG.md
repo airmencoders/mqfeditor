@@ -1,3 +1,7 @@
+## 0.22.0
+- Added `IconButton` adornments to options when editing
+- TODO: figure out how to delete the option
+
 ## 0.21.0
 - `QuestionEdit` uses a default value for the question parameter, able to be reused for `MQFEdit` and `MQFCreate`
 - TODO: Implement saving the new MQF

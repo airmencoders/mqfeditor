@@ -139,6 +139,8 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
 
       optionRefs.current[qIndex].forEach((oRef, oIndex) => options[oIndex] = oRef.value)
 
+      options.forEach((value, index) => console.log('reference and index:', `[${index}] ${value}`) )
+
       const question = {
         question: qRef.value,
         options,
