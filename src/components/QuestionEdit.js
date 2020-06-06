@@ -72,18 +72,27 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Edit Component
 //----------------------------------------------------------------//
-export default ({ answerRefs, optionRefs, question = {question:'', options:['','','',''], answer:'', reference:''}, questionIndex, questionRefs, referenceRefs }) => {
+export default ({ answerRefs, optionRefs, question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
 
+  // Initialize the current reference as a 2D array
+  optionRefs.current[questionIndex] = []
+
+  let optionValues = [...question.options]
+
+  //----------------------------------------------------------------//
+  // Option state
+  //----------------------------------------------------------------//
   const [options, setOptions] = React.useState([...question.options])
 
-  const handleDeleteOption = optionIndex => {
-    const newOptions = options.filter((value, index) => index !== optionIndex)
+  const handleRemoveOption = optionIndex => {
+    // If deleting the current answer, set the answer to null
+    if (selectedValue !== null && optionIndex === selectedValue.charCodeAt(0) - 65) {
+      setSelectedValue(null)
+    }
 
-    console.log('Passed Index:', optionIndex)
-    console.log('New Options:', newOptions)
-
-    setOptions(newOptions)
+    // Change the state
+    setOptions(options.filter((value, index) => index !== optionIndex))
   }
 
   //----------------------------------------------------------------//
@@ -94,9 +103,6 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
   const handleChange = (event) => {
     setSelectedValue(event.target.value)
   }
-
-  // Initialize the current reference as a 2D array
-  optionRefs.current[questionIndex] = []
 
   //----------------------------------------------------------------//
   // Render The Component
@@ -111,7 +117,7 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
         <TextField
           id={`question-${questionIndex + 1}`}
           className={classes.textField}
-          defaultValue={question.question}
+          value={question.question}
           fullWidth
           inputRef={value => questionRefs.current[questionIndex] = value}
           label={`Question ${questionIndex + 1}`}
@@ -121,7 +127,7 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
           options.map((option, optionIndex) => (
             <TextField
               className={classes.textField}
-              defaultValue={option}
+              value={optionValues[optionIndex]}
               fullWidth
               key={`question-${questionIndex}-option-${optionIndex}`}
               InputProps={{
@@ -144,24 +150,25 @@ export default ({ answerRefs, optionRefs, question = {question:'', options:['','
                     <IconButton
                       aria-label='delete option'
                       edge='end'
-                      onClick={() => handleDeleteOption(optionIndex)}
+                      onClick={() => handleRemoveOption(optionIndex)}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </InputAdornment>
                 )
-                
+
               }}
               inputRef={value => optionRefs.current[questionIndex][optionIndex] = value}
               label={`Option ${String.fromCharCode(65 + optionIndex)}`}
               multiline
+              onChange={event => console.log(event.target)}
             />
           ))
         }
         <TextField
           id={`question-${questionIndex + 1}-reference`}
           className={classes.textField}
-          defaultValue={question.reference}
+          value={question.reference}
           fullWidth
           inputRef={value => referenceRefs.current[questionIndex] = value}
           label='Reference'

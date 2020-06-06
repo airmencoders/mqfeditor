@@ -137,11 +137,12 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
     questionRefs.current.forEach((qRef, qIndex) => {
       let options = []
 
-      optionRefs.current[qIndex].forEach((oRef, oIndex) => options[oIndex] = oRef.value)
+      const trimmedOptionRefs = optionRefs.current[qIndex].filter(value => value !== null)
 
-      options.forEach((value, index) => console.log('reference and index:', `[${index}] ${value}`) )
+      trimmedOptionRefs.forEach((oRef, oIndex) => options[oIndex] = oRef.value)
 
       const question = {
+        ...currentMQF.questions[qIndex],
         question: qRef.value,
         options,
         answer: (answerRefs.current[qIndex].charCodeAt(0) - 65),

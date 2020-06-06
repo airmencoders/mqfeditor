@@ -85,7 +85,7 @@ class App extends React.Component {
       scrollComponent.toggleScrollButtonVisibility()
     })
   }
-
+  
   //----------------------------------------------------------------//
   // Drawer Methods
   //----------------------------------------------------------------//

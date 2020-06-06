@@ -232,7 +232,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
                 className={classes.card}
                 key='front'
                 onClick={toggleCardFlip}
-                variant='outlined'
               >
                 <CardContent>
                   <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
@@ -262,7 +261,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
                 className={classes.card}
                 key='back'
                 onClick={toggleCardFlip}
-                variant='outlined'
               >
                 <CardContent>
                   <Typography variant='body1' align='center'>
