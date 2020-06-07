@@ -57,7 +57,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
-import version from '../version'
+import version from '../version.js'
 
 //----------------------------------------------------------------//
 // Custom Class Styles

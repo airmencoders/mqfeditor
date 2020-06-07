@@ -78,8 +78,6 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
   // Initialize the current reference as a 2D array
   optionRefs.current[questionIndex] = []
 
-  let optionValues = [...question.options]
-
   //----------------------------------------------------------------//
   // Option state
   //----------------------------------------------------------------//
@@ -87,12 +85,23 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
 
   const handleRemoveOption = optionIndex => {
     // If deleting the current answer, set the answer to null
-    if (selectedValue !== null && optionIndex === selectedValue.charCodeAt(0) - 65) {
-      setSelectedValue(null)
+    if (selectedValue !== null) {
+      if (optionIndex === selectedValue.charCodeAt(0) - 65) {
+        setSelectedValue(null)
+      } else if (optionIndex < selectedValue.charCodeAt(0) - 65) {
+        setSelectedValue(String.fromCharCode(selectedValue.charCodeAt(0) - 1))
+      }
     }
 
     // Change the state
     setOptions(options.filter((value, index) => index !== optionIndex))
+  }
+
+  const handleOptionChange = (optionIndex, value) => {
+    let newOptions = [...options]
+    newOptions[optionIndex] = value
+
+    setOptions(newOptions)  
   }
 
   //----------------------------------------------------------------//
@@ -127,7 +136,7 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
           options.map((option, optionIndex) => (
             <TextField
               className={classes.textField}
-              value={optionValues[optionIndex]}
+              value={options[optionIndex]}
               fullWidth
               key={`question-${questionIndex}-option-${optionIndex}`}
               InputProps={{
@@ -161,7 +170,7 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
               inputRef={value => optionRefs.current[questionIndex][optionIndex] = value}
               label={`Option ${String.fromCharCode(65 + optionIndex)}`}
               multiline
-              onChange={event => console.log(event.target)}
+              onChange={event => handleOptionChange(optionIndex, event.target.value)}
             />
           ))
         }

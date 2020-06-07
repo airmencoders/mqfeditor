@@ -1,3 +1,7 @@
+## 0.23.1
+- Removed `VERSION.md` since in `package.json` as well as the `/src/version.js`
+- Added handling of `onChange` for `TextFields` in `QuestionEdit` for options. Now just need to add to question and reference.
+
 ## 0.23.0
 - Fixed option deleting in `QuestionEdit`
 - Changed card variant in `MQFStudy` back to default instead of `outlined`
