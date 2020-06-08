@@ -122,6 +122,13 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
     )
   }
 
+  React.useEffect(() => {
+    return () => {
+      handleSnackbarClose()
+    }
+  }, [handleSnackbarClose])
+
+
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
   //----------------------------------------------------------------//
@@ -135,7 +142,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
 
     let questions = []
 
-    const trimmedQuestionRefs = questionRefs.current.filter(value => value !== null) 
+    const trimmedQuestionRefs = questionRefs.current.filter(value => value !== null)
 
     trimmedQuestionRefs.forEach((qRef, qIndex) => {
       let options = []
@@ -169,16 +176,11 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
   }
 
   const handleDeleteQuestion = questionId => {
-    console.log(`Deleting question ${questionId}`)
     const filteredQuestions = currentMQF.questions.filter((value, index) => index !== questionId)
-
-    console.log('Filtered Questions', filteredQuestions)
     const updatedMQF = {
       ...currentMQF,
       questions: filteredQuestions,
     }
-
-    console.log('Updated MQF', updatedMQF)
 
     setCurrentMQF(updatedMQF)
   }
@@ -194,7 +196,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
       timesGotWrong: 0,
     }
 
-    const newQuestions =[...currentMQF.questions, newQuestion]
+    const newQuestions = [...currentMQF.questions, newQuestion]
 
     const updatedMQF = {
       ...currentMQF,
@@ -241,7 +243,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
                   <QuestionEdit
                     answerRefs={answerRefs}
                     handleDeleteQuestion={questionId => handleDeleteQuestion(questionId)}
-                    key={`question-${questionIndex}`}
+                    key={`question-${currentMQF.questions[questionIndex].question}`}
                     optionRefs={optionRefs}
                     question={question}
                     questionIndex={questionIndex}

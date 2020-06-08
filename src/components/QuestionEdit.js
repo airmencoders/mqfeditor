@@ -144,7 +144,6 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
   return (
     <Card
       className={classes.card}
-      key={`card-${questionIndex}`}
       variant='outlined'
     >
       <CardContent name='question'>
@@ -173,7 +172,7 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
                       //color='default'
                       onChange={event => handleAnswerChange(event.target.value)}
                       value={String.fromCharCode(65 + optionIndex)}
-                      name={`question-${questionIndex}-option-${optionIndex}`}
+                      //name={`question-${questionIndex}-option-${optionIndex}`}
                       inputProps={{ 'aria-label': String.fromCharCode(65 + optionIndex) }}
                       inputRef={() => answerRefs.current[questionIndex] = answerState}
                     />

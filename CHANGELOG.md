@@ -1,8 +1,12 @@
+## 0.23.3
+- BUGFIX: Clicking delete question deletes the correct question (Bug was in the `key` area, they were not unique enough)
+- BUGFIX: Using `React.useEffect` to always close the Snackbar when navigating away from `MQFEdit` even if the 5 second timer has not yet expired.
+
 ## 0.23.2
 - Added ability to add an option in `QuestionEdit` component
 - Added ability to add a question in `MQFEdit` component
 - Added ability to delete a question in `MQFEdit` component
-- BUG: Deleting a question only deletes the last question in the array, strangely enough.
+- ~~BUG: Deleting a question only deletes the last question in the array, strangely enough.~~
 
 ## 0.23.1
 - Removed `VERSION.md` since in `package.json` as well as the `/src/version.js`
