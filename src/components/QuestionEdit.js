@@ -72,46 +72,71 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Edit Component
 //----------------------------------------------------------------//
-export default ({ answerRefs, optionRefs, question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex, questionRefs, referenceRefs }) => {
+export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex, questionRefs, referenceRefs }) => {
   const classes = useStyles()
 
   // Initialize the current reference as a 2D array
   optionRefs.current[questionIndex] = []
 
   //----------------------------------------------------------------//
+  // Question state
+  //----------------------------------------------------------------//
+  const [questionState, setQuestionState] =  React.useState(question.question)
+
+  const handleQuestionChange = value => {
+    setQuestionState(value)
+  }
+
+  //----------------------------------------------------------------//
   // Option state
   //----------------------------------------------------------------//
-  const [options, setOptions] = React.useState([...question.options])
+  const [optionState, setOptionState] = React.useState([...question.options])
+
+  const handleAddOption = () => {
+    const newOptions = [...optionState, '']
+
+    setOptionState(newOptions)
+  }
 
   const handleRemoveOption = optionIndex => {
     // If deleting the current answer, set the answer to null
-    if (selectedValue !== null) {
-      if (optionIndex === selectedValue.charCodeAt(0) - 65) {
-        setSelectedValue(null)
-      } else if (optionIndex < selectedValue.charCodeAt(0) - 65) {
-        setSelectedValue(String.fromCharCode(selectedValue.charCodeAt(0) - 1))
+    if (answerState !== null) {
+      if (optionIndex === answerState.charCodeAt(0) - 65) {
+        setAnswerState(null)
+      } else if (optionIndex < answerState.charCodeAt(0) - 65) {
+        setAnswerState(String.fromCharCode(answerState.charCodeAt(0) - 1))
       }
     }
 
     // Change the state
-    setOptions(options.filter((value, index) => index !== optionIndex))
+    setOptionState(optionState.filter((value, index) => index !== optionIndex))
   }
 
   const handleOptionChange = (optionIndex, value) => {
-    let newOptions = [...options]
+    let newOptions = [...optionState]
     newOptions[optionIndex] = value
 
-    setOptions(newOptions)  
+    setOptionState(newOptions)
   }
 
   //----------------------------------------------------------------//
   // Radio Button State
   //----------------------------------------------------------------//
-  const [selectedValue, setSelectedValue] = React.useState(String.fromCharCode(65 + question.answer))
+  const [answerState, setAnswerState] = React.useState(String.fromCharCode(65 + question.answer))
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value)
+  const handleAnswerChange = value => {
+    setAnswerState(value)
   }
+
+  //----------------------------------------------------------------//
+  // Reference State
+  //----------------------------------------------------------------//
+  const [referenceState, setReferenceState] = React.useState(question.reference)
+
+  const handleReferenceChange = value => {
+    setReferenceState(value)
+  }
+
 
   //----------------------------------------------------------------//
   // Render The Component
@@ -119,38 +144,38 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
   return (
     <Card
       className={classes.card}
-      key={questionIndex}
+      key={`card-${questionIndex}`}
       variant='outlined'
     >
       <CardContent name='question'>
         <TextField
-          id={`question-${questionIndex + 1}`}
           className={classes.textField}
-          value={question.question}
+          value={questionState}
           fullWidth
           inputRef={value => questionRefs.current[questionIndex] = value}
           label={`Question ${questionIndex + 1}`}
           multiline
+          onChange={event => handleQuestionChange(event.target.value)}
         />
         {
-          options.map((option, optionIndex) => (
+          optionState.map((option, optionIndex) => (
             <TextField
               className={classes.textField}
-              value={options[optionIndex]}
+              value={optionState[optionIndex]}
               fullWidth
               key={`question-${questionIndex}-option-${optionIndex}`}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
                     <Radio
-                      checked={selectedValue === String.fromCharCode(65 + optionIndex)}
+                      checked={answerState === String.fromCharCode(65 + optionIndex)}
                       className={classes.radio}
                       //color='default'
-                      onChange={handleChange}
+                      onChange={event => handleAnswerChange(event.target.value)}
                       value={String.fromCharCode(65 + optionIndex)}
                       name={`question-${questionIndex}-option-${optionIndex}`}
                       inputProps={{ 'aria-label': String.fromCharCode(65 + optionIndex) }}
-                      inputRef={() => answerRefs.current[questionIndex] = selectedValue}
+                      inputRef={() => answerRefs.current[questionIndex] = answerState}
                     />
                   </InputAdornment>
                 ),
@@ -175,19 +200,31 @@ export default ({ answerRefs, optionRefs, question = { question: '', options: ['
           ))
         }
         <TextField
-          id={`question-${questionIndex + 1}-reference`}
           className={classes.textField}
-          value={question.reference}
+          value={referenceState}
           fullWidth
           inputRef={value => referenceRefs.current[questionIndex] = value}
           label='Reference'
           multiline
+          onChange={event => handleReferenceChange(event.target.value)}
         />
       </CardContent>
       <Divider />
       <CardActions>
-        <Button variant='contained' color='primary'>Add Option</Button>
-        <Button variant='contained' color='secondary'>Delete Question</Button>
+        <Button
+          color='primary'
+          onClick={() => handleAddOption()}
+          variant='contained'
+        >
+          Add Option
+        </Button>
+        <Button
+          color='secondary'
+          onClick={() => handleDeleteQuestion(questionIndex)}
+          variant='contained'
+        >
+          Delete Question
+        </Button>
       </CardActions>
     </Card>
   )

@@ -1,3 +1,9 @@
+## 0.23.2
+- Added ability to add an option in `QuestionEdit` component
+- Added ability to add a question in `MQFEdit` component
+- Added ability to delete a question in `MQFEdit` component
+- BUG: Deleting a question only deletes the last question in the array, strangely enough.
+
 ## 0.23.1
 - Removed `VERSION.md` since in `package.json` as well as the `/src/version.js`
 - Added handling of `onChange` for `TextFields` in `QuestionEdit` for options. Now just need to add to question and reference.
@@ -5,7 +11,7 @@
 ## 0.23.0
 - Fixed option deleting in `QuestionEdit`
 - Changed card variant in `MQFStudy` back to default instead of `outlined`
-- TODO: using `value` instead of `defaultValue` makes the `TextField` a controlled component, implement using a state and `onChange` to handle changes to the values.
+- ~~TODO: using `value` instead of `defaultValue` makes the `TextField` a controlled component, implement using a state and `onChange` to handle changes to the values.~~
 
 ## 0.22.1
 - Added filtering to delete options to `QuestionEdit`
@@ -18,7 +24,7 @@
 ## 0.21.0
 - `QuestionEdit` uses a default value for the question parameter, able to be reused for `MQFEdit` and `MQFCreate`
 - TODO: Implement saving the new MQF
-- TODO: Implement the add question, add option, and delete question, ~~and delete options~~ for the `QuestionEdit` component
+- T~~ODO: Implement the add question, add option, and delete question, and delete options for the `QuestionEdit` component~~
 
 ## 0.20.0
 - Used `React.useRef` for MDS and Name in `MQFEdit` and `MQFCreate`

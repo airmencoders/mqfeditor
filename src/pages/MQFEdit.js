@@ -126,7 +126,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
   //----------------------------------------------------------------//
   const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
-  const currentMQF = filterMQF(mqfId, state.tests)[0]
+  const [currentMQF, setCurrentMQF] = React.useState(filterMQF(mqfId, state.tests)[0])
 
   //----------------------------------------------------------------//
   // Handle Save Button
@@ -134,7 +134,10 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
   const handleSaveClick = () => {
 
     let questions = []
-    questionRefs.current.forEach((qRef, qIndex) => {
+
+    const trimmedQuestionRefs = questionRefs.current.filter(value => value !== null) 
+
+    trimmedQuestionRefs.forEach((qRef, qIndex) => {
       let options = []
 
       const trimmedOptionRefs = optionRefs.current[qIndex].filter(value => value !== null)
@@ -163,6 +166,42 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
     }
     handleMQFSave(mqfId, newMQF)
     handleSnackbarOpen()
+  }
+
+  const handleDeleteQuestion = questionId => {
+    console.log(`Deleting question ${questionId}`)
+    const filteredQuestions = currentMQF.questions.filter((value, index) => index !== questionId)
+
+    console.log('Filtered Questions', filteredQuestions)
+    const updatedMQF = {
+      ...currentMQF,
+      questions: filteredQuestions,
+    }
+
+    console.log('Updated MQF', updatedMQF)
+
+    setCurrentMQF(updatedMQF)
+  }
+
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      question: '',
+      options: ['', '', '', ''],
+      answer: '',
+      reference: '',
+      timesStudied: 0,
+      timesGotCorrect: 0,
+      timesGotWrong: 0,
+    }
+
+    const newQuestions =[...currentMQF.questions, newQuestion]
+
+    const updatedMQF = {
+      ...currentMQF,
+      questions: newQuestions,
+    }
+
+    setCurrentMQF(updatedMQF)
   }
 
   //----------------------------------------------------------------//
@@ -201,17 +240,19 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
                 currentMQF.questions.map((question, questionIndex) => (
                   <QuestionEdit
                     answerRefs={answerRefs}
+                    handleDeleteQuestion={questionId => handleDeleteQuestion(questionId)}
                     key={`question-${questionIndex}`}
                     optionRefs={optionRefs}
-                    referenceRefs={referenceRefs}
                     question={question}
                     questionIndex={questionIndex}
                     questionRefs={questionRefs}
+                    referenceRefs={referenceRefs}
                   />
                 ))
               }
               <Button
                 color='primary'
+                onClick={handleAddQuestion}
                 variant='contained'
               >
                 Add Question
