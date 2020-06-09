@@ -3,11 +3,11 @@
  * 
  * ${Description}
  * 
- * @link    TBD
+ * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    /src/components/TestDetails
+ * @file    /src/components/fabs/Add.js
  * @author  chris-m92
- * @since   0.19.0
+ * @since   0.24.0
  * 
  * MIT License
  * 
@@ -37,63 +37,48 @@
 import React from 'react'
 
 //----------------------------------------------------------------//
-// Material UI Core Components
+// Material UI Components
 //----------------------------------------------------------------//
-import Card from '@material-ui/core/Card'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Fab from '@material-ui/core/Fab'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import Zoom from '@material-ui/core/Zoom'
 
 //----------------------------------------------------------------//
-// Custom Class Styles
+// Material UI Icons
 //----------------------------------------------------------------//
-const useStyles = makeStyles((theme) => ({
-  card: {
-    marginBottom: theme.spacing(3),
-  },
-  textField: {
-    margin: theme.spacing(3),
-  },
-  title: {
-    margin: theme.spacing(3),
-  },
+import AddIcon from '@material-ui/icons/Add'
+
+const useStyles = makeStyles(theme => ({
+  fab: {
+    marginTop: theme.spacing(2),
+  }
 }))
 
 //----------------------------------------------------------------//
-// Test Details Component
+// Scroll To Top FAB Component
 //----------------------------------------------------------------//
-export default ({defaultMDS = '', defaultName = ''}) => {
+export default ({ handleClick }) => {
   const classes = useStyles()
+  const theme = useTheme()
 
-  const [mds, setMds] = React.useState(defaultMDS)
-  const [name, setName] = React.useState(defaultName)
-
-  const handleMDSChange = value => {
-    setMds(value)
+  //----------------------------------------------------------------//
+  // Define Transition Duration
+  //----------------------------------------------------------------//
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
   }
 
-  const handleNameChange = value => {
-    setName(value)
-  }
-
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
-    <Card
-      className={classes.card}
-      variant='outlined'
+    <Fab
+      className={classes.fab}
+      color='primary'
+      onClick={handleClick}
     >
-      <TextField
-        className={classes.textField}
-        value={mds}
-        fullWidth
-        label='MDS'
-        onChange={event => handleMDSChange(event.target.value)}
-      />
-      <TextField
-        className={classes.textField}
-        value={name}
-        fullWidth
-        label='Name'
-        onChange={event => handleNameChange(event.target.value)}
-      />
-    </Card>
+      <AddIcon />
+    </Fab>
   )
 }

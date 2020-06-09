@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Study MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, handleQuestionStudied, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleQuestionStudied, state }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
 

@@ -47,6 +47,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import Radio from '@material-ui/core/Radio'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
 
 //----------------------------------------------------------------//
 // Material UI Icons
@@ -57,9 +58,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 // Custom Class Styles
 //----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
-  card: {
-    marginBottom: theme.spacing(3),
-  },
   divider: {
     height: 20,
     margin: 10,
@@ -72,11 +70,8 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Edit Component
 //----------------------------------------------------------------//
-export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex, questionRefs, referenceRefs }) => {
+export default ({ question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex }) => {
   const classes = useStyles()
-
-  // Initialize the current reference as a 2D array
-  optionRefs.current[questionIndex] = []
 
   //----------------------------------------------------------------//
   // Question state
@@ -143,16 +138,15 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
   //----------------------------------------------------------------//
   return (
     <Card
-      className={classes.card}
       variant='outlined'
     >
       <CardContent name='question'>
+        <Typography variant='h6'>{`Question ${questionIndex + 1}`}</Typography>
         <TextField
           className={classes.textField}
           value={questionState}
           fullWidth
-          inputRef={value => questionRefs.current[questionIndex] = value}
-          label={`Question ${questionIndex + 1}`}
+          label='Question'
           multiline
           onChange={event => handleQuestionChange(event.target.value)}
         />
@@ -172,9 +166,7 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
                       //color='default'
                       onChange={event => handleAnswerChange(event.target.value)}
                       value={String.fromCharCode(65 + optionIndex)}
-                      //name={`question-${questionIndex}-option-${optionIndex}`}
                       inputProps={{ 'aria-label': String.fromCharCode(65 + optionIndex) }}
-                      inputRef={() => answerRefs.current[questionIndex] = answerState}
                     />
                   </InputAdornment>
                 ),
@@ -191,7 +183,6 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
                 )
 
               }}
-              inputRef={value => optionRefs.current[questionIndex][optionIndex] = value}
               label={`Option ${String.fromCharCode(65 + optionIndex)}`}
               multiline
               onChange={event => handleOptionChange(optionIndex, event.target.value)}
@@ -202,7 +193,6 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
           className={classes.textField}
           value={referenceState}
           fullWidth
-          inputRef={value => referenceRefs.current[questionIndex] = value}
           label='Reference'
           multiline
           onChange={event => handleReferenceChange(event.target.value)}
@@ -213,16 +203,8 @@ export default ({ answerRefs, handleDeleteQuestion, optionRefs, question = { que
         <Button
           color='primary'
           onClick={() => handleAddOption()}
-          variant='contained'
         >
           Add Option
-        </Button>
-        <Button
-          color='secondary'
-          onClick={() => handleDeleteQuestion(questionIndex)}
-          variant='contained'
-        >
-          Delete Question
         </Button>
       </CardActions>
     </Card>

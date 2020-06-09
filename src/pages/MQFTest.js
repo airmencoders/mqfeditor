@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // MQF Test Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleScrollToTop, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
@@ -168,7 +168,7 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
         <Grid container direction='row' justify='center'>
           <Grid item xs={10} md={5}>
             {
-              currentMQF.questions.map((q, index) => (
+              currentMQF.questions.map((question, index) => (
                 <QuestionTest
                   answerRefs={answerRefs}
                   currentQuestion={index}
@@ -180,11 +180,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleSc
             }
           </Grid>
         </Grid>
-        <ScrollToTop
-          state={state}
-          handleScrollToTop={handleScrollToTop}
-          order={2}
-        />
         <Fab
           aria-label='submit test'
           className={classes.submit}

@@ -1,3 +1,8 @@
+## 0.24.0
+- Working to remove `React.Ref` from input values in `QuestionEdit` since they are then becoming controlled components
+- Changed UX of `MQFEdit` to only have one question displayed at a time (looks cleaner)
+- TODO: Make the `MQFEdit` `FAB` components use `Zoom` to transition nicer
+
 ## 0.23.3
 - BUGFIX: Clicking delete question deletes the correct question (Bug was in the `key` area, they were not unique enough)
 - BUGFIX: Using `React.useEffect` to always close the Snackbar when navigating away from `MQFEdit` even if the 5 second timer has not yet expired.

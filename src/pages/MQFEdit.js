@@ -43,6 +43,7 @@ import { useParams, Redirect } from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
+import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
@@ -56,7 +57,10 @@ import TextField from '@material-ui/core/TextField'
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
+import Add from '../components/fabs/Add'
 import CustomSnackbar from '../components/CustomSnackbar'
+import Next from '../components/fabs/Next'
+import Previous from '../components/fabs/Previous'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import Save from '../components/fabs/Save'
 import ScrollToTop from '../components/fabs/ScrollToTop'
@@ -67,7 +71,7 @@ import QuestionEdit from '../components/QuestionEdit'
 //----------------------------------------------------------------//
 // Custom Class Styles
 //----------------------------------------------------------------//
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
@@ -83,37 +87,14 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(3),
   },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
 }))
 
 //----------------------------------------------------------------//
 // Edit MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleScrollToTop, handleSnackbarClose, handleSnackbarOpen, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
-
-  //----------------------------------------------------------------//
-  // Declare references
-  //----------------------------------------------------------------//
-  const mdsRef = React.useRef()
-  const nameRef = React.useRef()
-  // array of questions in order
-  const questionRefs = React.useRef([])
-
-  // 2D array of options in order
-  // [['one', 'two', 'three', 'four']]
-  const optionRefs = React.useRef([])
-
-  // array of answers in order
-  const answerRefs = React.useRef([])
-
-  // Array of publication references in order
-  const referenceRefs = React.useRef([])
 
   // Ensure that user is logged in
   if (state.isAuthenticated === false) {
@@ -122,56 +103,53 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
     )
   }
 
+  const [currentMQF, setCurrentMQF] = React.useState(state.tests.filter(mqf => mqf.id === mqfId)[0])
+  const [currentQuestion, setCurrentQuestion] = React.useState(0)
+  const [hasPrevious, setHasPrevious] = React.useState(false)
+  const [hasNext, setHasNext] = React.useState(false)
+
+  React.useEffect(() => {
+    if(currentMQF !== null && currentMQF.questions.length > 1) {
+      setHasNext(true)
+    }
+  }, [])
+
   React.useEffect(() => {
     return () => {
       handleSnackbarClose()
     }
   }, [handleSnackbarClose])
 
+  const handlePreviousQuestion = () => {
+    setHasNext(true)
 
-  //----------------------------------------------------------------//
-  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
-  //----------------------------------------------------------------//
-  const filterMQF = (needle, haystack) => haystack.filter(mqf => mqf.id === needle)
-  const [currentMQF, setCurrentMQF] = React.useState(filterMQF(mqfId, state.tests)[0])
+    if(currentQuestion === 1) {
+      setHasPrevious(false)
+    }
+
+    if(hasPrevious) {
+      setCurrentQuestion(currentQuestion - 1)
+    }
+  }
+
+  const handleNextQuestion = () => {
+    setHasPrevious(true)
+
+    if(currentQuestion === currentMQF.questions.length - 2) {
+      setHasNext(false)
+    }
+
+    if(hasNext) {
+      setCurrentQuestion(currentQuestion + 1)
+    }
+  }
 
   //----------------------------------------------------------------//
   // Handle Save Button
   //----------------------------------------------------------------//
   const handleSaveClick = () => {
 
-    let questions = []
-
-    const trimmedQuestionRefs = questionRefs.current.filter(value => value !== null)
-
-    trimmedQuestionRefs.forEach((qRef, qIndex) => {
-      let options = []
-
-      const trimmedOptionRefs = optionRefs.current[qIndex].filter(value => value !== null)
-
-      trimmedOptionRefs.forEach((oRef, oIndex) => options[oIndex] = oRef.value)
-
-      const question = {
-        ...currentMQF.questions[qIndex],
-        question: qRef.value,
-        options,
-        answer: (answerRefs.current[qIndex].charCodeAt(0) - 65),
-        reference: referenceRefs.current[qIndex].value
-      }
-
-      questions[qIndex] = question
-    })
-
-    let newMQF = {
-      ...currentMQF,
-      mds: mdsRef.current.value,
-      name: nameRef.current.value,
-      version: currentMQF.version + 1,
-      date: new Date().toString(),
-      seen: false,
-      questions
-    }
-    handleMQFSave(mqfId, newMQF)
+    console.log('save clicked')
     handleSnackbarOpen()
   }
 
@@ -204,6 +182,12 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
     }
 
     setCurrentMQF(updatedMQF)
+    setHasPrevious(true)
+    setCurrentQuestion(currentQuestion + 1)
+  }
+
+  const handleValueChange = () => {
+
   }
 
   //----------------------------------------------------------------//
@@ -235,40 +219,33 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSc
               <TestDetails
                 defaultMDS={currentMQF.mds}
                 defaultName={currentMQF.name}
-                mdsRef={mdsRef}
-                nameRef={nameRef}
               />
-              {
-                currentMQF.questions.map((question, questionIndex) => (
-                  <QuestionEdit
-                    answerRefs={answerRefs}
-                    handleDeleteQuestion={questionId => handleDeleteQuestion(questionId)}
-                    key={`question-${currentMQF.questions[questionIndex].question}`}
-                    optionRefs={optionRefs}
-                    question={question}
-                    questionIndex={questionIndex}
-                    questionRefs={questionRefs}
-                    referenceRefs={referenceRefs}
-                  />
-                ))
+              <QuestionEdit
+                handleChange={setCurrentMQF}
+                key={`question-${currentMQF.questions[currentQuestion].question}`}
+                question={currentMQF.questions[currentQuestion]}
+                questionIndex={currentQuestion}
+              />
+              {(hasPrevious) ?
+                <Previous
+                  handleClick={handlePreviousQuestion}
+                />
+                : null
               }
-              <Button
-                color='primary'
-                onClick={handleAddQuestion}
-                variant='contained'
-              >
-                Add Question
-              </Button>
+
+              {(hasNext) ?
+                <Next
+                  handleClick={handleNextQuestion}
+                /> :
+                <Add
+                  handleClick={handleAddQuestion}
+                />
+              }
             </Grid>
           </Grid>
         </form>
         <Save
           handleSaveClick={handleSaveClick}
-        />
-        <ScrollToTop
-          handleScrollToTop={handleScrollToTop}
-          order={2}
-          state={state}
         />
       </main>
       <CustomSnackbar
