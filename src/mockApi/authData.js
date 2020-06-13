@@ -1,17 +1,17 @@
 export const authData = {
   isAuthenticated: true,
   user: {
-    id: "68b80a87-a122-4f73-8dc5-1b06ddbeeb96",
-    display: "SNUFFY, JOHN C AMN USAF AETC 315TRS/DOT",
-    email: "this.is.fake@us.af.mil",
-    first: "John",
-    middle: "C",
-    last: "Snuffy",
-    rank: "Amn",
-    majcom: "AETC",
-    squadron: "315TRS",
-    office: "DOT",
-    role: "admin",
+    id: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
+    display: 'SNUFFY, JOHN C AMN USAF AETC 315TRS/DOT',
+    email: 'this.is.fake@us.af.mil',
+    first: 'John',
+    middle: 'C',
+    last: 'Snuffy',
+    rank: 'Amn',
+    majcom: 'AETC',
+    squadron: '315TRS',
+    office: 'DOT',
+    role: 'admin',
     testsStudied: [],
     testsInProgress: [],
     testsTaken: [],
@@ -20,7 +20,7 @@ export const authData = {
     {
       id: '7455766d-f0e4-4fb7-b351-e7ac9e2e02bc',
       mds: 'AFOQT - 1',
-      name: "SECTION 1: VERBAL ANALOGIES (25 QUESTIONS / 8 MINS)",
+      name: 'SECTION 1: VERBAL ANALOGIES (25 QUESTIONS / 8 MINS)',
       owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 1,
       date: '11 May 2020',
@@ -256,7 +256,7 @@ export const authData = {
     {
       id: '7455766d-f0e4-4fb7-b351-e7ac9e2e02bd',
       mds: 'AFOQT - 1',
-      name: "SECTION 2: ARITHMETIC REASONING (25 QUESTIONS / 29 MINUTES)",
+      name: 'SECTION 2: ARITHMETIC REASONING (25 QUESTIONS / 29 MINUTES)',
       owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 1,
       date: '11 May 2020',
@@ -274,12 +274,12 @@ export const authData = {
       ]
     },
     {
-      id: "e554c1b3-6713-4f06-a497-44800148a76b",
-      mds: "A-10C",
-      name: "Master MQF",
-      owner: "68b80a87-a122-4f73-8dc5-1b06ddbeeb96",
+      id: 'e554c1b3-6713-4f06-a497-44800148a76b',
+      mds: 'A-10C',
+      name: 'Master MQF',
+      owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 3,
-      date: "5 May 2020, 16:58 Zulu",
+      date: '5 May 2020, 16:58 Zulu',
       seen: false,
       questions: [
         {
@@ -339,12 +339,12 @@ export const authData = {
       ]
     },
     {
-      id: "0f2da7dc-e390-4f20-83a0-68c9844a24ae",
-      mds: "A-10C",
-      name: "23 FG Local MQF",
-      owner: "68b80a87-a122-4f73-8dc5-1b06ddbeeb96",
+      id: '0f2da7dc-e390-4f20-83a0-68c9844a24ae',
+      mds: 'A-10C',
+      name: '23 FG Local MQF',
+      owner: '68b80a87-a122-4f73-8dc5-1b06ddbeeb96',
       version: 1,
-      date: "5 May 2020, 16:58 Zulu",
+      date: '5 May 2020, 16:58 Zulu',
       seen: false,
       questions: [
         {

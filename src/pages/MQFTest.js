@@ -33,7 +33,7 @@
 // Top Level Modules
 //----------------------------------------------------------------//
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 //----------------------------------------------------------------//
 // Material UI Core Components
@@ -50,27 +50,15 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/fabs/ScrollToTop'
-import SideMenu from '../components/SideMenu'
 import QuestionTest from '../components/QuestionTest'
 
 //----------------------------------------------------------------//
 // Custom Class Styles
 //----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
   card: {
     minHeight: 300,
   },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  toolbar: theme.mixins.toolbar,
   questionFab: {
     marginTop: theme.spacing(2),
   },
@@ -84,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // MQF Test Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, state }) => {
+export default ({ handleMQFSeen, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
 
@@ -132,15 +120,6 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, state })
   }, [])
 
   //----------------------------------------------------------------//
-  // Ensure user is authenticated
-  //----------------------------------------------------------------//
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
-  //----------------------------------------------------------------//
   // DEBUG - LOG ANSWERS TO CONSOLE
   // TODO  - ALERT IF NOT ALL ANSWERED, VALIDATION
   const checkAnswers = () => {
@@ -153,42 +132,30 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, state })
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid container direction='row' justify='center'>
-          <Grid item xs={10} md={5}>
-            {
-              currentMQF.questions.map((question, index) => (
-                <QuestionTest
-                  answerRefs={answerRefs}
-                  currentQuestion={index}
-                  key={index}
-                  options={currentMQF.questions[questionArray[index]].options}
-                  question={currentMQF.questions[questionArray[index]].question}
-                />
-              ))
-            }
-          </Grid>
+    <React.Fragment>
+      <Grid container direction='row' justify='center'>
+        <Grid item xs={10} md={5}>
+          {
+            currentMQF.questions.map((question, index) => (
+              <QuestionTest
+                answerRefs={answerRefs}
+                currentQuestion={index}
+                key={index}
+                options={currentMQF.questions[questionArray[index]].options}
+                question={currentMQF.questions[questionArray[index]].question}
+              />
+            ))
+          }
         </Grid>
-        <Fab
-          aria-label='submit test'
-          className={classes.submit}
-          color='primary'
-          onClick={checkAnswers}
-        >
-          <AssignmentTurnedInIcon />
-        </Fab>
-      </main>
-    </div>
+      </Grid>
+      <Fab
+        aria-label='submit test'
+        className={classes.submit}
+        color='primary'
+        onClick={checkAnswers}
+      >
+        <AssignmentTurnedInIcon />
+      </Fab>
+    </React.Fragment>
   )
 }

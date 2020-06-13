@@ -36,79 +36,38 @@
 // Top Level Modules
 //----------------------------------------------------------------//
 import React from 'react'
-import { Redirect } from 'react-router-dom'
 
 //----------------------------------------------------------------//
 // Material UI Core Components
 //----------------------------------------------------------------//
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
 
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
 import DashboardStats from '../components/DashboardStats'
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import SideMenu from '../components/SideMenu'
 import CreateMqf from '../components/fabs/CreateMqf'
-
-//----------------------------------------------------------------//
-// Custom Class Styles
-//----------------------------------------------------------------//
-const useStyles = makeStyles((theme) => ({
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  root: {
-    display: 'flex',
-  },
-  toolbar: theme.mixins.toolbar,
-}))
 
 //----------------------------------------------------------------//
 // Dashboard Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, state }) => {
-  const classes = useStyles()
-
-  //----------------------------------------------------------------//
-  // Ensure User Is Authenticated
-  //----------------------------------------------------------------//
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
+export default ({ state }) => {
 
   //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid
-          container
-          direction='row'
-          justify='center'
-        >
-          <Grid item xs={8}>
-            <DashboardStats state={state} />
-          </Grid>
+    <React.Fragment>
+      <Grid
+        container
+        direction='row'
+        justify='center'
+      >
+        <Grid item xs={8}>
+          <DashboardStats state={state} />
         </Grid>
-      </main>
+      </Grid>
       {(state.user.role === 'admin') ? <CreateMqf /> : null}
-    </div >
+    </React.Fragment>
   )
 }

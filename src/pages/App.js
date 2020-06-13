@@ -39,6 +39,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 // Material UI Core Components
 //----------------------------------------------------------------//
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { makeStyles } from '@material-ui/core/styles'
 
 //----------------------------------------------------------------//
 // Custom Components
@@ -51,6 +52,21 @@ import MQFOverview from './MQFOverview'
 import MQFStudy from './MQFStudy'
 import MQFTest from './MQFTest'
 import UserAccount from './UserAccount'
+
+import ResponsiveNavigation from '../components/ResponsiveNavigation'
+import SideMenu from '../components/SideMenu'
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+  },
+  content: {
+    flexGrow: 1,
+    width: '100%',
+    padding: theme.spacing(3),
+  },
+  toolbar: theme.mixins.toolbar,
+}))
 
 //----------------------------------------------------------------//
 // App Component
@@ -203,6 +219,28 @@ class App extends React.Component {
     }
   }
 
+  pageTemplate = props => {
+    const classes = useStyles()
+
+    return (
+      <div className={classes.root}>
+        <ResponsiveNavigation
+          handleDrawerToggle={this.handleDrawerToggle}
+          handleLogoutClick={this.handleLogoutClick}
+          state={this.state}
+        />
+        <SideMenu
+          handleDrawerToggle={this.handleDrawerToggle}
+          state={this.state}
+        />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          {props.children}
+        </main>
+      </div>
+    )
+  }
+
   //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
@@ -214,11 +252,12 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/">
               {(this.state.isAuthenticated) ?
-                <Dashboard
-                  handleDrawerToggle={this.handleDrawerToggle}
-                  handleLogoutClick={this.handleLogoutClick}
-                  state={this.state}
-                /> :
+                <this.pageTemplate>
+                  <Dashboard
+                    state={this.state}
+                  />
+                </this.pageTemplate>
+                :
                 <Login
                   handleLoginClick={this.handleLoginClick}
                   state={this.state}
@@ -226,64 +265,82 @@ class App extends React.Component {
               }
             </Route>
             <Route exact path="/m">
-              <MQFEdit
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleMQFSave={newMQF => { this.handleMQFCreate(newMQF) }}
-                handleScrollToTop={this.handleScrollToTop}
-                handleSnackbarClose={this.handleSnackbarClose}
-                handleSnackbarOpen={this.handleSnackbarOpen}
-                state={this.state}
-                variant='create'
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <MQFEdit
+                    handleMQFSave={newMQF => { this.handleMQFCreate(newMQF) }}
+                    handleSnackbarClose={this.handleSnackbarClose}
+                    handleSnackbarOpen={this.handleSnackbarOpen}
+                    state={this.state}
+                    variant='create'
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
             <Route path="/m/:mqfId/e">
-              <MQFEdit
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleMQFSave={(mqfId, newValue) => { this.handleMQFSave(mqfId, newValue) }}
-                handleScrollToTop={this.handleScrollToTop}
-                handleSnackbarClose={this.handleSnackbarClose}
-                handleSnackbarOpen={this.handleSnackbarOpen}
-                state={this.state}
-                variant='edit'
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <MQFEdit
+                    handleMQFSave={(mqfId, newValue) => { this.handleMQFSave(mqfId, newValue) }}
+                    handleSnackbarClose={this.handleSnackbarClose}
+                    handleSnackbarOpen={this.handleSnackbarOpen}
+                    state={this.state}
+                    variant='edit'
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
             <Route path="/m/:mqfId/s/:order">
-              <MQFStudy
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleMQFSeen={this.handleMQFSeen}
-                handleScrollToTop={this.handleScrollToTop}
-                handleQuestionStudied={(mqfId, questionIndex) => { this.handleQuestionStudied(mqfId, questionIndex) }}
-                state={this.state}
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <MQFStudy
+                    handleMQFSeen={this.handleMQFSeen}
+                    handleQuestionStudied={(mqfId, questionIndex) => { this.handleQuestionStudied(mqfId, questionIndex) }}
+                    state={this.state}
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
             <Route path="/m/:mqfId/t">
-              <MQFTest
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleMQFSeen={this.handleMQFSeen}
-                handleScrollToTop={this.handleScrollToTop}
-                state={this.state}
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <MQFTest
+                    handleMQFSeen={this.handleMQFSeen}
+                    state={this.state}
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
             <Route path="/m/:mqfId">
-              <MQFOverview
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleMQFDelete={this.handleMQFDelete}
-                handleScrollToTop={this.handleScrollToTop}
-                state={this.state}
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <MQFOverview
+                    handleMQFDelete={this.handleMQFDelete}
+                    state={this.state}
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
             <Route path="/u/:userId">
-              <UserAccount
-                handleDrawerToggle={this.handleDrawerToggle}
-                handleLogoutClick={this.handleLogoutClick}
-                handleScrollToTop={this.handleScrollToTop}
-                state={this.state}
-              />
+              {(this.state.isAuthenticated) ?
+                <this.pageTemplate>
+                  <UserAccount
+                    state={this.state}
+                  />
+                </this.pageTemplate>
+                :
+                <Redirect to='/' />
+              }
             </Route>
           </Switch>
         </Router>

@@ -40,8 +40,7 @@ import React from 'react'
 // Material UI Components
 //----------------------------------------------------------------//
 import Fab from '@material-ui/core/Fab'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Zoom from '@material-ui/core/Zoom'
+import { makeStyles } from '@material-ui/core/styles'
 
 //----------------------------------------------------------------//
 // Material UI Icons
@@ -60,15 +59,6 @@ const useStyles = makeStyles(theme => ({
 //----------------------------------------------------------------//
 export default ({ handleClick }) => {
   const classes = useStyles()
-  const theme = useTheme()
-
-  //----------------------------------------------------------------//
-  // Define Transition Duration
-  //----------------------------------------------------------------//
-  const transitionDuration = {
-    enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen,
-  }
 
   //----------------------------------------------------------------//
   // Render The Component

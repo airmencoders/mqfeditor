@@ -33,7 +33,7 @@
 // Top Level Modules
 //----------------------------------------------------------------//
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import ReactCardFlip from 'react-card-flip'
 
 //----------------------------------------------------------------//
@@ -55,42 +55,18 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 
 //----------------------------------------------------------------//
-// Custom Components
-//----------------------------------------------------------------//
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import SideMenu from '../components/SideMenu'
-
-//----------------------------------------------------------------//
 // Custom Class Styles
 //----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
   card: {
-    // marginLeft: 'auto',
-    //marginRight: 'auto',
     minHeight: 300,
   },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  toolbar: theme.mixins.toolbar,
-  previousQuestionFab: {
-    marginTop: theme.spacing(2),
-  },
-  nextQuestionFab: {
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(2),
-  }
 }))
 
 //----------------------------------------------------------------//
 // Study MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleQuestionStudied, state }) => {
+export default ({ handleMQFSeen, handleQuestionStudied, state }) => {
   const classes = useStyles()
   let { mqfId, order } = useParams()
 
@@ -197,91 +173,68 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSeen, handleQu
   }, [questionsPicked, currentQuestion])
 
   //----------------------------------------------------------------//
-  // Ensure user is authenticated
-  //----------------------------------------------------------------//
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
-  //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid container direction='row' justify='center'>
-          <Grid item xs={10} md={5}>
-            <ReactCardFlip
-              flipDirection='vertical'
-              infinite={true}
-              isFlipped={isFlipped}
-            >
-              <Card
-                className={classes.card}
-                key='front'
-                onClick={toggleCardFlip}
-              >
-                <CardContent>
-                  <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
-                  <Typography variant='body1'>
-                    {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
-                  </Typography>
-                </CardContent>
-                <Divider />
-                <CardActions>
-                  <Grid container direction='column'>
-                    {
-                      currentMQF.questions[questionArray[currentQuestion]].options.map((option, index) => (
-                        <Grid
-                          item
-                          key={index}
-                          xs={10}>
-                          <Typography variant='body1' >
-                            {`${String.fromCharCode(index + 65)}. ${option}`}
-                          </Typography>
-                        </Grid>
-                      ))
-                    }
-                  </Grid>
-                </CardActions>
-              </Card>
-              <Card
-                className={classes.card}
-                key='back'
-                onClick={toggleCardFlip}
-              >
-                <CardContent>
-                  <Typography variant='body1' align='center'>
-                    <strong>
-                      {
-                        `${String.fromCharCode(65 + currentMQF.questions[questionArray[currentQuestion]].answer)}. ${currentMQF.questions[questionArray[currentQuestion]].options[currentMQF.questions[questionArray[currentQuestion]].answer]}`
-                      }
-                    </strong>
-                  </Typography>
-                </CardContent>
-              </Card>
-            </ReactCardFlip>
-            <Fab className={classes.previousQuestionFab} onClick={handlePreviousQuestion}>
-              <KeyboardArrowLeftIcon />
-            </Fab>
-            <Fab className={classes.nextQuestionFab} onClick={handleNextQuestion}>
-              <KeyboardArrowRightIcon />
-            </Fab>
-          </Grid>
-        </Grid>
-      </main>
-    </div>
+    <Grid container direction='row' justify='center'>
+      <Grid item xs={10} md={5}>
+        <ReactCardFlip
+          flipDirection='vertical'
+          infinite={true}
+          isFlipped={isFlipped}
+        >
+          <Card
+            className={classes.card}
+            key='front'
+            onClick={toggleCardFlip}
+          >
+            <CardContent>
+              <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
+              <Typography variant='body1'>
+                {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
+              </Typography>
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <Grid container direction='column'>
+                {
+                  currentMQF.questions[questionArray[currentQuestion]].options.map((option, index) => (
+                    <Grid
+                      item
+                      key={index}
+                      xs={10}>
+                      <Typography variant='body1' >
+                        {`${String.fromCharCode(index + 65)}. ${option}`}
+                      </Typography>
+                    </Grid>
+                  ))
+                }
+              </Grid>
+            </CardActions>
+          </Card>
+          <Card
+            className={classes.card}
+            key='back'
+            onClick={toggleCardFlip}
+          >
+            <CardContent>
+              <Typography variant='body1' align='center'>
+                <strong>
+                  {
+                    `${String.fromCharCode(65 + currentMQF.questions[questionArray[currentQuestion]].answer)}. ${currentMQF.questions[questionArray[currentQuestion]].options[currentMQF.questions[questionArray[currentQuestion]].answer]}`
+                  }
+                </strong>
+              </Typography>
+            </CardContent>
+          </Card>
+        </ReactCardFlip>
+        <Fab className={classes.previousQuestionFab} onClick={handlePreviousQuestion}>
+          <KeyboardArrowLeftIcon />
+        </Fab>
+        <Fab className={classes.nextQuestionFab} onClick={handleNextQuestion}>
+          <KeyboardArrowRightIcon />
+        </Fab>
+      </Grid>
+    </Grid>
   )
 }

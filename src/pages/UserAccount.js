@@ -32,14 +32,10 @@
  * SOFTWARE.
  */
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/fabs/ScrollToTop'
-import SideMenu from '../components/SideMenu'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,36 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: theme.mixins.toolbar,
 }))
-
-const Test = ({ state, scroll }) => {
+export default ({ state }) => {
   const classes = useStyles()
   let { userId } = useParams()
 
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
-
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
-
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation state={state} onMenuClick={handleDrawerToggle} />
-      <SideMenu state={state} mobileOpen={mobileOpen} onMenuClick={handleDrawerToggle} />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography variant='h6'>
-          {userId}
-        </Typography>
-        <ScrollToTop state={state} scroll={scroll} />
-      </main>
-    </div>
-	)
+    <React.Fragment>
+      <Typography variant='h6'>
+        {userId}
+      </Typography>
+    </React.Fragment>
+  )
 }
-
-export default Test

@@ -35,15 +35,13 @@
 // Top Level Modules
 //----------------------------------------------------------------//
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { v4 } from 'uuid'
 
 //----------------------------------------------------------------//
 // Material UI Core Components
 //----------------------------------------------------------------//
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
-import Zoom from '@material-ui/core/Zoom'
 
 //----------------------------------------------------------------//
 // Material UI Lab Components
@@ -59,40 +57,15 @@ import CustomSnackbar from '../components/CustomSnackbar'
 import Delete from '../components/fabs/Delete'
 import Next from '../components/fabs/Next'
 import Previous from '../components/fabs/Previous'
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import Save from '../components/fabs/Save'
-import SideMenu from '../components/SideMenu'
 import TestDetails from '../components/TestDetails'
 import QuestionEdit from '../components/QuestionEdit'
 
 //----------------------------------------------------------------//
-// Custom Class Styles
-//----------------------------------------------------------------//
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  toolbar: theme.mixins.toolbar,
-}))
-
-//----------------------------------------------------------------//
 // Edit MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state, variant }) => {
-  const classes = useStyles()
+export default ({ handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state, variant }) => {
   const { mqfId } = useParams()
-
-  // Ensure that user is logged in
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
 
   /**
    * SERVERLESS DEVELOPMENT - WILL USE AJAX TO GET API ENDPOINT FOR THE QUESTION INFORMATION
@@ -409,80 +382,65 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSn
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <form noValidate autoComplete='off'>
+    <React.Fragment>
+      <form noValidate autoComplete='off'>
+        <Grid
+          container
+          direction='row'
+          justify='center'
+        >
           <Grid
-            container
-            direction='row'
-            justify='center'
+            item
+            xs={10}
           >
-            <Grid
-              item
-              xs={10}
-            >
-              <TestDetails
-                handleMDSChange={value => handleMDSChange(value)}
-                handleNameChange={value => handleNameChange(value)}
-                mds={currentMQF.mds}
-                name={currentMQF.name}
+            <TestDetails
+              handleMDSChange={value => handleMDSChange(value)}
+              handleNameChange={value => handleNameChange(value)}
+              mds={currentMQF.mds}
+              name={currentMQF.name}
+            />
+            <QuestionEdit
+              answer={currentMQF.questions[currentQuestion].answer}
+              handleAnswerChange={value => handleAnswerChange(value)}
+              handleOptionAdd={() => handleOptionAdd()}
+              handleOptionChange={(optionIndex, value) => handleOptionChange(optionIndex, value)}
+              handleOptionDelete={optionIndex => handleOptionDelete(optionIndex)}
+              handleQuestionChange={value => handleQuestionChange(value)}
+              handleReferenceChange={value => handleReferenceChange(value)}
+              index={currentQuestion}
+              options={currentMQF.questions[currentQuestion].options}
+              question={currentMQF.questions[currentQuestion].question}
+              reference={currentMQF.questions[currentQuestion].reference}
+            />
+            {(hasNext || hasPrevious) ?
+              <Delete
+                handleClick={handleDeleteQuestion}
+              /> : null
+            }
+            {(hasPrevious) ?
+              <Previous
+                handleClick={handlePreviousQuestion}
+              /> : null
+            }
+            {(hasNext) ?
+              <Next
+                handleClick={handleNextQuestion}
+              /> :
+              <Add
+                handleClick={handleAddQuestion}
               />
-              <QuestionEdit
-                answer={currentMQF.questions[currentQuestion].answer}
-                handleAnswerChange={value => handleAnswerChange(value)}
-                handleOptionAdd={() => handleOptionAdd()}
-                handleOptionChange={(optionIndex, value) => handleOptionChange(optionIndex, value)}
-                handleOptionDelete={optionIndex => handleOptionDelete(optionIndex)}
-                handleQuestionChange={value => handleQuestionChange(value)}
-                handleReferenceChange={value => handleReferenceChange(value)}
-                index={currentQuestion}
-                options={currentMQF.questions[currentQuestion].options}
-                question={currentMQF.questions[currentQuestion].question}
-                reference={currentMQF.questions[currentQuestion].reference}
-              />
-              {(hasPrevious || hasNext) ?
-                <Delete
-                  handleClick={handleDeleteQuestion}
-                />
-                : null
-              }
-              {(hasPrevious) ?
-                <Previous
-                  handleClick={handlePreviousQuestion}
-                />
-                : null
-              }
-
-              {(hasNext) ?
-                <Next
-                  handleClick={handleNextQuestion}
-                /> :
-                <Add
-                  handleClick={handleAddQuestion}
-                />
-              }
-            </Grid>
+            }
           </Grid>
-        </form>
-        <Save
-          handleSaveClick={handleSaveClick}
-        />
-      </main>
+        </Grid>
+      </form>
+      <Save
+        handleSaveClick={handleSaveClick}
+      />
       <CustomSnackbar
         handleSnackbarClose={handleSnackbarClose}
         message='Changes Saved'
         open={state.snackbarOpen}
       />
-    </div>
+    </React.Fragment>
   )
 }

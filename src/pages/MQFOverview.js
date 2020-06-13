@@ -60,25 +60,9 @@ import ShuffleIcon from '@material-ui/icons/Shuffle'
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
 //----------------------------------------------------------------//
-// Custom Components
-//----------------------------------------------------------------//
-import ResponsiveNavigation from '../components/ResponsiveNavigation'
-import ScrollToTop from '../components/fabs/ScrollToTop'
-import SideMenu from '../components/SideMenu'
-
-//----------------------------------------------------------------//
 // Custom Class Styles
 //----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
-  },
-  toolbar: theme.mixins.toolbar,
   blueButton: {
     margin: theme.spacing(1),
   },
@@ -95,18 +79,9 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // MQF Overview Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFDelete, handleScrollToTop, state }) => {
+export default ({ handleMQFDelete, state }) => {
   const classes = useStyles()
   let { mqfId } = useParams()
-
-  //----------------------------------------------------------------//
-  // Ensure user is authenticated
-  //----------------------------------------------------------------//
-  if (state.isAuthenticated === false) {
-    return (
-      <Redirect to='/' />
-    )
-  }
 
   //----------------------------------------------------------------//
   // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
@@ -127,143 +102,124 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFDelete, handle
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <div className={classes.root}>
-      <ResponsiveNavigation
-        handleDrawerToggle={handleDrawerToggle}
-        handleLogoutClick={handleLogoutClick}
-        state={state}
-      />
-      <SideMenu
-        handleDrawerToggle={handleDrawerToggle}
-        state={state}
-      />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid container direction='row' justify='center'>
-          <Grid item xs={10}>
-            <Card
-              className={classes.card}
-              variant='outlined'
-            >
-              <CardContent>
-                <Typography variant='h5'>{currentMQF.name}</Typography>
-                <Typography variant='h6'>{`MDS: ${currentMQF.mds}`}</Typography>
-                <Typography variant='subtitle1'>{`Created by: ${mqfOwner.rank} ${mqfOwner.first} ${mqfOwner.last}, ${mqfOwner.squadron}/${mqfOwner.office}`}</Typography>
-                <Typography variant='body1'>{`Version: ${currentMQF.version}`}</Typography>
-                <Typography variant='body1'>{`Date Created: ${currentMQF.date}`}</Typography>
-                <Typography variant='body1'>{`Number of questions: ${currentMQF.questions.length}`}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+    <Grid container direction='row' justify='center'>
+      <Grid item xs={10}>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardContent>
+            <Typography variant='h5'>{currentMQF.name}</Typography>
+            <Typography variant='h6'>{`MDS: ${currentMQF.mds}`}</Typography>
+            <Typography variant='subtitle1'>{`Created by: ${mqfOwner.rank} ${mqfOwner.first} ${mqfOwner.last}, ${mqfOwner.squadron}/${mqfOwner.office}`}</Typography>
+            <Typography variant='body1'>{`Version: ${currentMQF.version}`}</Typography>
+            <Typography variant='body1'>{`Date Created: ${currentMQF.date}`}</Typography>
+            <Typography variant='body1'>{`Number of questions: ${currentMQF.questions.length}`}</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
 
-          {/* Show actions only if test owner / admin */}
-          <Grid item xs={10}>
-            <Card
-              className={classes.card}
-              variant='outlined'
+      {/* Show actions only if test owner / admin */}
+      <Grid item xs={10}>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardActions>
+            <Box
+              direction='row'
+              display='flex'
+              flexWrap='wrap'
             >
-              <CardActions>
-                <Box
-                  direction='row'
-                  display='flex'
-                  flexWrap='wrap'
+              <NavLink
+                style={{ textDecoration: 'none' }}
+                to={`/m/${mqfId}/s/sequential`}
+              >
+                <Button
+                  className={classes.blueButton}
+                  color='primary'
+                  startIcon={<SpeakerNotesIcon />}
+                  variant='contained'
                 >
-                  <NavLink
-                    style={{ textDecoration: 'none' }}
-                    to={`/m/${mqfId}/s/sequential`}
-                  >
-                    <Button
-                      className={classes.blueButton}
-                      color='primary'
-                      startIcon={<SpeakerNotesIcon />}
-                      variant='contained'
-                    >
-                      Study (Sequential)
+                  Study (Sequential)
                     </Button>
-                  </NavLink>
-                  <NavLink
-                    style={{ textDecoration: 'none' }}
-                    to={`/m/${mqfId}/s/random`}
-                  >
-                    <Button
-                      className={classes.blueButton}
-                      color='primary'
-                      startIcon={<ShuffleIcon />}
-                      variant='contained'
-                    >
-                      Study (Random)
+              </NavLink>
+              <NavLink
+                style={{ textDecoration: 'none' }}
+                to={`/m/${mqfId}/s/random`}
+              >
+                <Button
+                  className={classes.blueButton}
+                  color='primary'
+                  startIcon={<ShuffleIcon />}
+                  variant='contained'
+                >
+                  Study (Random)
                     </Button>
-                  </NavLink>
-                  <NavLink
-                    style={{ textDecoration: 'none' }}
-                    to={`/m/${mqfId}/t`}
-                  >
-                    <Button
-                      className={classes.blueButton}
-                      color='primary'
-                      startIcon={<ListAltIcon />}
-                      variant='contained'
-                    >
-                      Take Practice Test
+              </NavLink>
+              <NavLink
+                style={{ textDecoration: 'none' }}
+                to={`/m/${mqfId}/t`}
+              >
+                <Button
+                  className={classes.blueButton}
+                  color='primary'
+                  startIcon={<ListAltIcon />}
+                  variant='contained'
+                >
+                  Take Practice Test
                     </Button>
-                  </NavLink>
+              </NavLink>
 
-                  {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
-                    (
-                      <React.Fragment>
-                        <NavLink
-                          style={{ textDecoration: 'none' }}
-                          to={`/m/${mqfId}/e`}
-                        >
-                          <Button
-                            className={classes.blueButton}
-                            color='primary'
-                            startIcon={<EditIcon />}
-                            variant='contained'
-                          >
-                            Edit Test
-                          </Button>
-                        </NavLink>
-                        <Button
-                          className={classes.redButton}
-                          onClick={() => handleMQFDelete(mqfId)}
-                          startIcon={<DeleteIcon />}
-                          variant='contained'
-                        >
-                          Delete Test
-                        </Button>
-                      </React.Fragment>
-                    ) :
-                    (null)
-                  }
-                </Box>
-              </CardActions>
-            </Card>
-            <Card
-              className={classes.card}
-              variant='outlined'
-            >
-              <CardContent>
-                {
-                  currentMQF.questions.map((question, index) => (
-                    <Typography
-                      key={index}
-                      variant='body1'
+              {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
+                (
+                  <React.Fragment>
+                    <NavLink
+                      style={{ textDecoration: 'none' }}
+                      to={`/m/${mqfId}/e`}
                     >
-                      {`${index + 1}. Studied ${question.timesStudied} times.`}
-                    </Typography>
-                  ))
-                }
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        <ScrollToTop
-          handleScrollToTop={handleScrollToTop}
-          order={1}
-          state={state}
-        />
-      </main>
-    </div >
+                      <Button
+                        className={classes.blueButton}
+                        color='primary'
+                        startIcon={<EditIcon />}
+                        variant='contained'
+                      >
+                        Edit Test
+                          </Button>
+                    </NavLink>
+                    <Button
+                      className={classes.redButton}
+                      onClick={() => handleMQFDelete(mqfId)}
+                      startIcon={<DeleteIcon />}
+                      variant='contained'
+                    >
+                      Delete Test
+                        </Button>
+                  </React.Fragment>
+                ) :
+                (null)
+              }
+            </Box>
+          </CardActions>
+        </Card>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardContent>
+            {
+              currentMQF.questions.map((question, index) => (
+                <Typography
+                  key={index}
+                  variant='body1'
+                >
+                  {`${index + 1}. Studied ${question.timesStudied} times.`}
+                </Typography>
+              ))
+            }
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   )
 }
