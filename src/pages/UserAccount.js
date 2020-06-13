@@ -34,29 +34,69 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+  card: {
+    marginBottom: theme.spacing(2),
   },
-  content: {
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
+  textField: {
+    marginBottom: theme.spacing(3),
   },
-  toolbar: theme.mixins.toolbar,
 }))
+
+
 export default ({ state }) => {
   const classes = useStyles()
   let { userId } = useParams()
 
+  const [user, setUser] = React.useState({ ...state.user })
+
   return (
-    <React.Fragment>
-      <Typography variant='h6'>
-        {userId}
-      </Typography>
-    </React.Fragment>
+    <Grid
+      container
+      direction='row'
+      justify='center'>
+      <Grid
+        item
+        xs={10}
+      >
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardContent>
+            <Typography variant='h6'>Name and details are pulled from the Air Force Portal and must be changed there.</Typography>
+            <Typography variant='body1'>{`Name: ${user.first} ${user.middle}. ${user.last}`}</Typography>
+            <Typography variant='body1'>{`Rank: ${user.rank}`}</Typography>
+            <Typography variant='body1'>{`MAJCOM: ${user.majcom}`}</Typography>
+            <Typography variant='body1'>{`Squadron/Office: ${user.squadron}/${user.office}`}</Typography>
+          </CardContent>
+        </Card>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardContent>
+            <Typography variant='h6'>Roles</Typography>
+            <Typography variant='body1'>{`Current Role: ${user.role}`}</Typography>
+            <Typography variant='body2'>TODO: Radio Buttons to request</Typography>
+          </CardContent>
+        </Card>
+        <Card
+          className={classes.card}
+          variant='outlined'
+        >
+          <CardContent>
+            <Typography variant='body2'>TODO: List of owned MQFs</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   )
 }

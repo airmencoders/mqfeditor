@@ -80,7 +80,7 @@ export default ({ answer, handleAnswerChange, handleOptionAdd, handleOptionChang
     <Card
       variant='outlined'
     >
-      <CardContent name='question'>
+      <CardContent>
         <Typography variant='h6'>{`Question ${index + 1}`}</Typography>
         <TextField
           className={classes.textField}

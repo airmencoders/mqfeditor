@@ -56,6 +56,7 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import ListAltIcon from '@material-ui/icons/ListAlt'
+import PrintIcon from '@material-ui/icons/Print'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes'
 
@@ -140,9 +141,7 @@ export default ({ handleMQFDelete, state }) => {
                   color='primary'
                   startIcon={<SpeakerNotesIcon />}
                   variant='contained'
-                >
-                  Study (Sequential)
-                    </Button>
+                >Study (Sequential)</Button>
               </NavLink>
               <NavLink
                 style={{ textDecoration: 'none' }}
@@ -153,9 +152,7 @@ export default ({ handleMQFDelete, state }) => {
                   color='primary'
                   startIcon={<ShuffleIcon />}
                   variant='contained'
-                >
-                  Study (Random)
-                    </Button>
+                >Study (Random)</Button>
               </NavLink>
               <NavLink
                 style={{ textDecoration: 'none' }}
@@ -166,11 +163,19 @@ export default ({ handleMQFDelete, state }) => {
                   color='primary'
                   startIcon={<ListAltIcon />}
                   variant='contained'
-                >
-                  Take Practice Test
-                    </Button>
+                >Take Practice Test</Button>
               </NavLink>
-
+              <NavLink
+                style={{ textDecoration: 'none' }}
+                to={`/m/${mqfId}/p`}
+              >
+                <Button
+                  className={classes.blueButton}
+                  color='primary'
+                  startIcon={<PrintIcon />}
+                  variant='contained'
+                >Print</Button>
+              </NavLink>
               {(state.user.role === 'admin' || state.user.id === currentMQF.owner) ?
                 (
                   <React.Fragment>
@@ -183,18 +188,14 @@ export default ({ handleMQFDelete, state }) => {
                         color='primary'
                         startIcon={<EditIcon />}
                         variant='contained'
-                      >
-                        Edit Test
-                          </Button>
+                      >Edit Test</Button>
                     </NavLink>
                     <Button
                       className={classes.redButton}
                       onClick={() => handleMQFDelete(mqfId)}
                       startIcon={<DeleteIcon />}
                       variant='contained'
-                    >
-                      Delete Test
-                        </Button>
+                    >Delete Test</Button>
                   </React.Fragment>
                 ) :
                 (null)

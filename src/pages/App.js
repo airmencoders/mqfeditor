@@ -12,7 +12,7 @@
  * Copyright (c) 2020 Airmen Coders
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and associated documentation files (the 'Software'), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -21,7 +21,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -49,6 +49,7 @@ import Dashboard from './Dashboard'
 import Login from './Login'
 import MQFEdit from './MQFEdit'
 import MQFOverview from './MQFOverview'
+import MQFPrint from './MQFPrint'
 import MQFStudy from './MQFStudy'
 import MQFTest from './MQFTest'
 import UserAccount from './UserAccount'
@@ -246,11 +247,11 @@ class App extends React.Component {
   //----------------------------------------------------------------//
   render() {
     return (
-      <div className="App">
+      <div className='App'>
         <CssBaseline />
         <Router>
           <Switch>
-            <Route exact path="/">
+            <Route exact path='/'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <Dashboard
@@ -264,7 +265,7 @@ class App extends React.Component {
                 />
               }
             </Route>
-            <Route exact path="/m">
+            <Route exact path='/m'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <MQFEdit
@@ -279,7 +280,7 @@ class App extends React.Component {
                 <Redirect to='/' />
               }
             </Route>
-            <Route path="/m/:mqfId/e">
+            <Route path='/m/:mqfId/e'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <MQFEdit
@@ -294,7 +295,18 @@ class App extends React.Component {
                 <Redirect to='/' />
               }
             </Route>
-            <Route path="/m/:mqfId/s/:order">
+            <Route path='/m/:mqfId/p'>
+              {(this.state.isAuthenticated) ?
+              <this.pageTemplate>
+                <MQFPrint
+                  state={this.state}
+                />
+              </this.pageTemplate>  
+              :
+              <Redirect to='/' />
+            }
+            </Route>
+            <Route path='/m/:mqfId/s/:order'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <MQFStudy
@@ -307,7 +319,7 @@ class App extends React.Component {
                 <Redirect to='/' />
               }
             </Route>
-            <Route path="/m/:mqfId/t">
+            <Route path='/m/:mqfId/t'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <MQFTest
@@ -319,7 +331,7 @@ class App extends React.Component {
                 <Redirect to='/' />
               }
             </Route>
-            <Route path="/m/:mqfId">
+            <Route path='/m/:mqfId'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <MQFOverview
@@ -331,7 +343,7 @@ class App extends React.Component {
                 <Redirect to='/' />
               }
             </Route>
-            <Route path="/u/:userId">
+            <Route path='/u/:userId'>
               {(this.state.isAuthenticated) ?
                 <this.pageTemplate>
                   <UserAccount

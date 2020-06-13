@@ -1,3 +1,10 @@
+## 0.27.0
+* Began work on User Account page
+* Expectations:
+* -- User information is pulled from the Air Force Portal
+* -- User can request roles
+* -- Role requests will go to administrators to approve
+
 ## 0.26.0
 * Implemented page templates in `App` to help decrease amount of code in each component
 * Moved authentication check from individual pages to `App` before rendering
