@@ -70,68 +70,8 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Edit Component
 //----------------------------------------------------------------//
-export default ({ question = { question: '', options: ['', '', '', ''], answer: '', reference: '', timesStudied: 0, timesGotCorrect: 0, timesGotWrong: 0 }, questionIndex }) => {
+export default ({ answer, handleAnswerChange, handleOptionAdd, handleOptionChange, handleOptionDelete, handleQuestionChange, handleReferenceChange, index, options, question, reference }) => {
   const classes = useStyles()
-
-  //----------------------------------------------------------------//
-  // Question state
-  //----------------------------------------------------------------//
-  const [questionState, setQuestionState] =  React.useState(question.question)
-
-  const handleQuestionChange = value => {
-    setQuestionState(value)
-  }
-
-  //----------------------------------------------------------------//
-  // Option state
-  //----------------------------------------------------------------//
-  const [optionState, setOptionState] = React.useState([...question.options])
-
-  const handleAddOption = () => {
-    const newOptions = [...optionState, '']
-
-    setOptionState(newOptions)
-  }
-
-  const handleRemoveOption = optionIndex => {
-    // If deleting the current answer, set the answer to null
-    if (answerState !== null) {
-      if (optionIndex === answerState.charCodeAt(0) - 65) {
-        setAnswerState(null)
-      } else if (optionIndex < answerState.charCodeAt(0) - 65) {
-        setAnswerState(String.fromCharCode(answerState.charCodeAt(0) - 1))
-      }
-    }
-
-    // Change the state
-    setOptionState(optionState.filter((value, index) => index !== optionIndex))
-  }
-
-  const handleOptionChange = (optionIndex, value) => {
-    let newOptions = [...optionState]
-    newOptions[optionIndex] = value
-
-    setOptionState(newOptions)
-  }
-
-  //----------------------------------------------------------------//
-  // Radio Button State
-  //----------------------------------------------------------------//
-  const [answerState, setAnswerState] = React.useState(String.fromCharCode(65 + question.answer))
-
-  const handleAnswerChange = value => {
-    setAnswerState(value)
-  }
-
-  //----------------------------------------------------------------//
-  // Reference State
-  //----------------------------------------------------------------//
-  const [referenceState, setReferenceState] = React.useState(question.reference)
-
-  const handleReferenceChange = value => {
-    setReferenceState(value)
-  }
-
 
   //----------------------------------------------------------------//
   // Render The Component
@@ -141,41 +81,38 @@ export default ({ question = { question: '', options: ['', '', '', ''], answer: 
       variant='outlined'
     >
       <CardContent name='question'>
-        <Typography variant='h6'>{`Question ${questionIndex + 1}`}</Typography>
+        <Typography variant='h6'>{`Question ${index + 1}`}</Typography>
         <TextField
           className={classes.textField}
-          value={questionState}
+          value={question}
           fullWidth
           label='Question'
           multiline
           onChange={event => handleQuestionChange(event.target.value)}
         />
         {
-          optionState.map((option, optionIndex) => (
+          options.map((option, optionIndex) => (
             <TextField
               className={classes.textField}
-              value={optionState[optionIndex]}
+              value={option}
               fullWidth
-              key={`question-${questionIndex}-option-${optionIndex}`}
+              key={optionIndex}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
                     <Radio
-                      checked={answerState === String.fromCharCode(65 + optionIndex)}
+                      checked={answer === optionIndex}
                       className={classes.radio}
-                      //color='default'
-                      onChange={event => handleAnswerChange(event.target.value)}
-                      value={String.fromCharCode(65 + optionIndex)}
-                      inputProps={{ 'aria-label': String.fromCharCode(65 + optionIndex) }}
+                      onChange={event => handleAnswerChange(parseInt(event.target.value))}
+                      value={optionIndex}
                     />
                   </InputAdornment>
                 ),
                 endAdornment: (
                   <InputAdornment position='end'>
                     <IconButton
-                      aria-label='delete option'
                       edge='end'
-                      onClick={() => handleRemoveOption(optionIndex)}
+                      onClick={() => handleOptionDelete(optionIndex)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -191,7 +128,7 @@ export default ({ question = { question: '', options: ['', '', '', ''], answer: 
         }
         <TextField
           className={classes.textField}
-          value={referenceState}
+          value={reference}
           fullWidth
           label='Reference'
           multiline
@@ -202,7 +139,7 @@ export default ({ question = { question: '', options: ['', '', '', ''], answer: 
       <CardActions>
         <Button
           color='primary'
-          onClick={() => handleAddOption()}
+          onClick={() => handleOptionAdd()}
         >
           Add Option
         </Button>

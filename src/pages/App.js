@@ -46,7 +46,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { authData } from '../mockApi/authData'
 import Dashboard from './Dashboard'
 import Login from './Login'
-import MQFCreate from './MQFCreate'
 import MQFEdit from './MQFEdit'
 import MQFOverview from './MQFOverview'
 import MQFStudy from './MQFStudy'
@@ -85,7 +84,7 @@ class App extends React.Component {
       scrollComponent.toggleScrollButtonVisibility()
     })
   }
-  
+
   //----------------------------------------------------------------//
   // Drawer Methods
   //----------------------------------------------------------------//
@@ -113,6 +112,15 @@ class App extends React.Component {
   //----------------------------------------------------------------//
   // MQF Lifecycle Methods 
   //----------------------------------------------------------------//
+
+  handleMQFCreate = newMQF => {
+    const testArray = [...this.state.tests, newMQF]
+
+    this.setState({
+      tests: testArray,
+    })
+  }
+
 
   handleMQFDelete = mqfId => {
     const index = this.state.tests.findIndex(needle => needle.id === mqfId)
@@ -218,13 +226,15 @@ class App extends React.Component {
               }
             </Route>
             <Route exact path="/m">
-              <MQFCreate
+              <MQFEdit
                 handleDrawerToggle={this.handleDrawerToggle}
                 handleLogoutClick={this.handleLogoutClick}
+                handleMQFSave={newMQF => { this.handleMQFCreate(newMQF) }}
                 handleScrollToTop={this.handleScrollToTop}
                 handleSnackbarClose={this.handleSnackbarClose}
                 handleSnackbarOpen={this.handleSnackbarOpen}
                 state={this.state}
+                variant='create'
               />
             </Route>
             <Route path="/m/:mqfId/e">
@@ -236,6 +246,7 @@ class App extends React.Component {
                 handleSnackbarClose={this.handleSnackbarClose}
                 handleSnackbarOpen={this.handleSnackbarOpen}
                 state={this.state}
+                variant='edit'
               />
             </Route>
             <Route path="/m/:mqfId/s/:order">

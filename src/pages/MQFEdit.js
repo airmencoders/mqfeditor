@@ -36,17 +36,14 @@
 //----------------------------------------------------------------//
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
+import { v4 } from 'uuid'
 
 //----------------------------------------------------------------//
 // Material UI Core Components
 //----------------------------------------------------------------//
-import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Zoom from '@material-ui/core/Zoom'
 
 //----------------------------------------------------------------//
 // Material UI Lab Components
@@ -59,11 +56,11 @@ import TextField from '@material-ui/core/TextField'
 //----------------------------------------------------------------//
 import Add from '../components/fabs/Add'
 import CustomSnackbar from '../components/CustomSnackbar'
+import Delete from '../components/fabs/Delete'
 import Next from '../components/fabs/Next'
 import Previous from '../components/fabs/Previous'
 import ResponsiveNavigation from '../components/ResponsiveNavigation'
 import Save from '../components/fabs/Save'
-import ScrollToTop from '../components/fabs/ScrollToTop'
 import SideMenu from '../components/SideMenu'
 import TestDetails from '../components/TestDetails'
 import QuestionEdit from '../components/QuestionEdit'
@@ -81,18 +78,12 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
-  card: {
-    marginBottom: theme.spacing(3),
-  },
-  textField: {
-    margin: theme.spacing(3),
-  },
 }))
 
 //----------------------------------------------------------------//
 // Edit MQF Component
 //----------------------------------------------------------------//
-export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state }) => {
+export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state, variant }) => {
   const classes = useStyles()
   const { mqfId } = useParams()
 
@@ -103,44 +94,90 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSn
     )
   }
 
-  const [currentMQF, setCurrentMQF] = React.useState(state.tests.filter(mqf => mqf.id === mqfId)[0])
+  /**
+   * SERVERLESS DEVELOPMENT - WILL USE AJAX TO GET API ENDPOINT FOR THE QUESTION INFORMATION
+   * SOMETHING LIKE
+   * PROMISE('https://airmencoders.cce.us.af.mil/mqfeditor/api/mqf?request=.......data)
+   * 
+   * data: {
+   *  authentication: {user: _userid_, token: _authToken_}
+   *  version: 1,
+   *  mqfId: _mqfId
+   * }
+   */
+
+  const blankTest = {
+    id: v4(),
+    mds: '',
+    name: '',
+    owner: state.user.id,
+    version: 1,
+    date: new Date(),
+    seen: false,
+    questions: [
+      {
+        question: '',
+        options: ['', '', '', ''],
+        answer: null,
+        reference: '',
+        timesStudied: 0,
+        timesGotCorrect: 0,
+        timesGotWrong: 0,
+      },
+    ],
+  }
+
+  const [currentMQF, setCurrentMQF] = React.useState(
+    (variant === 'edit') ?
+      state.tests.filter(mqf => mqf.id === mqfId)[0] :
+      blankTest
+  )
   const [currentQuestion, setCurrentQuestion] = React.useState(0)
   const [hasPrevious, setHasPrevious] = React.useState(false)
   const [hasNext, setHasNext] = React.useState(false)
 
+  //----------------------------------------------------------------//
+  // Set has next if currentMQF has more than one question
+  //----------------------------------------------------------------//
   React.useEffect(() => {
-    if(currentMQF !== null && currentMQF.questions.length > 1) {
+    if (currentMQF !== null && currentMQF.questions.length > 1) {
       setHasNext(true)
     }
   }, [])
 
+  //----------------------------------------------------------------//
+  // When unmounting the component, close the snackbar
+  //----------------------------------------------------------------//
   React.useEffect(() => {
     return () => {
       handleSnackbarClose()
     }
   }, [handleSnackbarClose])
 
-  const handlePreviousQuestion = () => {
-    setHasNext(true)
-
-    if(currentQuestion === 1) {
-      setHasPrevious(false)
-    }
-
-    if(hasPrevious) {
-      setCurrentQuestion(currentQuestion - 1)
-    }
-  }
-
+  //----------------------------------------------------------------//
+  // Handle question navigation
+  //----------------------------------------------------------------//
   const handleNextQuestion = () => {
     setHasPrevious(true)
 
-    if(currentQuestion === currentMQF.questions.length - 2) {
+    if (currentQuestion === currentMQF.questions.length - 2) {
       setHasNext(false)
     }
 
-    if(hasNext) {
+    if (hasNext) {
       setCurrentQuestion(currentQuestion + 1)
+    }
+  }
+
+  const handlePreviousQuestion = () => {
+    setHasNext(true)
+
+    if (currentQuestion === 1) {
+      setHasPrevious(false)
+    }
+
+    if (hasPrevious) {
+      setCurrentQuestion(currentQuestion - 1)
     }
   }
 
@@ -149,25 +186,30 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSn
   //----------------------------------------------------------------//
   const handleSaveClick = () => {
 
-    console.log('save clicked')
+    if (variant === 'edit') {
+      const newMQF = {
+        ...currentMQF,
+        seen: false,
+        version: currentMQF.version + 1,
+        date: new Date(),
+      }
+
+      handleMQFSave(mqfId, newMQF)
+    } else if (variant === 'create') {
+      handleMQFSave(currentMQF)
+    }
+
     handleSnackbarOpen()
   }
 
-  const handleDeleteQuestion = questionId => {
-    const filteredQuestions = currentMQF.questions.filter((value, index) => index !== questionId)
-    const updatedMQF = {
-      ...currentMQF,
-      questions: filteredQuestions,
-    }
-
-    setCurrentMQF(updatedMQF)
-  }
-
+  //----------------------------------------------------------------//
+  // Handle Adding and Deleting a question
+  //----------------------------------------------------------------//
   const handleAddQuestion = () => {
     const newQuestion = {
       question: '',
       options: ['', '', '', ''],
-      answer: '',
+      answer: null,
       reference: '',
       timesStudied: 0,
       timesGotCorrect: 0,
@@ -186,8 +228,181 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSn
     setCurrentQuestion(currentQuestion + 1)
   }
 
-  const handleValueChange = () => {
+  const handleDeleteQuestion = () => {
+    const filteredQuestions = currentMQF.questions.filter((value, index) => index !== currentQuestion)
+    const updatedMQF = {
+      ...currentMQF,
+      questions: filteredQuestions,
+    }
 
+    if (filteredQuestions.length === 1) {
+      setCurrentQuestion(0)
+      setHasNext(false)
+      setHasPrevious(false)
+    }
+
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1)
+    }
+
+    setCurrentMQF(updatedMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle Answer Changes
+  //----------------------------------------------------------------//
+  const handleAnswerChange = value => {
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      answer: value,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle MDS Changes
+  //----------------------------------------------------------------//
+  const handleMDSChange = value => {
+    const newMQF = {
+      ...currentMQF,
+      mds: value,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle Name Changes
+  //----------------------------------------------------------------//
+  const handleNameChange = value => {
+    const newMQF = {
+      ...currentMQF,
+      name: value,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle Option Changes
+  //----------------------------------------------------------------//
+  const handleOptionAdd = () => {
+    const newOptionArray = [...currentMQF.questions[currentQuestion].options, '']
+
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      options: newOptionArray,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  const handleOptionChange = (optionIndex, value) => {
+    const newOptionArray = [...currentMQF.questions[currentQuestion].options]
+
+    newOptionArray.splice(optionIndex, 1, value)
+
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      options: newOptionArray,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  const handleOptionDelete = optionIndex => {
+    const newOptionArray = currentMQF.questions[currentQuestion].options.filter((fValue, fIndex) => optionIndex !== fIndex)
+
+    let newAnswer = currentMQF.questions[currentQuestion].answer
+    if (optionIndex === newAnswer) {
+      newAnswer = null
+    } else if (optionIndex < newAnswer) {
+      newAnswer--
+    }
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      options: newOptionArray,
+      answer: newAnswer,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle Question Changes
+  //----------------------------------------------------------------//
+  const handleQuestionChange = value => {
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      question: value,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray,
+    }
+
+    setCurrentMQF(newMQF)
+  }
+
+  //----------------------------------------------------------------//
+  // Handle Reference Changes
+  //----------------------------------------------------------------//
+  const handleReferenceChange = value => {
+    const newQuestion = {
+      ...currentMQF.questions[currentQuestion],
+      reference: value,
+    }
+
+    const newQuestionArray = [...currentMQF.questions]
+    newQuestionArray.splice(currentQuestion, 1, newQuestion)
+
+    const newMQF = {
+      ...currentMQF,
+      questions: newQuestionArray,
+    }
+
+    setCurrentMQF(newMQF)
   }
 
   //----------------------------------------------------------------//
@@ -217,15 +432,30 @@ export default ({ handleDrawerToggle, handleLogoutClick, handleMQFSave, handleSn
               xs={10}
             >
               <TestDetails
-                defaultMDS={currentMQF.mds}
-                defaultName={currentMQF.name}
+                handleMDSChange={value => handleMDSChange(value)}
+                handleNameChange={value => handleNameChange(value)}
+                mds={currentMQF.mds}
+                name={currentMQF.name}
               />
               <QuestionEdit
-                handleChange={setCurrentMQF}
-                key={`question-${currentMQF.questions[currentQuestion].question}`}
-                question={currentMQF.questions[currentQuestion]}
-                questionIndex={currentQuestion}
+                answer={currentMQF.questions[currentQuestion].answer}
+                handleAnswerChange={value => handleAnswerChange(value)}
+                handleOptionAdd={() => handleOptionAdd()}
+                handleOptionChange={(optionIndex, value) => handleOptionChange(optionIndex, value)}
+                handleOptionDelete={optionIndex => handleOptionDelete(optionIndex)}
+                handleQuestionChange={value => handleQuestionChange(value)}
+                handleReferenceChange={value => handleReferenceChange(value)}
+                index={currentQuestion}
+                options={currentMQF.questions[currentQuestion].options}
+                question={currentMQF.questions[currentQuestion].question}
+                reference={currentMQF.questions[currentQuestion].reference}
               />
+              {(hasPrevious || hasNext) ?
+                <Delete
+                  handleClick={handleDeleteQuestion}
+                />
+                : null
+              }
               {(hasPrevious) ?
                 <Previous
                   handleClick={handlePreviousQuestion}

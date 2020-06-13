@@ -3,11 +3,11 @@
  * 
  * ${Description}
  * 
- * @link    TBD
+ * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
- * @file    /src/components/TestDetails
+ * @file    /src/components/fabs/Add.js
  * @author  chris-m92
- * @since   0.19.0
+ * @since   0.24.0
  * 
  * MIT License
  * 
@@ -37,52 +37,49 @@
 import React from 'react'
 
 //----------------------------------------------------------------//
-// Material UI Core Components
+// Material UI Components
 //----------------------------------------------------------------//
-import Card from '@material-ui/core/Card'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Fab from '@material-ui/core/Fab'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import Zoom from '@material-ui/core/Zoom'
 
 //----------------------------------------------------------------//
-// Custom Class Styles
+// Material UI Icons
 //----------------------------------------------------------------//
-const useStyles = makeStyles((theme) => ({
-  card: {
-    marginBottom: theme.spacing(3),
-  },
-  textField: {
-    margin: theme.spacing(3),
-  },
-  title: {
-    margin: theme.spacing(3),
-  },
+import DeleteIcon from '@material-ui/icons/Delete'
+
+const useStyles = makeStyles(theme => ({
+  fab: {
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  }
 }))
 
 //----------------------------------------------------------------//
-// Test Details Component
+// Scroll To Top FAB Component
 //----------------------------------------------------------------//
-export default ({handleMDSChange, handleNameChange, mds, name}) => {
+export default ({ handleClick }) => {
   const classes = useStyles()
+  const theme = useTheme()
 
+  //----------------------------------------------------------------//
+  // Define Transition Duration
+  //----------------------------------------------------------------//
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
+  }
+
+  //----------------------------------------------------------------//
+  // Render The Component
+  //----------------------------------------------------------------//
   return (
-    <Card
-      className={classes.card}
-      variant='outlined'
+    <Fab
+      className={classes.fab}
+      color='secondary'
+      onClick={handleClick}
     >
-      <TextField
-        className={classes.textField}
-        value={mds}
-        fullWidth
-        label='MDS'
-        onChange={event => handleMDSChange(event.target.value)}
-      />
-      <TextField
-        className={classes.textField}
-        value={name}
-        fullWidth
-        label='Name'
-        onChange={event => handleNameChange(event.target.value)}
-      />
-    </Card>
+      <DeleteIcon />
+    </Fab>
   )
 }

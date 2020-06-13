@@ -1,3 +1,9 @@
+## 0.25.0
+- Finished state changes in `MQFEdit`, `QuestionEdit`, and `TestDetails`
+- Deprecated `MQFCreate`
+- Added `variant` prop to `MQFEdit` component which either uses the pulled MQF ID `variant=edit` or a blank test `variant=create` - This saves a LOT of code/redundancy
+- Added `handleMQFCreate` function to `App`
+
 ## 0.24.0
 - Working to remove `React.Ref` from input values in `QuestionEdit` since they are then becoming controlled components
 - Changed UX of `MQFEdit` to only have one question displayed at a time (looks cleaner)
@@ -32,8 +38,8 @@
 
 ## 0.21.0
 - `QuestionEdit` uses a default value for the question parameter, able to be reused for `MQFEdit` and `MQFCreate`
-- TODO: Implement saving the new MQF
-- T~~ODO: Implement the add question, add option, and delete question, and delete options for the `QuestionEdit` component~~
+- ~~TODO: Implement saving the new MQF~~
+- ~~TODO: Implement the add question, add option, and delete question, and delete options for the `QuestionEdit` component~~
 
 ## 0.20.0
 - Used `React.useRef` for MDS and Name in `MQFEdit` and `MQFCreate`
@@ -68,7 +74,7 @@
 
 ## 0.14.0
 - Continued work on `/src/pages/MQFCreate`
-- TODO: Find a Javascript PDF Parser
+- ~~TODO: Find a Javascript PDF Parser~~
 - Began work on abstracting out state / components
 
 ## 0.13.0
@@ -104,7 +110,7 @@
 - ~~TODO: Implement an option for random order studying (using `react-router` url query?) - require extra 'state'~~
 - ~~TODO: Implement `MQFTest` (will always be in random order)~~
 - TODO: Implement User Account page
-- TODO: Implement `MQFCreate` page (PDF Import, parse, JSON Generation add to state / database through API Endpoints) as well as manual
+- ~~TODO: Implement `MQFCreate` page (PDF Import, parse, JSON Generation add to state / database through API Endpoints) as well as manual~~
 - FEATURE: Potential for 'private' vs. 'public' tests?
 
 ## 0.8.0
