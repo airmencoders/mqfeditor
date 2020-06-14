@@ -1,3 +1,6 @@
+## 0.28.1
+* UI Fix for cards in `MQFTest`
+
 ## 0.28.0
 * Changed the React state to have a ternary operation for the `hasNext` State in `MQFEdit` making the visual glitch not occur (loads and immediately hides buttons)
 * Changed UX in `MQFTest` to have the same type of 'flash card' view rather than a long test (similar to PEX testing - 1 question at a time)

@@ -61,7 +61,7 @@ import QuestionTest from '../components/QuestionTest'
 //----------------------------------------------------------------//
 const useStyles = makeStyles((theme) => ({
   card: {
-    minHeight: 300,
+    marginBottom: theme.spacing(3),
   },
   questionFab: {
     marginTop: theme.spacing(2),
@@ -183,6 +183,14 @@ export default ({ handleMQFSeen, state }) => {
           item
           xs={8}
         >
+          <Card
+            className={classes.card}
+            variant='outlined'
+          >
+            <CardContent>
+              <Typography variant='h6'>{`Score: ${Math.round(score * 100)}%`}</Typography>
+            </CardContent>
+          </Card>
           {questionArray.map((value, index) => (
             <QuestionResult
               answer={answers[index]}
@@ -193,12 +201,7 @@ export default ({ handleMQFSeen, state }) => {
               reference={currentMQF.questions[questionArray[index]].reference}
             />
           ))
-          }
-          <Card>
-            <CardContent>
-              <Typography variant='h6'>{`Score: ${Math.round(score * 100)}%`}</Typography>
-            </CardContent>
-          </Card>
+          }          
         </Grid>
         :
         (questionsPicked) ?
@@ -207,6 +210,7 @@ export default ({ handleMQFSeen, state }) => {
             xs={8}
           >
             <Card
+              className={classes.card}
               variant='outlined'
             >
               <CardContent>
