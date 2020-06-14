@@ -1,3 +1,15 @@
+## 0.28.0
+* Changed the React state to have a ternary operation for the `hasNext` State in `MQFEdit` making the visual glitch not occur (loads and immediately hides buttons)
+* Changed UX in `MQFTest` to have the same type of 'flash card' view rather than a long test (similar to PEX testing - 1 question at a time)
+* Added ternary operation in `MQFStudy` and `MQFTest` to only show the cards once the random order has been selected. This avoids a visual glitch where the default order (`0` through `questions.length`) is first shown and then changes once the randomization occurs after render (due to `React.useEffect`, like `ComponentDidMount` being called after rendering)
+* Changed `Previous` and `Next` Buttons to be normal buttons inside the card in `MQFTest` rather than Floating Action Buttons.
+* Potential to change `Previous` and `Next` Buttons in `MQFStudy` and `MQFEdit` to be similar to `MQFTest`
+* Created `QuestionResult` component to handle the review and scoring of test results
+* TODO: Code cleanup
+* TODO: Button Changes
+* TODO: Creation of backend, database, API Endpoints
+* TODO: Integrate API calls to frontend
+
 ## 0.27.0
 * Began work on User Account page
 * Expectations:

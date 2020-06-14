@@ -161,11 +161,16 @@ class App extends React.Component {
     })
   }
 
-  handleMQFSeen = (mqfId, seenVersion) => {
+  handleMQFSeen = mqfId => {
     const index = this.state.tests.findIndex(needle => needle.id === mqfId)
 
-    const testArray = this.state.tests.slice()
-    testArray[index] = seenVersion
+    const testArray = [...this.state.tests]
+    const updatedTest = {
+      ...testArray[index],
+      seen: true,
+    }
+
+    testArray[index] = updatedTest
 
     // Set delay so that renders still show nice animation
     setTimeout(() => {

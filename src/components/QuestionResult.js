@@ -1,11 +1,11 @@
 /**
- * Renders a testable question card
+ * Renders a Question Card that displays the result of the user's answers
  * 
  * @link    https://airmencoders.cce.us.af.mil/mqf
  * @link    https://github.com/airmencoders/mqfeditor
  * @file    /src/components/QuestionTest.js
  * @author  chris-m92
- * @since   0.11.0
+ * @since   0.28.0
  * 
  * MIT License
  * 
@@ -47,6 +47,9 @@ import Radio from '@material-ui/core/Radio'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+import CancelIcon from '@material-ui/icons/Cancel'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+
 //----------------------------------------------------------------//
 // Custom Class Styles
 //----------------------------------------------------------------//
@@ -71,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 //----------------------------------------------------------------//
 // Question Test Component
 //----------------------------------------------------------------//
-export default ({ answer, handleAnswerChange, handleNextQuestion, handlePreviousQuestion, hasNext, hasPrevious, options, question, reference }) => {
+export default ({ answer, correctAnswer, options, question, reference }) => {
   const classes = useStyles()
 
   //----------------------------------------------------------------//
@@ -98,41 +101,39 @@ export default ({ answer, handleAnswerChange, handleNextQuestion, handlePrevious
               key={index}
               xs={12}
             >
-              <Radio
-                checked={answer === index}
-                onChange={event => handleAnswerChange(parseInt(event.target.value))}
-                value={index}
-              />
-              {option}
+              <Grid
+                container
+                direction='row'
+                alignItems='center'
+                justify='space-between'
+              >
+                <Grid
+                  item
+                >
+                  <Radio
+                    checked={answer === index}
+                    disabled
+                  />
+                  {option}
+                </Grid>
+                <Grid
+                  item
+                >
+                  {(correctAnswer === index && answer === index) ?
+                    <CheckCircleIcon color='primary' />
+                    :
+                    (correctAnswer === index && answer !== index) ?
+                      <CancelIcon color='secondary' />
+                      :
+                      null
+                  }
+                </Grid>
+              </Grid>
             </Grid>
           ))
           }
         </Grid>
       </CardContent>
-      <CardActions>
-        <Grid
-          container
-          direction='row'
-          justify='space-between'
-        >
-          {(hasPrevious) ?
-            <Button
-              color='primary'
-              onClick={() => handlePreviousQuestion()}
-            >
-              Previous
-            </Button>:
-            <div/>
-          }
-          <Button
-            color='primary'
-            onClick={() => handleNextQuestion()}
-            variant='contained'
-          >
-            {(hasNext) ? 'Next' : 'Submit'}
-          </Button>
-        </Grid>
-      </CardActions>
     </Card>
   )
 }

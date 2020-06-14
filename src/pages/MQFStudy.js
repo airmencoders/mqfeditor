@@ -43,16 +43,15 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Divider from '@material-ui/core/Divider'
-import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 //----------------------------------------------------------------//
-// Material UI Icons
+// Custom Components
 //----------------------------------------------------------------//
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import Next from '../components/fabs/Next'
+import Previous from '../components/fabs/Previous'
 
 //----------------------------------------------------------------//
 // Custom Class Styles
@@ -119,8 +118,9 @@ export default ({ handleMQFSeen, handleQuestionStudied, state }) => {
       tempArray[i] = i
     }
   }
-  let [questionArray, setQuestionArray] = React.useState(tempArray)
-  let [questionsPicked, setQuestionsPicked] = React.useState(false)
+
+  const [questionArray, setQuestionArray] = React.useState(tempArray)
+  const [questionsPicked, setQuestionsPicked] = React.useState(false)
 
   //----------------------------------------------------------------//
   // Hook to mimic componentDidMount() in Class Components
@@ -128,35 +128,28 @@ export default ({ handleMQFSeen, handleQuestionStudied, state }) => {
   // Because of how useEffect works, we need to accomplish this prior to any returns
 
   React.useEffect(() => {
-    // Update the 'seen' state (POTENTIAL TO CHANGE TO THE OVERVIEW PAGE)
-    if (state.isAuthenticated === true && state.tests !== null) {
-      const seenMQF = {
-        ...currentMQF,
-        seen: true,
-      }
-      handleMQFSeen(mqfId, seenMQF)
-    }
+    handleMQFSeen(mqfId)
   }, [])
 
   //----------------------------------------------------------------//
   // Here we test to see if a 'state' for the question order is preserved across renders
   React.useEffect(() => {
-    if (state.tests !== null) {
-      let tempArray = []
-      for (var tempIndex = 0; tempIndex < currentMQF.questions.length; tempIndex++) {
-        if (order === 'random') {
-          let potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
+    //if (state.tests !== null) {
+    let tempArray = []
+    for (var tempIndex = 0; tempIndex < currentMQF.questions.length; tempIndex++) {
+      if (order === 'random') {
+        let potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
 
-          // Do not allow repeat questions
-          while (tempArray.find(value => value === potentialQuestion) !== undefined) {
-            potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
-          }
-
-          tempArray[tempIndex] = potentialQuestion
-        } else {
-          tempArray[tempIndex] = tempIndex
+        // Do not allow repeat questions
+        while (tempArray.find(value => value === potentialQuestion) !== undefined) {
+          potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
         }
+
+        tempArray[tempIndex] = potentialQuestion
+      } else {
+        tempArray[tempIndex] = tempIndex
       }
+      //}
       setQuestionArray(tempArray)
       setQuestionsPicked(true)
     }
@@ -177,64 +170,68 @@ export default ({ handleMQFSeen, handleQuestionStudied, state }) => {
   //----------------------------------------------------------------//
   return (
     <Grid container direction='row' justify='center'>
-      <Grid item xs={10} md={5}>
-        <ReactCardFlip
-          flipDirection='vertical'
-          infinite={true}
-          isFlipped={isFlipped}
-        >
-          <Card
-            className={classes.card}
-            key='front'
-            onClick={toggleCardFlip}
+      {(questionsPicked) ?
+        <Grid item xs={10} md={5}>
+          <ReactCardFlip
+            flipDirection='vertical'
+            infinite={true}
+            isFlipped={isFlipped}
           >
-            <CardContent>
-              <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
-              <Typography variant='body1'>
-                {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
-              </Typography>
-            </CardContent>
-            <Divider />
-            <CardActions>
-              <Grid container direction='column'>
-                {
-                  currentMQF.questions[questionArray[currentQuestion]].options.map((option, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={10}>
-                      <Typography variant='body1' >
-                        {`${String.fromCharCode(index + 65)}. ${option}`}
-                      </Typography>
-                    </Grid>
-                  ))
-                }
-              </Grid>
-            </CardActions>
-          </Card>
-          <Card
-            className={classes.card}
-            key='back'
-            onClick={toggleCardFlip}
-          >
-            <CardContent>
-              <Typography variant='body1' align='center'>
-                <strong>
+            <Card
+              className={classes.card}
+              key='front'
+              onClick={toggleCardFlip}
+            >
+              <CardContent>
+                <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
+                <Typography variant='body1'>
+                  {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
+                </Typography>
+              </CardContent>
+              <Divider />
+              <CardActions>
+                <Grid container direction='column'>
                   {
-                    `${String.fromCharCode(65 + currentMQF.questions[questionArray[currentQuestion]].answer)}. ${currentMQF.questions[questionArray[currentQuestion]].options[currentMQF.questions[questionArray[currentQuestion]].answer]}`
+                    currentMQF.questions[questionArray[currentQuestion]].options.map((option, index) => (
+                      <Grid
+                        item
+                        key={index}
+                        xs={10}>
+                        <Typography variant='body1' >
+                          {`${String.fromCharCode(index + 65)}. ${option}`}
+                        </Typography>
+                      </Grid>
+                    ))
                   }
-                </strong>
-              </Typography>
-            </CardContent>
-          </Card>
-        </ReactCardFlip>
-        <Fab className={classes.previousQuestionFab} onClick={handlePreviousQuestion}>
-          <KeyboardArrowLeftIcon />
-        </Fab>
-        <Fab className={classes.nextQuestionFab} onClick={handleNextQuestion}>
-          <KeyboardArrowRightIcon />
-        </Fab>
-      </Grid>
-    </Grid>
+                </Grid>
+              </CardActions>
+            </Card>
+            <Card
+              className={classes.card}
+              key='back'
+              onClick={toggleCardFlip}
+            >
+              <CardContent>
+                <Typography variant='body1' align='center'>
+                  <strong>
+                    {
+                      `${String.fromCharCode(65 + currentMQF.questions[questionArray[currentQuestion]].answer)}. ${currentMQF.questions[questionArray[currentQuestion]].options[currentMQF.questions[questionArray[currentQuestion]].answer]}`
+                    }
+                  </strong>
+                </Typography>
+              </CardContent>
+            </Card>
+          </ReactCardFlip>
+          <Previous
+            handleClick={handlePreviousQuestion}
+          />
+          <Next
+            handleClick={handleNextQuestion}
+          />
+        </Grid>
+        :
+        <React.Fragment />
+      }
+    </Grid >
   )
 }

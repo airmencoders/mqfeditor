@@ -107,7 +107,7 @@ export default ({ handleMQFSave, handleSnackbarClose, handleSnackbarOpen, state,
   )
   const [currentQuestion, setCurrentQuestion] = React.useState(0)
   const [hasPrevious, setHasPrevious] = React.useState(false)
-  const [hasNext, setHasNext] = React.useState(false)
+  const [hasNext, setHasNext] = React.useState((currentMQF.questions.length > 1) ? true : false)
 
   //----------------------------------------------------------------//
   // Set has next if currentMQF has more than one question

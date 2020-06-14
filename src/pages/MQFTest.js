@@ -38,9 +38,12 @@ import { useParams } from 'react-router-dom'
 //----------------------------------------------------------------//
 // Material UI Core Components
 //----------------------------------------------------------------//
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
 //----------------------------------------------------------------//
 // Material UI Icons
@@ -50,6 +53,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 //----------------------------------------------------------------//
 // Custom Components
 //----------------------------------------------------------------//
+import QuestionResult from '../components/QuestionResult'
 import QuestionTest from '../components/QuestionTest'
 
 //----------------------------------------------------------------//
@@ -77,63 +81,159 @@ export default ({ handleMQFSeen, state }) => {
   let { mqfId } = useParams()
 
   //----------------------------------------------------------------//
-  // Define answer references
+  // Get MQF information
   //----------------------------------------------------------------//
-  const answerRefs = React.useRef([])
+  const currentMQF = state.tests.filter(test => test.id === mqfId)[0]
+  const numberOfQuestions = Math.min(50, currentMQF.questions.length)
 
   //----------------------------------------------------------------//
-  // SERVERLESS DEVELOPMENT ONLY, USE API FOR PRODUCTION
+  // Initialize states
   //----------------------------------------------------------------//
-  let index, currentMQF
+  const [currentQuestion, setCurrentQuestion] = React.useState(0)
+  const [hasPrevious, setHasPrevious] = React.useState(false)
+  const [hasNext, setHasNext] = React.useState((numberOfQuestions > 1) ? true : false)
+  const [questionsPicked, setQuestionsPicked] = React.useState(false)
+  const [testSubmitted, setTestSubmitted] = React.useState(false)
+  const [score, setScore] = React.useState(0)
+
   let tempArray = []
-
-  if (state.tests !== null) {
-    index = state.tests.findIndex((needle) => needle.id === mqfId)
-    currentMQF = state.tests.slice()[index]
-    for (let i = 0; i < currentMQF.questions.length; i++) {
-      let potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
-
-      // Do not allow repeat questions
-      while (tempArray.find(value => value === potentialQuestion) !== undefined) {
-        potentialQuestion = Math.floor(Math.random() * currentMQF.questions.length)
-      }
-
-      tempArray[i] = potentialQuestion
-    }
+  let initialAnswerArray = []
+  for (let i = 0; i < numberOfQuestions; i++) {
+    tempArray[i] = i
+    initialAnswerArray[i] = null
   }
-  let [questionArray] = React.useState(tempArray)
 
-  //----------------------------------------------------------------//
-  // Hook to mimic componentDidMount() in Class Components
-  // Here we update the 'seen' flag for the state
-  // Because of how this works, we need to do this before any returns
+  const [questionArray, setQuestionArray] = React.useState(tempArray)
+  const [answers, setAnswers] = React.useState(initialAnswerArray)
 
   React.useEffect(() => {
-    // Update the 'seen' state (POTENTIAL TO CHANGE TO THE OVERVIEW PAGE)
-    if (state.isAuthenticated === true && state.tests !== null) {
-      const seenMQF = {
-        ...currentMQF,
-        seen: true,
+    handleMQFSeen(mqfId)
+
+    let shuffledArray = []
+
+    for (let i = 0; i < numberOfQuestions; i++) {
+      let potentialQuestion = Math.floor(Math.random() * numberOfQuestions)
+
+      while (shuffledArray.find(value => value === potentialQuestion) !== undefined) {
+        potentialQuestion = Math.floor(Math.random() * numberOfQuestions)
       }
-      handleMQFSeen(mqfId, seenMQF)
+
+      shuffledArray[i] = potentialQuestion
     }
+
+    setQuestionArray(shuffledArray)
+    setQuestionsPicked(true)
   }, [])
 
+  const handleAnswerChange = value => {
+    let newAnswers = [...answers]
+    newAnswers[currentQuestion] = value
+
+    setAnswers(newAnswers)
+  }
+
   //----------------------------------------------------------------//
-  // DEBUG - LOG ANSWERS TO CONSOLE
-  // TODO  - ALERT IF NOT ALL ANSWERED, VALIDATION
-  const checkAnswers = () => {
-    answerRefs.current.map((answer, index) => {
-      console.log(`answer ${index}:`, answer)
-    })
+  // Handle Question Navigation
+  //----------------------------------------------------------------//
+  const handleNextQuestion = () => {
+    setHasPrevious(true)
+
+    if (currentQuestion === numberOfQuestions - 2) {
+      setHasNext(false)
+    }
+
+    if (hasNext) {
+      setCurrentQuestion(currentQuestion + 1)
+    } else {
+      let numberCorrect = 0
+      for (let i = 0; i < numberOfQuestions; i++) {
+        if(currentMQF.questions[questionArray[i]].answer === answers[i]) {
+          numberCorrect++
+        }
+      }
+
+      setScore(numberCorrect / numberOfQuestions)
+      setTestSubmitted(true)
+    }
+  }
+
+  const handlePreviousQuestion = () => {
+    setHasNext(true)
+
+    if (currentQuestion === 1) {
+      setHasPrevious(false)
+    }
+
+    if (hasPrevious) {
+      setCurrentQuestion(currentQuestion - 1)
+    }
   }
 
   //----------------------------------------------------------------//
   // Render The Component
   //----------------------------------------------------------------//
   return (
-    <React.Fragment>
-      <Grid container direction='row' justify='center'>
+    <Grid
+      container
+      direction='row'
+      justify='center'
+    >
+      {(testSubmitted) ?
+        <Grid
+          item
+          xs={8}
+        >
+          {questionArray.map((value, index) => (
+            <QuestionResult
+              answer={answers[index]}
+              correctAnswer={currentMQF.questions[questionArray[index]].answer}
+              key={index}
+              options={currentMQF.questions[questionArray[index]].options}
+              question={currentMQF.questions[questionArray[index]].question}
+              reference={currentMQF.questions[questionArray[index]].reference}
+            />
+          ))
+          }
+          <Card>
+            <CardContent>
+              <Typography variant='h6'>{`Score: ${Math.round(score * 100)}%`}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        :
+        (questionsPicked) ?
+          <Grid
+            item
+            xs={8}
+          >
+            <Card
+              variant='outlined'
+            >
+              <CardContent>
+                <Typography variant='subtitle1'>{`Question ${currentQuestion + 1} of ${numberOfQuestions}`}</Typography>
+              </CardContent>
+            </Card>
+            <QuestionTest
+              answer={answers[currentQuestion]}
+              handleAnswerChange={value => handleAnswerChange(value)}
+              handleNextQuestion={handleNextQuestion}
+              handlePreviousQuestion={handlePreviousQuestion}
+              hasNext={(hasNext)}
+              hasPrevious={(hasPrevious)}
+              options={currentMQF.questions[questionArray[currentQuestion]].options}
+              question={currentMQF.questions[questionArray[currentQuestion]].question}
+              reference={currentMQF.questions[questionArray[currentQuestion]].reference}
+            />
+          </Grid>
+          :
+          <React.Fragment />
+      }
+    </Grid>
+  )
+}
+
+/*
+<Grid container direction='row' justify='center'>
         <Grid item xs={10} md={5}>
           {
             currentMQF.questions.map((question, index) => (
@@ -156,6 +256,5 @@ export default ({ handleMQFSeen, state }) => {
       >
         <AssignmentTurnedInIcon />
       </Fab>
-    </React.Fragment>
-  )
-}
+
+*/
