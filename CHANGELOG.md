@@ -1,3 +1,7 @@
+## 0.28.2
+* Add class for `Typography` components in `MQFStudy` and `MQFTest` to properly show new lines
+* Added new Tests
+
 ## 0.28.1
 * UI Fix for cards in `MQFTest`
 

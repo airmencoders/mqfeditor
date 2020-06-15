@@ -184,7 +184,7 @@ export default ({ handleMQFSeen, handleQuestionStudied, state }) => {
             >
               <CardContent>
                 <Typography variant='h6'>{`Question ${currentQuestion + 1} of ${currentMQF.questions.length}`}</Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' style={{ whiteSpace: 'pre-line' }}>
                   {`${questionArray[currentQuestion] + 1}. ${currentMQF.questions[questionArray[currentQuestion]].question}`}
                 </Typography>
               </CardContent>

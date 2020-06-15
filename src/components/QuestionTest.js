@@ -83,7 +83,7 @@ export default ({ answer, handleAnswerChange, handleNextQuestion, handlePrevious
       variant='outlined'
     >
       <CardContent>
-        <Typography variant='h6'>{question}</Typography>
+        <Typography variant='h6' style={{ whiteSpace: 'pre-line' }}>{question}</Typography>
         <Typography variant='subtitle2'>{`Reference: ${reference}`}</Typography>
       </CardContent>
       <Divider />
