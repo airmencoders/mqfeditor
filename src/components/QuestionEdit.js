@@ -53,6 +53,7 @@ import Typography from '@material-ui/core/Typography'
 // Material UI Icons
 //----------------------------------------------------------------//
 import DeleteIcon from '@material-ui/icons/Delete'
+import ImageIcon from '@material-ui/icons/Image'
 
 //----------------------------------------------------------------//
 // Custom Class Styles
@@ -142,6 +143,13 @@ export default ({ answer, handleAnswerChange, handleOptionAdd, handleOptionChang
           onClick={() => handleOptionAdd()}
         >
           Add Option
+        </Button>
+        <Button
+          color='primary'
+          startIcon={<ImageIcon />}
+          variant='contained'
+        >
+          Add Figure
         </Button>
       </CardActions>
     </Card>

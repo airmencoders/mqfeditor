@@ -1,3 +1,8 @@
+## 0.29.0
+* Added `Add Figure` Button to `QuestionEdit` component
+* TODO: logic to upload image and attach to question
+* TODO: logic to overwrite / delete image from question
+
 ## 0.28.2
 * Add class for `Typography` components in `MQFStudy` and `MQFTest` to properly show new lines
 * Added new Tests
