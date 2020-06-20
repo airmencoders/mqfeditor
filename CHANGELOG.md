@@ -1,3 +1,6 @@
+## 0.29.1
+* Changed `MenuIcon` breakpoint in `ResponsiveNavigation` component from `md` to `sm`
+
 ## 0.29.0
 * Added `Add Figure` Button to `QuestionEdit` component
 * TODO: logic to upload image and attach to question
